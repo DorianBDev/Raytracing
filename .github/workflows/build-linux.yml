@@ -16,6 +16,7 @@ jobs:
       shell: bash
       run: |
         sudo pip install conan
+        sudo apt-get install libgl-dev
 
     - name: Build
       shell: bash
