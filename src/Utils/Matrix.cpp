@@ -40,12 +40,12 @@ Matrix::Matrix(std::size_t nbLine,
     for (const auto& list : initializerList)
     {
         if (line >= m_dimL)
-            throw std::exception("Wrong initializer list.");
+            throw std::runtime_error("Wrong initializer list.");
 
         for (const auto& value : list)
         {
             if (column >= m_dimC)
-                throw std::exception("Wrong initializer list.");
+                throw std::runtime_error("Wrong initializer list.");
 
             m_matrix[line][column] = value;
             column++;
@@ -93,7 +93,7 @@ void Matrix::setvalue()
 {
     if ((m_dimC == 0) || (m_dimL == 0))
     {
-        throw std::exception("The m_matrix is not init");
+        throw std::runtime_error("The m_matrix is not init");
     }
 
     std::cout << "Enter Matrix elements" << std::endl;
@@ -111,7 +111,7 @@ void Matrix::printMatrix()
 {
     if (m_dimC == 0 || m_dimL == 0)
     {
-        throw std::exception("The m_matrix isn't init");
+        throw std::runtime_error("The m_matrix isn't init");
     }
 
     for (std::size_t i = 0; i < m_dimL; i++)
@@ -128,7 +128,7 @@ Matrix Matrix::addMat(Matrix& a, Matrix& b)
 {
     if ((a.m_dimC != b.m_dimC) || (a.m_dimL != b.m_dimL))
     {
-        throw std::exception("The m_matrix haven't the same dimension");
+        throw std::runtime_error("The m_matrix haven't the same dimension");
     }
 
 
@@ -149,7 +149,7 @@ Matrix Matrix::subMat(Matrix& a, Matrix& b)
 {
     if ((a.m_dimC != b.m_dimC) || (a.m_dimL != b.m_dimL))
     {
-        throw std::exception("The m_matrix haven't the same dimension");
+        throw std::runtime_error("The m_matrix haven't the same dimension");
     }
 
 
@@ -170,7 +170,7 @@ Matrix Matrix::scalMult(Matrix& a, double scalar)
 {
     if (a.m_dimC == 0 || a.m_dimL == 0)
     {
-        throw std::exception("The m_matrix isn't init");
+        throw std::runtime_error("The m_matrix isn't init");
     }
 
     Matrix c = Matrix(a.m_dimL, a.m_dimC);
@@ -190,7 +190,7 @@ Matrix Matrix::prodMat(Matrix& a, Matrix& b)
 {
     if (a.m_dimC == 0 || a.m_dimC != b.m_dimL)
     {
-        throw std::exception("Problem with dimension to multiply the m_matrix");
+        throw std::runtime_error("Problem with dimension to multiply the m_matrix");
     }
 
     Matrix c = Matrix(a.m_dimL, b.m_dimC);
@@ -223,11 +223,11 @@ Matrix Matrix::translation(Matrix& a, Matrix& b)
         }
 
 
-        throw std::exception("the secong argument isn't a Vec3");
+        throw std::runtime_error("the secong argument isn't a Vec3");
     }
 
 
-    throw std::exception("the first argument isn't a Vec3");
+    throw std::runtime_error("the first argument isn't a Vec3");
 }
 
 Matrix Matrix::rotationX(double alpha, Matrix& a)
@@ -254,7 +254,7 @@ Matrix Matrix::rotationX(double alpha, Matrix& a)
     }
 
 
-    throw std::exception("the m_matrix need to be a Vec3");
+    throw std::runtime_error("the m_matrix need to be a Vec3");
 }
 
 Matrix Matrix::rotationY(double alpha, Matrix& a)
@@ -281,7 +281,7 @@ Matrix Matrix::rotationY(double alpha, Matrix& a)
     }
 
 
-    throw std::exception("the m_matrix need to be a Vec3");
+    throw std::runtime_error("the m_matrix need to be a Vec3");
 }
 
 Matrix Matrix::rotationZ(double alpha, Matrix& a)
@@ -308,7 +308,7 @@ Matrix Matrix::rotationZ(double alpha, Matrix& a)
     }
 
 
-    throw std::exception("the m_matrix need to be a Vec3");
+    throw std::runtime_error("the m_matrix need to be a Vec3");
 }
 
 Matrix Matrix::scale(double x, double y, double z, Matrix& a)
@@ -329,7 +329,7 @@ Matrix Matrix::scale(double x, double y, double z, Matrix& a)
     }
 
 
-    throw std::exception("the m_matrix need to be a Vec3");
+    throw std::runtime_error("the m_matrix need to be a Vec3");
 }
 
 Matrix Matrix::transposed(Matrix& a)
@@ -350,7 +350,7 @@ Matrix Matrix::transposed(Matrix& a)
     }
 
 
-    throw std::exception("the m_matrix isn't init");
+    throw std::runtime_error("the m_matrix isn't init");
 }
 
 double Matrix::getNorm(Matrix& a)
@@ -367,7 +367,7 @@ double Matrix::getNorm(Matrix& a)
     }
 
 
-    throw std::exception("the m_matrix need to be a Vec3");
+    throw std::runtime_error("the m_matrix need to be a Vec3");
 }
 
 Matrix Matrix::normalize(Matrix& a)
@@ -388,13 +388,13 @@ Matrix Matrix::normalize(Matrix& a)
     }
 
 
-    throw std::exception("the m_matrix need to be a Vec3");
+    throw std::runtime_error("the m_matrix need to be a Vec3");
 }
 
 double Matrix::getValue(std::size_t line, std::size_t column)
 {
     if (line >= m_dimL ||column >= m_dimC)
-        throw std::exception("Wrong coordinates to get a value.");
+        throw std::runtime_error("Wrong coordinates to get a value.");
 
     return m_matrix[line][column];
 }
