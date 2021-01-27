@@ -241,12 +241,12 @@ Matrix Matrix::rotationX(double alpha, Matrix& a)
         rotaMatX.m_matrix[0][2] = 0;
 
         rotaMatX.m_matrix[1][0] = 0;
-        rotaMatX.m_matrix[1][1] = cos(alpha);
-        rotaMatX.m_matrix[1][2] = -sin(alpha);
+        rotaMatX.m_matrix[1][1] = std::cos(alpha);
+        rotaMatX.m_matrix[1][2] = -std::sin(alpha);
 
         rotaMatX.m_matrix[2][0] = 0;
-        rotaMatX.m_matrix[2][1] = sin(alpha);
-        rotaMatX.m_matrix[2][2] = cos(alpha);
+        rotaMatX.m_matrix[2][1] = std::sin(alpha);
+        rotaMatX.m_matrix[2][2] = std::cos(alpha);
 
         Matrix res = prodMat(rotaMatX, a);
 
@@ -263,17 +263,17 @@ Matrix Matrix::rotationY(double alpha, Matrix& a)
     {
         Matrix rotaMatY = Matrix(3, 3);
 
-        rotaMatY.m_matrix[0][0] = cos(alpha);
+        rotaMatY.m_matrix[0][0] = std::cos(alpha);
         rotaMatY.m_matrix[0][1] = 0;
-        rotaMatY.m_matrix[0][2] = sin(alpha);
+        rotaMatY.m_matrix[0][2] = std::sin(alpha);
 
         rotaMatY.m_matrix[1][0] = 0;
         rotaMatY.m_matrix[1][1] = 1;
         rotaMatY.m_matrix[1][2] = 0;
 
-        rotaMatY.m_matrix[2][0] = -sin(alpha);
+        rotaMatY.m_matrix[2][0] = -std::sin(alpha);
         rotaMatY.m_matrix[2][1] = 0;
-        rotaMatY.m_matrix[2][2] = cos(alpha);
+        rotaMatY.m_matrix[2][2] = std::cos(alpha);
 
         Matrix res = prodMat(rotaMatY, a);
 
@@ -290,12 +290,12 @@ Matrix Matrix::rotationZ(double alpha, Matrix& a)
     {
         Matrix rotaMatZ = Matrix(3, 3);
 
-        rotaMatZ.m_matrix[0][0] = cos(alpha);
-        rotaMatZ.m_matrix[0][1] = -sin(alpha);
+        rotaMatZ.m_matrix[0][0] = std::cos(alpha);
+        rotaMatZ.m_matrix[0][1] = -std::sin(alpha);
         rotaMatZ.m_matrix[0][2] = 0;
 
-        rotaMatZ.m_matrix[1][0] = sin(alpha);
-        rotaMatZ.m_matrix[1][1] = cos(alpha);
+        rotaMatZ.m_matrix[1][0] = std::sin(alpha);
+        rotaMatZ.m_matrix[1][1] = std::cos(alpha);
         rotaMatZ.m_matrix[1][2] = 0;
 
         rotaMatZ.m_matrix[2][0] = 0;
@@ -338,9 +338,9 @@ Matrix Matrix::transposed(Matrix& a)
     {
         Matrix res = Matrix(a.m_dimC, a.m_dimL);
 
-        for (int i = 0; i < a.m_dimL; i++)
+        for (std::size_t i = 0; i < a.m_dimL; i++)
         {
-            for (int j = 0; j < a.m_dimC; j++)
+            for (std::size_t j = 0; j < a.m_dimC; j++)
             {
                 res.m_matrix[j][i] = a.m_matrix[i][j];
             }
@@ -361,7 +361,7 @@ double Matrix::getNorm(Matrix& a)
         double y = a.m_matrix[1][0];
         double z = a.m_matrix[2][0];
 
-        double norm = sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
+        double norm = std::sqrt(std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2));
 
         return norm;
     }
