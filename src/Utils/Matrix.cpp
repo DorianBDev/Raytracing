@@ -1,5 +1,7 @@
 #include "Matrix.h"
 
+#include <cmath>
+
 Matrix::Matrix(std::size_t nbLine, std::size_t nbCol)
 {
     m_dimL = nbLine;
@@ -393,7 +395,7 @@ Matrix Matrix::normalize(Matrix& a)
 
 double Matrix::getValue(std::size_t line, std::size_t column)
 {
-    if (line >= m_dimL ||column >= m_dimC)
+    if (line >= m_dimL || column >= m_dimC)
         throw std::runtime_error("Wrong coordinates to get a value.");
 
     return m_matrix[line][column];
