@@ -1,30 +1,19 @@
-#include "Example/Example.hpp"
+//#define SDL_DISABLE_ANALYZE_MACROS
+//#include <SDL.h>
+#include "Utils/Matrix.h"
 
-#define SDL_DISABLE_ANALYZE_MACROS
-#include <SDL.h>
 #include <iostream>
-
-const int screenWidth = 800;
-const int screenHeight = 600;
 
 int main(int argc, char* argv[])
 {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        std::cout << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
-    }
-    else
-    {
+    Matrix a(3, 3, {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}});
+    a.printMatrix();
 
-        SDL_CreateWindow("SDL2 Demo",
-                         SDL_WINDOWPOS_CENTERED,
-                         SDL_WINDOWPOS_CENTERED,
-                         screenWidth,
-                         screenHeight,
-                         SDL_WINDOW_SHOWN);
+    //double norm = Matrix::getNorm(a);
+    //std::cout << "norme = " << norm << std::endl;
 
-        SDL_Delay(2000);
-    }
+    //Matrix d = Matrix::normalize(a);
+    //d.printMatrix();
 
     return 0;
 }

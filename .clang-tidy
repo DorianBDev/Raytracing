@@ -14,6 +14,10 @@ Checks: >
   -cppcoreguidelines-avoid-non-const-global-variables,
   -llvm-header-guard,
   -hicpp-signed-bitwise,
+  -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+  -cppcoreguidelines-owning-memory,
+  -cppcoreguidelines-special-member-functions,
+  -hicpp-special-member-functions,
 WarningsAsErrors:  '*'
 CheckOptions:
   - key:    readability-identifier-naming.ClassCase

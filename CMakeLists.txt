@@ -5,7 +5,7 @@
 #
 # Project name
 #
-project("LibTrace")
+project("Raytracing")
 
 #
 # Cpp version

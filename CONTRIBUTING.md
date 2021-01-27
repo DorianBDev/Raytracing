@@ -22,7 +22,8 @@ The naming convention is:
 | Macro             | UPPER_CASE    |
 | Namespace         | camelBack     |
 
-The header guard convention is 'INCLUDE_[FILE PATH FROM src]_[EXTENSION]. For example, for the file 'src/Example/Example.hpp' the header guard will be 'INCLUDE_EXAMPLE_EXAMPLE_HPP'.
+The header guard convention is '[EXTENSION]_RAYTRACING_[FILE PATH FROM src]_[EXTENSION]. For example, for the file 
+'src/Example/Example.hpp' the header guard will be 'HPP_RAYTRACING_EXAMPLE_EXAMPLE_HPP'.
 
 ## Documentation
 
