@@ -1,6 +1,6 @@
 #include <Utils/Matrix.h>
-#include <doctest.h>
 #include <cmath>
+#include <doctest.h>
 
 bool absoluteToleranceCompare(double x, double y)
 {
