@@ -1,5 +1,6 @@
 #include <Utils/Matrix.h>
 #include <doctest.h>
+#include <cmath>
 
 bool absoluteToleranceCompare(double x, double y)
 {
@@ -8,7 +9,7 @@ bool absoluteToleranceCompare(double x, double y)
 
 bool approximatelyEqual(double a, double b, double epsilon = 0.01)
 {
-    return fabs(a - b) <= ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+    return std::fabs(a - b) <= ((std::fabs(a) < std::fabs(b) ? std::fabs(b) : std::fabs(a)) * epsilon);
 }
 
 TEST_CASE("testing example")
