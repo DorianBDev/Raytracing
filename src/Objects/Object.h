@@ -1,22 +1,11 @@
-#ifndef RAYTRACING_OBJECT_H
-#define RAYTRACING_OBJECT_H
+#ifndef H_RAYTRACING_OBJECT_H
+#define H_RAYTRACING_OBJECT_H
 
-#include "Utils/Matrix.h"
+#include "Utils/Color.h"
+#include "Utils/Ray.h"
+#include "Utils/Vector3.h"
 
-/**
- * @union Color
- * @brief Union to define a color.
- *
- * Union to define a color.
- *
- * @see Matrix
- */
-union Color
-{
-    int m_r;
-    int m_g;
-    int m_b;
-};
+#include <optional>
 
 /**
  * @class Object
@@ -39,6 +28,15 @@ public:
      * @param color       Object's color.
      */
     Object(const Matrix& coordinates, Color color);
+
+    /**
+     * @brief Check if the ray intersect with the object, if this is the case it will return the intersection point.
+     *
+     * @param ray The ray to check the collision with.
+     *
+     * @return Returns the intersection point if there is an intersection, nothing otherwise.
+     */
+    virtual std::optional<Vector3> getIntersection(Ray ray) = 0;
 
     /**
      * @brief Method.
