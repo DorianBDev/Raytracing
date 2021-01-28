@@ -15,7 +15,6 @@ bool approximatelyEqual(double a, double b, double epsilon = 0.01)
 TEST_CASE("testing example")
 {
 
-
     /* Init test */
     Matrix a(2, 2, {{1, 0}, {0, 1}});
 

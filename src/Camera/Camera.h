@@ -32,7 +32,6 @@ public:
      */
     Camera(const Matrix& coordinates, double angle, double scope);
 
-
     /**
      * @brief Method.
      *
@@ -79,6 +78,5 @@ private:
      */
     double m_scope;
 };
-
 
 #endif //RAYTRACING_CAMERA_H

@@ -133,7 +133,6 @@ Matrix Matrix::addMat(Matrix& a, Matrix& b)
         throw std::runtime_error("The m_matrix haven't the same dimension");
     }
 
-
     Matrix c = Matrix(a.m_dimL, a.m_dimC);
 
     for (std::size_t i = 0; i < c.m_dimL; i++)
@@ -153,7 +152,6 @@ Matrix Matrix::subMat(Matrix& a, Matrix& b)
     {
         throw std::runtime_error("The m_matrix haven't the same dimension");
     }
-
 
     Matrix c = Matrix(a.m_dimL, a.m_dimC);
 
@@ -224,10 +222,8 @@ Matrix Matrix::translation(Matrix& a, Matrix& b)
             return c;
         }
 
-
         throw std::runtime_error("the secong argument isn't a Vec3");
     }
-
 
     throw std::runtime_error("the first argument isn't a Vec3");
 }
@@ -255,7 +251,6 @@ Matrix Matrix::rotationX(double alpha, Matrix& a)
         return res;
     }
 
-
     throw std::runtime_error("the m_matrix need to be a Vec3");
 }
 
@@ -281,7 +276,6 @@ Matrix Matrix::rotationY(double alpha, Matrix& a)
 
         return res;
     }
-
 
     throw std::runtime_error("the m_matrix need to be a Vec3");
 }
@@ -309,7 +303,6 @@ Matrix Matrix::rotationZ(double alpha, Matrix& a)
         return res;
     }
 
-
     throw std::runtime_error("the m_matrix need to be a Vec3");
 }
 
@@ -329,7 +322,6 @@ Matrix Matrix::scale(double x, double y, double z, Matrix& a)
 
         return res;
     }
-
 
     throw std::runtime_error("the m_matrix need to be a Vec3");
 }
@@ -351,7 +343,6 @@ Matrix Matrix::transposed(Matrix& a)
         return res;
     }
 
-
     throw std::runtime_error("the m_matrix isn't init");
 }
 
@@ -367,7 +358,6 @@ double Matrix::getNorm(Matrix& a)
 
         return norm;
     }
-
 
     throw std::runtime_error("the m_matrix need to be a Vec3");
 }
@@ -388,7 +378,6 @@ Matrix Matrix::normalize(Matrix& a)
 
         return a;
     }
-
 
     throw std::runtime_error("the m_matrix need to be a Vec3");
 }

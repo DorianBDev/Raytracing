@@ -301,7 +301,6 @@ public:
      */
     double getValue(std::size_t line, std::size_t column);
 
-
 private:
     /**
      * The number of the line of our matrix.
