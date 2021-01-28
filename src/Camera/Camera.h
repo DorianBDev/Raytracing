@@ -24,13 +24,16 @@ public:
      * @param coordinates
      *     Coordinates for the camera.
      *
-     * @param angle
-     *     View's angle of the camera.
+     * @param direction
+     *     Direction of the camera.
      *
-     * @param scope
-     *     Scope of the camera.
+     * @param resolution
+     *     Resolution of the camera.
+     *
+     * @param focale
+     *     Focale of the camera.
      */
-    Camera(const Matrix& coordinates, double angle, double scope);
+    Camera(const Matrix& coordinates, const Matrix& direction, const Matrix& resolution, double focale);
 
     /**
      * @brief Method.
@@ -45,22 +48,60 @@ public:
     /**
      * @brief Method.
      *
-     * This method change the camera's angle.
+     * This method change the direction of the camera.
      *
-     * @param angle
-     *     View's angle of the camera.
+     * @param direction
+     *     Direction for the camera.
      */
-    void setAngle(double angle);
+    void setDirection(const Matrix& direction);
 
     /**
      * @brief Method.
      *
-     * This method change the camera's scope.
+     * This method change the camera's focale.
      *
-     * @param scope
-     *     Scope of the camera.
+     * @param focale
+     *     Focale of the camera.
      */
-    void setScope(double scope);
+    void setFocale(double focale);
+
+    /**
+     * @brief Method.
+     *
+     * This method change the camera's ratio.
+     *
+     * @param ratio
+     *     Ratio of the camera.
+     */
+    void setRatio(double ratio);
+
+    /**
+     * @brief Method.
+     *
+     * This method return the coordinates of the camera.
+     */
+    Matrix getCoordinates();
+
+    /**
+     * @brief Method.
+     *
+     * This method return the direction of the camera.
+     */
+    Matrix getDirection();
+
+    /**
+     * @brief Method.
+     *
+     * This method return the camera's focale.
+     */
+    [[nodiscard]] double getFocale() const;
+
+    /**
+     * @brief Method.
+     *
+     * This method return the camera's ratio.
+     */
+    [[nodiscard]] double getRatio() const;
 
 private:
     /**
@@ -69,14 +110,24 @@ private:
     Matrix m_coordinates;
 
     /**
-     * The view's angle of the camera.
+     * The direction of the camera.
      */
-    double m_angle;
+    Matrix m_direction;
 
     /**
-     * The scope of the camera.
+     * The resolution of the camera.
      */
-    double m_scope;
+    Matrix m_resolution;
+
+    /**
+     * The focale of the camera.
+     */
+    double m_focale;
+
+    /**
+     * The ratio of the picture.
+     */
+    double m_ratio;
 };
 
 #endif //RAYTRACING_CAMERA_H
