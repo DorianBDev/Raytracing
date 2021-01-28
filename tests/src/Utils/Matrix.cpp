@@ -30,6 +30,9 @@ TEST_CASE("testing example")
     Matrix vec3(3, 1, {{3}, {5}, {0.2}});
     Matrix vec31(3, 1, {{0}, {1}, {0}});
 
+    Matrix calcDet(3, 3, {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
+    Matrix calcDet2(3, 3, {{1, 0.25, 2}, {3, 1, 2}, {0.4, 0.7, 1}});
+
     /* Addition tests */
     Matrix c = Matrix::addMat(a, b);
     Matrix c2 = Matrix::addMat(a, b2);
@@ -162,4 +165,24 @@ TEST_CASE("testing example")
 
     CHECK(Matrix::getNorm(j) == 1);
     CHECK(approximatelyEqual(Matrix::getNorm(j2), 1.0));
+
+    /* Determinant */
+
+    CHECK(Matrix::getDet(calcDet) == 0);
+    CHECK(approximatelyEqual(Matrix::getDet(calcDet2), 2.45));
+
+    /* Invert */
+
+    Matrix toInvert(3, 3, {{-1, 2, 5}, {1, 2, 3}, {-2, 8, 10}});
+    Matrix toTest = toInvert.invertMat(toInvert);
+
+    CHECK(toTest.getValue(0, 0) == -0.125);
+    CHECK(toTest.getValue(0, 1) == 0.625);
+    CHECK(toTest.getValue(0, 2) == -0.125);
+    CHECK(toTest.getValue(1, 0) == -0.5);
+    CHECK(toTest.getValue(1, 1) == 0);
+    CHECK(toTest.getValue(1, 2) == 0.25);
+    CHECK(toTest.getValue(2, 0) == 0.375);
+    CHECK(toTest.getValue(2, 1) == 0.125);
+    CHECK(toTest.getValue(2, 2) == -0.125);
 }

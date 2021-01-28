@@ -233,6 +233,28 @@ public:
      */
     double getValue(std::size_t line, std::size_t column);
 
+    /**
+     * @brief Invert the matrix in parameter (only for a 3*3 matrix).
+     *
+     * @param a   The matrix we want to invert.
+     *
+     * @return Returns the inverted matrix.
+     *
+     * @see transposed
+     * @see getDet
+     * @see scalMult
+     */
+    static Matrix invertMat(Matrix& a);
+
+    /**
+     * @brief Get the determinant of a 3*3 matrix.
+     *
+     * @param a   The matrix we want to have the determinant.
+     *
+     * @return Returns the determinant of the matrix.
+     */
+    static double getDet(Matrix& a);
+
 private:
     /**
      * The number of the line of our matrix.

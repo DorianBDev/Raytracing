@@ -389,3 +389,79 @@ double Matrix::getValue(std::size_t line, std::size_t column)
 
     return m_matrix[line][column];
 }
+
+Matrix Matrix::invertMat(Matrix& a)
+{
+    if (a.m_dimC != 3 && a.m_dimL != 3)
+    {
+        throw std::runtime_error("the m_matrix is not a 3*3 matrix");
+    }
+
+    double matrixDet = Matrix::getDet(a);
+
+    if (matrixDet == 0)
+    {
+        throw std::runtime_error("the m_matrix is not invertible");
+    }
+
+    // Create submatrix to have the determinant
+    Matrix subMat00(2, 2, {{a.m_matrix[1][1], a.m_matrix[1][2]}, {a.m_matrix[2][1], a.m_matrix[2][2]}});
+    Matrix subMat01(2, 2, {{a.m_matrix[1][0], a.m_matrix[1][2]}, {a.m_matrix[2][0], a.m_matrix[2][2]}});
+    Matrix subMat02(2, 2, {{a.m_matrix[1][0], a.m_matrix[1][1]}, {a.m_matrix[2][0], a.m_matrix[2][1]}});
+
+    Matrix subMat10(2, 2, {{a.m_matrix[0][1], a.m_matrix[0][2]}, {a.m_matrix[2][1], a.m_matrix[2][2]}});
+    Matrix subMat11(2, 2, {{a.m_matrix[0][0], a.m_matrix[0][2]}, {a.m_matrix[2][0], a.m_matrix[2][2]}});
+    Matrix subMat12(2, 2, {{a.m_matrix[0][0], a.m_matrix[0][1]}, {a.m_matrix[2][0], a.m_matrix[2][1]}});
+
+    Matrix subMat20(2, 2, {{a.m_matrix[0][1], a.m_matrix[0][2]}, {a.m_matrix[1][1], a.m_matrix[1][2]}});
+    Matrix subMat21(2, 2, {{a.m_matrix[0][0], a.m_matrix[0][2]}, {a.m_matrix[1][0], a.m_matrix[1][2]}});
+    Matrix subMat22(2, 2, {{a.m_matrix[0][0], a.m_matrix[0][1]}, {a.m_matrix[1][0], a.m_matrix[1][1]}});
+
+    // Get the determinant for each submatrix
+    double det00 = Matrix::getDet(subMat00);
+    double det01 = -Matrix::getDet(subMat01);
+    double det02 = Matrix::getDet(subMat02);
+
+    double det10 = -Matrix::getDet(subMat10);
+    double det11 = Matrix::getDet(subMat11);
+    double det12 = -Matrix::getDet(subMat12);
+
+    double det20 = Matrix::getDet(subMat20);
+    double det21 = -Matrix::getDet(subMat21);
+    double det22 = Matrix::getDet(subMat22);
+
+    Matrix toTranspose(3, 3, {{det00, det01, det02}, {det10, det11, det12}, {det20, det21, det22}});
+
+    Matrix transposed = Matrix::transposed(toTranspose);
+
+    double scalar = 1 / matrixDet;
+
+    Matrix invert = Matrix::scalMult(transposed, scalar);
+
+    return invert;
+}
+
+double Matrix::getDet(Matrix& a)
+{
+    // 3*3 matrix
+    if (a.m_dimC == 3 && a.m_dimL == 3)
+    {
+        double det = a.m_matrix[0][0] * a.m_matrix[1][1] * a.m_matrix[2][2];
+        det -= a.m_matrix[2][0] * a.m_matrix[1][1] * a.m_matrix[0][2];
+        det += a.m_matrix[0][1] * a.m_matrix[1][2] * a.m_matrix[2][0];
+        det -= a.m_matrix[2][1] * a.m_matrix[1][2] * a.m_matrix[0][0];
+        det += a.m_matrix[0][2] * a.m_matrix[1][0] * a.m_matrix[2][1];
+        det -= a.m_matrix[2][2] * a.m_matrix[1][0] * a.m_matrix[0][1];
+
+        return det;
+    }
+    // 2*2 matrix
+    if (a.m_dimC == 2 && a.m_dimL == 2)
+    {
+        double det = a.m_matrix[0][0] * a.m_matrix[1][1] - (a.m_matrix[0][1] * a.m_matrix[1][0]);
+
+        return det;
+    }
+
+    throw std::runtime_error("the m_matrix is not a 3*3 matrix");
+}
