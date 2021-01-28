@@ -21,17 +21,10 @@ public:
      *
      * This constructor initialize the camera object.
      *
-     * @param coordinates
-     *     Coordinates for the camera.
-     *
-     * @param direction
-     *     Direction of the camera.
-     *
-     * @param resolution
-     *     Resolution of the camera.
-     *
-     * @param focale
-     *     Focale of the camera.
+     * @param coordinates Coordinates for the camera.
+     * @param direction   Direction of the camera.
+     * @param resolution  Resolution of the camera.
+     * @param focale      Focale of the camera.
      */
     Camera(const Matrix& coordinates, const Matrix& direction, const Matrix& resolution, double focale);
 
@@ -40,8 +33,7 @@ public:
      *
      * This method change the coordinates of the camera.
      *
-     * @param coordinates
-     *     Coordinates for the camera.
+     * @param coordinates Coordinates for the camera.
      */
     void setCoordinates(const Matrix& coordinates);
 
@@ -50,8 +42,7 @@ public:
      *
      * This method change the direction of the camera.
      *
-     * @param direction
-     *     Direction for the camera.
+     * @param direction Direction for the camera.
      */
     void setDirection(const Matrix& direction);
 
@@ -60,8 +51,7 @@ public:
      *
      * This method change the camera's focale.
      *
-     * @param focale
-     *     Focale of the camera.
+     * @param focale Focale of the camera.
      */
     void setFocale(double focale);
 
@@ -70,8 +60,7 @@ public:
      *
      * This method change the camera's ratio.
      *
-     * @param ratio
-     *     Ratio of the camera.
+     * @param ratio Ratio of the camera.
      */
     void setRatio(double ratio);
 
@@ -79,6 +68,8 @@ public:
      * @brief Method.
      *
      * This method return the coordinates of the camera.
+     *
+     * @return Returns the coordinates matrix.
      */
     Matrix getCoordinates();
 
@@ -86,6 +77,8 @@ public:
      * @brief Method.
      *
      * This method return the direction of the camera.
+     *
+     * @return Returns the direction matrix.
      */
     Matrix getDirection();
 
@@ -93,6 +86,8 @@ public:
      * @brief Method.
      *
      * This method return the camera's focale.
+     *
+     * @param Returns the focale length.
      */
     double getFocale() const;
 
@@ -100,6 +95,8 @@ public:
      * @brief Method.
      *
      * This method return the camera's ratio.
+     *
+     * @return Returns the picture's ratio.
      */
     double getRatio() const;
 

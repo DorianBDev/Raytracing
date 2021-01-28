@@ -35,11 +35,8 @@ public:
      *
      * This constructor initialize the object.
      *
-     * @param coordinates
-     *     Coordinates for the object.
-     *
-     * @param color
-     *     Object's color
+     * @param coordinates Coordinates for the object.
+     * @param color       Object's color.
      */
     Object(const Matrix& coordinates, Color color);
 
@@ -48,8 +45,7 @@ public:
      *
      * This method change the coordinates of the object.
      *
-     * @param coordinates
-     *     Coordinates for the object.
+     * @param coordinates Coordinates for the object.
      */
     void setCoordinates(const Matrix& coordinates);
 
@@ -58,8 +54,7 @@ public:
      *
      * This method change the color of the object.
      *
-     * @param color
-     *     Object's color.
+     * @param color Object's color.
      */
     void setColor(Color color);
 
@@ -68,8 +63,9 @@ public:
      *
      * This method return the coordinates of the object.
      *
-     * @param coordinates
-     *     Coordinates for the object.
+     * @param coordinates Coordinates for the object.
+     *
+     * @return Returns the object's coordinates.
      */
     Matrix getCoordinates();
 
@@ -78,8 +74,9 @@ public:
      *
      * This method return the color of the object.
      *
-     * @param color
-     *     Object's color.
+     * @param color Object's color.
+     *
+     * @return Returns the object's color.
      */
     Color getColor();
 
