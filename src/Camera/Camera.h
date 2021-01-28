@@ -94,14 +94,14 @@ public:
      *
      * This method return the camera's focale.
      */
-    [[nodiscard]] double getFocale() const;
+    double getFocale() const;
 
     /**
      * @brief Method.
      *
      * This method return the camera's ratio.
      */
-    [[nodiscard]] double getRatio() const;
+    double getRatio() const;
 
 private:
     /**

@@ -18,6 +18,7 @@ Checks: >
   -cppcoreguidelines-owning-memory,
   -cppcoreguidelines-special-member-functions,
   -hicpp-special-member-functions,
+  -modernize-use-nodiscard,
 WarningsAsErrors:  '*'
 CheckOptions:
   - key:    readability-identifier-naming.ClassCase
