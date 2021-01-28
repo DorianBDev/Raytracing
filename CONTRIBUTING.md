@@ -81,7 +81,6 @@ enum MyEnum
 };
 ```
 
-
 ## Documentation
 
 You can build the project **code** documentation to help you (in the "doc" folder), see the "doc/README.md" file for more.
