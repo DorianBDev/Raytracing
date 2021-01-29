@@ -220,6 +220,13 @@ public:
      */
     double determinant() const;
 
+    /**
+     * @brief Round this matrix.
+     *
+     * @return Returns *this.
+     */
+    Matrix& round();
+
     /////////////////////////////////////////////////////////////////////
     /// Operators
     /////////////////////////////////////////////////////////////////////
@@ -436,6 +443,15 @@ public:
                              const Matrix& directionPrimary,    // (1,3)
                              const Matrix& intersectionPoint,   // (1,3)
                              const Matrix& intersectionNormal); // (1,3)
+
+    /**
+     * @brief Round a matrix.
+     *
+     * @param matrix The matrix to round.
+     *
+     * @return Returns the rounded matrix.
+     */
+    static Matrix round(const Matrix& matrix);
 
 protected:
     /**

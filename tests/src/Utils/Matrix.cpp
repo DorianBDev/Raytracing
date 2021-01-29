@@ -189,6 +189,14 @@ TEST_CASE("testing matrix 1")
 
 TEST_CASE("testing matrix 2")
 {
+    Matrix a = Matrix(2, 2, {{0.41453, 40.888888888888}, {50.695599, 10.1444868644}});
+
+    a.round();
+    CHECK(a.value(0, 0) == 0.0);
+    CHECK(a.value(0, 1) == 41.0);
+    CHECK(a.value(1, 0) == 51.0);
+    CHECK(a.value(1, 1) == 10.0);
+
     //TODO: test operators
     //TODO: test matrix.functions()
     //TODO: test (1,3) and (3,1) for operators

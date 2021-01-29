@@ -150,6 +150,12 @@ double Matrix::determinant() const
     return Matrix::determinant(*this);
 }
 
+Matrix& Matrix::round()
+{
+    *this = Matrix::round(*this);
+    return *this;
+}
+
 /////////////////////////////////////////////////////////////////////
 /// Operators
 /////////////////////////////////////////////////////////////////////
@@ -690,6 +696,20 @@ Matrix Matrix::reflection(const Matrix& originPrimary,
     throw std::runtime_error("Not implemented.");
 
     return Matrix(1, 1);
+}
+
+Matrix Matrix::round(const Matrix& matrix)
+{
+    Matrix res = matrix;
+    for (std::size_t i = 0; i < res.m_rowCount; i++)
+    {
+        for (std::size_t j = 0; j < res.m_columnCount; j++)
+        {
+            res.m_matrix[i][j] = std::round(res.m_matrix[i][j]);
+        }
+    }
+
+    return res;
 }
 
 void Matrix::allocate(std::size_t rowCount, std::size_t columnCount)
