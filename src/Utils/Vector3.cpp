@@ -6,6 +6,7 @@ Vector3::Vector3() : Matrix(1, 3)
 
 Vector3::Vector3(const Vector3& vector) : Matrix(1, 3)
 {
+    Matrix::fill(vector);
 }
 
 Vector3::Vector3(const Matrix& matrix) : Matrix(matrix)

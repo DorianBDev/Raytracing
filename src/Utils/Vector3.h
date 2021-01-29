@@ -87,7 +87,7 @@ public:
 
 protected:
     /**
-     * @brief Fill the matrix from an initializer list.
+     * @brief Fill the vector with an initializer list.
      *
      * @param initializerList The initializer list.
      */

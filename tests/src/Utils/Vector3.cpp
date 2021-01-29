@@ -1,6 +1,7 @@
 #include <Utils/Vector3.h>
 #include <cmath>
 #include <doctest.h>
+#include <optional>
 
 TEST_CASE("testing vector3")
 {
@@ -59,6 +60,9 @@ TEST_CASE("testing vector3")
     CHECK(b != c);
     CHECK(b != m);
     CHECK(d == b);
+
+    std::optional<Vector3> res(Vector3({1, 1, 1}));
+    CHECK(res.value() == Vector3({1, 1, 1}));
 
     //TODO: more tests
 }
