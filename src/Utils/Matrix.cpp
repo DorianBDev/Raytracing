@@ -1,5 +1,6 @@
 #include "Matrix.h"
 
+#include "Math.h"
 #include "Vector3.h"
 
 #include <cmath>
@@ -228,8 +229,7 @@ bool Matrix::operator==(const Matrix& matrix) const
     {
         for (std::size_t column = 0; column < m_columnCount; column++)
         {
-            if (std::fabs(matrix.m_matrix[row][column] - m_matrix[row][column]) >
-                std::numeric_limits<double>::epsilon())
+            if (!areDoubleEqual(matrix.m_matrix[row][column], m_matrix[row][column]))
                 return false;
         }
     }
@@ -710,6 +710,23 @@ Matrix Matrix::round(const Matrix& matrix)
     }
 
     return res;
+}
+
+bool Matrix::areApproximatelyEqual(const Matrix& a, const Matrix& b, double precision)
+{
+    if (a.getRowCount() != b.getRowCount() || a.getColumnCount() != b.getColumnCount())
+        return false;
+
+    for (std::size_t row = 0; row < a.getRowCount(); row++)
+    {
+        for (std::size_t column = 0; column < a.getColumnCount(); column++)
+        {
+            if (!areDoubleApproximatelyEqual(a.value(row, column), b.value(row, column), precision))
+                return false;
+        }
+    }
+
+    return true;
 }
 
 void Matrix::allocate(std::size_t rowCount, std::size_t columnCount)

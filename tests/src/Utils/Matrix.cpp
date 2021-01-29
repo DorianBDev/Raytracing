@@ -1,20 +1,9 @@
+#include <Utils/Math.h>
 #include <Utils/Matrix.h>
-#include <cmath>
 #include <doctest.h>
-
-bool absoluteToleranceCompare(double x, double y)
-{
-    return std::fabs(x - y) <= std::numeric_limits<double>::epsilon();
-}
-
-bool approximatelyEqual(double a, double b, double epsilon = 0.01)
-{
-    return std::fabs(a - b) <= ((std::fabs(a) < std::fabs(b) ? std::fabs(b) : std::fabs(a)) * epsilon);
-}
 
 TEST_CASE("testing matrix 1")
 {
-
     /* Init test */
     Matrix a(2, 2, {{1, 0}, {0, 1}});
 
@@ -71,10 +60,10 @@ TEST_CASE("testing matrix 1")
     CHECK(d2.value(1, 0) == 2);
     CHECK(d2.value(1, 1) == -5);
 
-    CHECK(absoluteToleranceCompare(d3.value(0, 0), -0.25));
-    CHECK(absoluteToleranceCompare(d3.value(0, 1), 5.25));
-    CHECK(absoluteToleranceCompare(d3.value(1, 0), 1.33));
-    CHECK(absoluteToleranceCompare(d3.value(1, 1), 0.67));
+    CHECK(areDoubleApproximatelyEqual(d3.value(0, 0), -0.25));
+    CHECK(areDoubleApproximatelyEqual(d3.value(0, 1), 5.25));
+    CHECK(areDoubleApproximatelyEqual(d3.value(1, 0), 1.33));
+    CHECK(areDoubleApproximatelyEqual(d3.value(1, 1), 0.67));
 
     /* Multiplication with scalar */
     Matrix e = Matrix::scalarProduct(a, 7);
@@ -91,10 +80,10 @@ TEST_CASE("testing matrix 1")
     CHECK(e2.value(1, 0) == 0);
     CHECK(e2.value(1, 1) == -7);
 
-    CHECK(absoluteToleranceCompare(e3.value(0, 0), 0.33));
-    CHECK(absoluteToleranceCompare(e3.value(0, 1), 0));
-    CHECK(absoluteToleranceCompare(e3.value(1, 0), 0));
-    CHECK(absoluteToleranceCompare(e3.value(1, 1), 0.33));
+    CHECK(areDoubleApproximatelyEqual(e3.value(0, 0), 0.33));
+    CHECK(areDoubleApproximatelyEqual(e3.value(0, 1), 0));
+    CHECK(areDoubleApproximatelyEqual(e3.value(1, 0), 0));
+    CHECK(areDoubleApproximatelyEqual(e3.value(1, 1), 0.33));
 
     /* Multiplication with another matrix */
     Matrix f = Matrix::matrixProduct(a, a);
@@ -111,27 +100,27 @@ TEST_CASE("testing matrix 1")
     CHECK(f2.value(1, 0) == 1);
     CHECK(f2.value(1, 1) == 0);
 
-    CHECK(absoluteToleranceCompare(f3.value(0, 0), -1.09));
-    CHECK(absoluteToleranceCompare(f3.value(0, 1), 15.09));
-    CHECK(absoluteToleranceCompare(f3.value(1, 0), -10.48));
-    CHECK(absoluteToleranceCompare(f3.value(1, 1), 12.48));
+    CHECK(areDoubleApproximatelyEqual(f3.value(0, 0), -1.09));
+    CHECK(areDoubleApproximatelyEqual(f3.value(0, 1), 15.09));
+    CHECK(areDoubleApproximatelyEqual(f3.value(1, 0), -10.48));
+    CHECK(areDoubleApproximatelyEqual(f3.value(1, 1), 12.48));
 
     /* Rotation X, Y and Z */
     Matrix g = Matrix::rotationX(0.25, vec3);
     Matrix g2 = Matrix::rotationY(0.25, vec3);
     Matrix g3 = Matrix::rotationZ(0.25, vec3);
 
-    CHECK(absoluteToleranceCompare(g.value(0, 0), 3));
-    CHECK(approximatelyEqual(g.value(1, 0), 4.79508));
-    CHECK(approximatelyEqual(g.value(2, 0), 1.4308022806));
+    CHECK(areDoubleApproximatelyEqual(g.value(0, 0), 3));
+    CHECK(areDoubleApproximatelyEqual(g.value(1, 0), 4.79508));
+    CHECK(areDoubleApproximatelyEqual(g.value(2, 0), 1.4308022806));
 
-    CHECK(approximatelyEqual(g2.value(0, 0), 2.95622));
-    CHECK(approximatelyEqual(g2.value(1, 0), 5));
-    CHECK(approximatelyEqual(g2.value(2, 0), -0.548429));
+    CHECK(areDoubleApproximatelyEqual(g2.value(0, 0), 2.95622));
+    CHECK(areDoubleApproximatelyEqual(g2.value(1, 0), 5));
+    CHECK(areDoubleApproximatelyEqual(g2.value(2, 0), -0.548429));
 
-    CHECK(approximatelyEqual(g3.value(0, 0), 1.66972));
-    CHECK(approximatelyEqual(g3.value(1, 0), 5.58677));
-    CHECK(approximatelyEqual(g3.value(2, 0), 0.2));
+    CHECK(areDoubleApproximatelyEqual(g3.value(0, 0), 1.66972));
+    CHECK(areDoubleApproximatelyEqual(g3.value(1, 0), 5.58677));
+    CHECK(areDoubleApproximatelyEqual(g3.value(2, 0), 0.2));
 
     /* Matrix transposition */
     Matrix h = Matrix::transposed(a);
@@ -157,19 +146,19 @@ TEST_CASE("testing matrix 1")
     double i2 = Matrix::getNorm(vec3);
 
     CHECK(i == 1);
-    CHECK(approximatelyEqual(i2, 5.8343808583));
+    CHECK(areDoubleApproximatelyEqual(i2, 5.8343808583));
 
     /* Normalize */
     Matrix j = Matrix::normalize(vec31);
     Matrix j2 = Matrix::normalize(vec3);
 
     CHECK(Matrix::getNorm(j) == 1);
-    CHECK(approximatelyEqual(Matrix::getNorm(j2), 1.0));
+    CHECK(areDoubleApproximatelyEqual(Matrix::getNorm(j2), 1.0));
 
     /* Determinant */
 
     CHECK(Matrix::determinant(calcDet) == 0);
-    CHECK(approximatelyEqual(Matrix::determinant(calcDet2), 2.45));
+    CHECK(areDoubleApproximatelyEqual(Matrix::determinant(calcDet2), 2.45));
 
     /* Invert */
 
@@ -196,6 +185,16 @@ TEST_CASE("testing matrix 2")
     CHECK(a.value(0, 1) == 41.0);
     CHECK(a.value(1, 0) == 51.0);
     CHECK(a.value(1, 1) == 10.0);
+
+    Matrix b = Matrix(2, 2, {{0.41453, 40.888888888888}, {50.695599, 10.1444868644}});
+    Matrix c = Matrix(2, 2, {{0.41453, 40.888888888888}, {50.695599, 10.1444868644}});
+    CHECK(b == c);
+    CHECK(Matrix::areApproximatelyEqual(b, c));
+
+    c = Matrix(2, 2, {{0.414531, 40.888888888885}, {50.695599, 10.1444868648}});
+    CHECK(b != c);
+    CHECK(Matrix::areApproximatelyEqual(b, c));
+    CHECK(!Matrix::areApproximatelyEqual(b, c, 0.00000000000000001));
 
     //TODO: test operators
     //TODO: test matrix.functions()

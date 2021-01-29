@@ -453,6 +453,17 @@ public:
      */
     static Matrix round(const Matrix& matrix);
 
+    /**
+     * @brief Test if two matrices are approximately equal.
+     *
+     * @param a         The first matrix to compare.
+     * @param b         The second matrix to compare.
+     * @param precision The precision of the comparison, a ~= b +- precision.
+     *
+     * @return Returns true if a and b are approximately equal.
+     */
+    static bool areApproximatelyEqual(const Matrix& a, const Matrix& b, double precision = 0.01);
+
 protected:
     /**
      * @brief Allocate the matrix.
