@@ -61,6 +61,12 @@ TEST_CASE("testing vector3")
     CHECK(b != m);
     CHECK(d == b);
 
+    b = Vector3({1.256, 9.6899, 0.00025});
+    CHECK(d != b);
+
+    d = Vector3({1.256, 9.6899, 0.00025});
+    CHECK(d == b);
+
     std::optional<Vector3> res(Vector3({1, 1, 1}));
     CHECK(res.value() == Vector3({1, 1, 1}));
 

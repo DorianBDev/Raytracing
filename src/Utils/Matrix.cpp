@@ -222,7 +222,8 @@ bool Matrix::operator==(const Matrix& matrix) const
     {
         for (std::size_t column = 0; column < m_columnCount; column++)
         {
-            if (matrix.m_matrix[row][column] != m_matrix[row][column])
+            if (std::fabs(matrix.m_matrix[row][column] - m_matrix[row][column]) >
+                std::numeric_limits<double>::epsilon())
                 return false;
         }
     }
