@@ -5,6 +5,8 @@
 #include <iostream>
 #include <stdexcept>
 
+class Vector3;
+
 /**
  * @class Matrix
  * @brief Class that manage matrix calculations.
@@ -20,10 +22,10 @@ public:
      *
      * This is a basic constructor for a matrix. All the values are set to 0.
      *
-     * @param nbLine Number of line for the matrix.
-     * @param nbCol  Number of column for the matrix.
+     * @param rowCount     Number of line for the matrix.
+     * @param columnCount  Number of column for the matrix.
      */
-    Matrix(std::size_t nbLine, std::size_t nbCol);
+    Matrix(std::size_t rowCount, std::size_t columnCount);
 
     /**
      * @brief Another constructor with line and column and value init.
@@ -31,13 +33,16 @@ public:
      * This is another constructor for a matrix. We also use a initializer_list to init the values of the matrix's
      * element.
      *
-     * @param nbLine          Number of line for the matrix.
-     * @param nbLine          Number of column for the matrix.
+     * @param rowCount        Number of line for the matrix.
+     * @param columnCount     Number of column for the matrix.
      * @param initializerList List to init the values os the matrix.
      */
-    Matrix(std::size_t nbLine,
-           std::size_t nbCol,
+    Matrix(std::size_t rowCount,
+           std::size_t columnCount,
            const std::initializer_list<std::initializer_list<double>>& initializerList);
+    Matrix(std::size_t rowCount,
+           std::size_t columnCount,
+           const std::initializer_list<std::initializer_list<double>>&& initializerList);
 
     /**
      * @brief Constructor by copy.
@@ -52,16 +57,186 @@ public:
     ~Matrix();
 
     /**
-     * @brief Set the values of the matrix manually.
-     *
-     * Update the values of the matrix with a terminal.
-     */
-    void setvalue();
-
-    /**
      * @brief Print a matrix.
      */
-    void printMatrix();
+    void print() const;
+
+    /**
+     * @brief Get the value of one item in the matrix.
+     *
+     * @param row    The line's location of our element.
+     * @param column The column's location of our element.
+     *
+     * @return Returns the value of the element at the given line and column.
+     */
+    double value(std::size_t row, std::size_t column) const;
+
+    /**
+     * @brief
+     * @param row
+     * @param column
+     * @param value
+     */
+    void setValue(std::size_t row, std::size_t column, double value);
+
+    /**
+     * @brief Get the row count of the matrix.
+     *
+     * @return Returns the row count of the matrix.
+     */
+    std::size_t getRowCount() const;
+
+    /**
+     * @brief Get the column count of the matrix.
+     *
+     * @return Returns the column count of the matrix.
+     */
+    std::size_t getColumnCount() const;
+
+    /**
+     * @brief Convert the matrix to a Vector3.
+     *
+     * @return Returns the new Vector3 from the matrix.
+     */
+    Vector3 toVector3() const;
+
+    /**
+     * @brief Translate this matrix. (must be Vector3)
+     *
+     * Translate a 3D vector with another 3D vector.
+     * Be careful, this only works with 3D vector.
+     *
+     * @param a Second 3D vector which represent the direction.
+     *
+     * @return Returns *this.
+     *
+     * @see addMatrix
+     */
+    Matrix& translate(const Matrix& a);
+
+    /**
+     * @brief Rotate on x axis. (must be Vector3)
+     *
+     * Rotate a 3D vector on the x axis.
+     * Be careful, this only works with 3D vector.
+     * The rotation matrix is 3*3 matrix.
+     *
+     * @param alpha The angle of the rotation.
+     *
+     * @return Returns *this.
+     *
+     * @see matrixProduct
+     */
+    Matrix& rotateX(double angle);
+
+    /**
+     * @brief Rotate on y axis. (must be Vector3)
+     *
+     * Rotate a 3D vector on the y axis.
+     * Be careful, this only works with 3D vector.
+     * The rotation matrix is 3*3 matrix.
+     *
+     * @param alpha The angle of the rotation.
+     *
+     * @return Returns *this.
+     *
+     * @see matrixProduct
+     */
+    Matrix& rotateY(double angle);
+
+    /**
+     * @brief Rotate on z axis. (must be Vector3)
+     *
+     * Rotate a 3D vector on the z axis.
+     * Be careful, this only works with 3D vector.
+     * The rotation matrix is 3*3 matrix.
+     *
+     * @param alpha The angle of the rotation.
+     *
+     * @return Returns *this.
+     *
+     * @see matrixProduct
+     */
+    Matrix& rotateZ(double angle);
+
+    /**
+     * @brief Scale this matrix. (must be Vector3)
+     *
+     * Be careful, this only works with 3D vector.
+     * The scaling matrix is 3*3 matrix.
+     *
+     * @param x The coefficient for the x component of the 3D vector.
+     * @param y The coefficient for the y component of the 3D vector.
+     * @param z The coefficient for the z component of the 3D vector.
+     *
+     * @return Returns *this.
+     *
+     * @see matrixProduct
+     */
+    Matrix& scale(double x, double y, double z);
+
+    /**
+     * @brief Transpose this matrix.
+     *
+     * @return Returns *this.
+     */
+    Matrix& transpose();
+
+    /**
+     * @brief Get the norm of this matrix. (must be Vector3)
+     *
+     * Be careful, this only works with 3D vector.
+     *
+     * @return Returns the norm of the matrix.
+     */
+    double getNorm() const;
+
+    /**
+     * @brief Normalize this matrix. (must be Vector3)
+     *
+     * Be careful, this only works with 3D vector.
+     *
+     * @return Returns *this.
+     *
+     * @see getNorm
+     */
+    Matrix& normalize();
+
+    /**
+     * @brief Invert the matrix (only for a 3*3 matrix).
+     *
+     * @return Returns *this.
+     *
+     * @see transpose
+     * @see determinant
+     * @see scalarProduct
+     */
+    Matrix& invert();
+
+    /**
+     * @brief Get the determinant of the matrix (must be 3*3).
+     *
+     * @return Returns the determinant of the matrix.
+     */
+    double determinant() const;
+
+    /////////////////////////////////////////////////////////////////////
+    /// Operators
+    /////////////////////////////////////////////////////////////////////
+
+    Matrix& operator=(const Matrix& matrix);
+    Matrix& operator+=(const Matrix& matrix);
+    Matrix& operator-=(const Matrix& matrix);
+    Matrix& operator*=(const Matrix& matrix);
+    Matrix& operator*=(double scalar);
+    Matrix operator+(const Matrix& matrix) const;
+    Matrix operator-(const Matrix& matrix) const;
+    Matrix operator*(const Matrix& matrix) const;
+    Matrix operator*(double scalar) const;
+
+    /////////////////////////////////////////////////////////////////////
+    /// Static methods
+    /////////////////////////////////////////////////////////////////////
 
     /**
      * @brief Addition of two matrix.
@@ -73,7 +248,7 @@ public:
      *
      * @return Returns the result of the addition of matrix a and b.
      */
-    static Matrix addMat(Matrix& a, Matrix& b);
+    static Matrix addMatrix(const Matrix& a, const Matrix& b);
 
     /**
      * @brief Subtraction of two matrix.
@@ -85,7 +260,7 @@ public:
      *
      * @return Returns the result of the subtraction of matrix a and b (a-b).
      */
-    static Matrix subMat(Matrix& a, Matrix& b);
+    static Matrix subMatrix(const Matrix& a, const Matrix& b);
 
     /**
      * @brief Multiplication with a scalar.
@@ -97,7 +272,7 @@ public:
      *
      * @return Returns the result of the multiplication of the matrix and the scalar.
      */
-    static Matrix scalMult(Matrix& a, double scalar);
+    static Matrix scalarProduct(const Matrix& a, double scalar);
 
     /**
      * @brief Multiplication two matrix.
@@ -109,7 +284,7 @@ public:
      *
      * @return Returns the result of the multiplication of the two matrix. Be safe of the order : a*b.
      */
-    static Matrix prodMat(Matrix& a, Matrix& b);
+    static Matrix matrixProduct(const Matrix& a, const Matrix& b);
 
     /**
      * @brief Translation of one 3D vector.
@@ -123,9 +298,9 @@ public:
      * @return Returns a nex 3D vector resulting of the translation of the vector a by the direction b. The operation
      *         is the following : a+b.
      *
-     * @see addMat
+     * @see addMatrix
      */
-    static Matrix translation(Matrix& a, Matrix& b);
+    static Matrix translation(const Matrix& a, const Matrix& b);
 
     /**
      * @brief Rotation on x axis.
@@ -139,9 +314,9 @@ public:
      *
      * @return Returns a new 3D vector resulting of the rotation of the vector on the x axis.
      *
-     * @see prodMat
+     * @see matrixProduct
      */
-    static Matrix rotationX(double alpha, Matrix& a);
+    static Matrix rotationX(double alpha, const Matrix& a);
 
     /**
      * @brief Rotation on y axis.
@@ -149,14 +324,14 @@ public:
      * Rotate a 3D vector on the y axis.
      * Be careful, this only works with 3D vector.
      * The rotation matrix is 3*3 matrix.
-     * There is a dependency with the prodMat method.
+     * There is a dependency with the matrixProduct method.
      *
      * @param alpha The angle of the rotation.
      * @param a     3D vector to rotate. Must be a 3D vector
      *
      * @return Returns a new 3D vector resulting of the rotation of the vector on the y axis.
      */
-    static Matrix rotationY(double alpha, Matrix& a);
+    static Matrix rotationY(double alpha, const Matrix& a);
 
     /**
      * @brief Rotation on z axis.
@@ -164,14 +339,14 @@ public:
      * Rotate a 3D vector on the z axis.
      * Be careful, this only works with 3D vector.
      * The rotation matrix is 3*3 matrix.
-     * There is a dependency with the prodMat method.
+     * There is a dependency with the matrixProduct method.
      *
      * @param alpha The angle of the rotation.
      * @param a     3D vector to rotate. Must be a 3D vector
      *
      * @return Returns a new 3D vector resulting of the rotation of the vector on the z axis.
      */
-    static Matrix rotationZ(double alpha, Matrix& a);
+    static Matrix rotationZ(double alpha, const Matrix& a);
 
     /**
      * @brief Scale a 3D vector.
@@ -186,9 +361,9 @@ public:
      *
      * @return Returns a new 3D vector resulting of the scaling depending of the coefficient.
      *
-     * @see prodMat
+     * @see matrixProduct
      */
-    static Matrix scale(double x, double y, double z, Matrix& a);
+    static Matrix scale(double x, double y, double z, const Matrix& a);
 
     /**
      * @brief Transposition of a matrix.
@@ -197,7 +372,7 @@ public:
      *
      * @return Returns a new matrix which is the transpose of the matrix in parameter.
      */
-    static Matrix transposed(Matrix& a);
+    static Matrix transposed(const Matrix& a);
 
     /**
      * @brief Get the norm of a 3D vector.
@@ -208,7 +383,7 @@ public:
      *
      * @return Returns the norm of the 3D vector in parameter.
      */
-    static double getNorm(Matrix& a);
+    static double getNorm(const Matrix& a);
 
     /**
      * @brief Normalize a 3D vector.
@@ -221,17 +396,7 @@ public:
      *
      * @see getNorm
      */
-    static Matrix normalize(Matrix& a);
-
-    /**
-     * @brief Get the value of one item in the matrix.
-     *
-     * @param line   The line's location of our element.
-     * @param column The column's location of our element.
-     *
-     * @return Returns the value of the element at the given line and column.
-     */
-    double getValue(std::size_t line, std::size_t column);
+    static Matrix normalize(const Matrix& a);
 
     /**
      * @brief Invert the matrix in parameter (only for a 3*3 matrix).
@@ -240,11 +405,11 @@ public:
      *
      * @return Returns the inverted matrix.
      *
-     * @see transposed
-     * @see getDet
-     * @see scalMult
+     * @see transpose
+     * @see determinant
+     * @see scalarProduct
      */
-    static Matrix invertMat(Matrix& a);
+    static Matrix invert(const Matrix& a);
 
     /**
      * @brief Get the determinant of a 3*3 matrix.
@@ -253,18 +418,68 @@ public:
      *
      * @return Returns the determinant of the matrix.
      */
-    static double getDet(Matrix& a);
+    static double determinant(const Matrix& a);
+
+    /**
+     * @brief Reflection implementation.
+     *
+     * @param originPrimary      The origin point of the primary ray.
+     * @param directionPrimary   The direction of the primary ray.
+     * @param intersectionPoint  The intersection point.
+     * @param intersectionNormal The intersection normal.
+     *
+     * @return Returns the reflected ray direction. The reflected ray will be intersectionPoint + reflectedDirection.
+     */
+    static Matrix reflection(const Matrix& originPrimary,       // (1,3)
+                             const Matrix& directionPrimary,    // (1,3)
+                             const Matrix& intersectionPoint,   // (1,3)
+                             const Matrix& intersectionNormal); // (1,3)
+
+protected:
+    /**
+     * @brief Allocate the matrix.
+     *
+     * @param rowCount    The matrix row count.
+     * @param columnCount The matrix column count.
+     */
+    void allocate(std::size_t rowCount, std::size_t columnCount);
+
+    /**
+     * @brief Deallocate the matrix.
+     */
+    void deallocate();
+
+    /**
+     * @brief Fill the matrix from an initializer list.
+     *
+     * @param initializerList The initializer list.
+     */
+    void fill(const std::initializer_list<std::initializer_list<double>>& initializerList);
+
+    /**
+     * @brief Fill the matrix from another matrix.
+     *
+     * @param a The matrix to fill from.
+     */
+    void fill(const Matrix& a);
+
+    /**
+     * @brief Fill the matrix with a specific value.
+     *
+     * @param value The value to use.
+     */
+    void fill(double value);
 
 private:
     /**
      * The number of the line of our matrix.
      */
-    std::size_t m_dimL = 0;
+    std::size_t m_rowCount = 0;
 
     /**
      * The number of the column of our matrix.
      */
-    std::size_t m_dimC = 0;
+    std::size_t m_columnCount = 0;
 
     /**
      * Store the element of our matrix.

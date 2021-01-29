@@ -39,6 +39,15 @@ public:
     virtual std::optional<Vector3> getIntersection(Ray ray) = 0;
 
     /**
+     * @brief Get the secondary ray from a primary ray, if there is an intersection.
+     *
+     * @param ray The primary ray to use.
+     *
+     * @return Returns the secondary ray if there is an intersection, nothing otherwise.
+     */
+    virtual std::optional<Ray> getSecondaryRay(Ray ray) = 0;
+
+    /**
      * @brief Method.
      *
      * This method change the coordinates of the object.

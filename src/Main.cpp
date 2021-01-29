@@ -7,7 +7,7 @@
 int main(int argc, char* argv[])
 {
     Matrix a(3, 3, {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}});
-    a.printMatrix();
+    a.print();
 
     //double norm = Matrix::getNorm(a);
     //std::cout << "norme = " << norm << std::endl;

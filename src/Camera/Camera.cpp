@@ -6,7 +6,7 @@ Camera::Camera(const Matrix& coordinates, const Matrix& direction, const Matrix&
       m_resolution(resolution),
       m_focale(focale)
 {
-    m_ratio = m_resolution.getValue(0, 0) / m_resolution.getValue(1, 0);
+    m_ratio = m_resolution.value(0, 0) / m_resolution.value(1, 0);
 }
 
 void Camera::setCoordinates(const Matrix& coordinates)
