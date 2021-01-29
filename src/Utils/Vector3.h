@@ -83,6 +83,8 @@ public:
      */
     void setZ(double value);
 
+    Vector3& operator=(const Matrix& matrix);
+
 protected:
     /**
      * @brief Fill the matrix from an initializer list.
@@ -91,5 +93,14 @@ protected:
      */
     void fill(const std::initializer_list<double>& initializerList);
 };
+
+/**
+ * @brief Check if a matrix is a Vector3 (size of 1,3).
+ *
+ * @param matrix The matrix to test.
+ *
+ * @return Returns true if the matrix is a Vector3, false otherwise.
+ */
+bool isVector3(const Matrix& matrix);
 
 #endif //H_RAYTRACING_VECTOR3_H

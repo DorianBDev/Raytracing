@@ -213,6 +213,28 @@ Matrix Matrix::operator*(double scalar) const
     return Matrix::scalarProduct(*this, scalar);
 }
 
+bool Matrix::operator==(const Matrix& matrix) const
+{
+    if (matrix.getRowCount() != m_rowCount || matrix.getColumnCount() != m_columnCount)
+        return false;
+
+    for (std::size_t row = 0; row < m_rowCount; row++)
+    {
+        for (std::size_t column = 0; column < m_columnCount; column++)
+        {
+            if (matrix.m_matrix[row][column] != m_matrix[row][column])
+                return false;
+        }
+    }
+
+    return true;
+}
+
+bool Matrix::operator!=(const Matrix& matrix) const
+{
+    return !(*this == matrix);
+}
+
 /////////////////////////////////////////////////////////////////////
 /// Static methods
 /////////////////////////////////////////////////////////////////////
@@ -281,8 +303,6 @@ Matrix Matrix::matrixProduct(const Matrix& a, const Matrix& b)
 {
     if (a.m_columnCount == 0 || a.m_columnCount != b.m_rowCount)
     {
-        a.print();
-        b.print();
         throw std::runtime_error("Problem with dimension to multiply the m_matrix");
     }
 

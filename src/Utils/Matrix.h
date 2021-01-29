@@ -233,6 +233,8 @@ public:
     Matrix operator-(const Matrix& matrix) const;
     Matrix operator*(const Matrix& matrix) const;
     Matrix operator*(double scalar) const;
+    bool operator==(const Matrix& matrix) const;
+    bool operator!=(const Matrix& matrix) const;
 
     /////////////////////////////////////////////////////////////////////
     /// Static methods

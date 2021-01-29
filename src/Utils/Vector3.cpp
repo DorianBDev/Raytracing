@@ -65,6 +65,17 @@ void Vector3::setZ(double value)
     setValue(0, 2, value);
 }
 
+Vector3& Vector3::operator=(const Matrix& matrix)
+{
+    if (!isVector3(matrix))
+        throw std::runtime_error("The matrix can't be cast to a vector3, wrong size.");
+
+    allocate(1, 3);
+    Matrix::fill(matrix);
+
+    return *this;
+}
+
 void Vector3::fill(const std::initializer_list<double>& initializerList)
 {
     std::size_t column = 0;
@@ -76,4 +87,9 @@ void Vector3::fill(const std::initializer_list<double>& initializerList)
         setValue(0, column, value);
         column++;
     }
+}
+
+bool isVector3(const Matrix& matrix)
+{
+    return (matrix.getRowCount() == 1 && matrix.getColumnCount() == 3);
 }

@@ -25,5 +25,40 @@ TEST_CASE("testing vector3")
     CHECK(c.y() == 0);
     CHECK(c.z() == 0);
 
+    Vector3 d;
+    d = c + b;
+
+    CHECK(d.x() == 2);
+    CHECK(d.y() == 0);
+    CHECK(d.z() == 0);
+
+    Matrix m(3, 3, {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}});
+    d = b * m + c;
+
+    CHECK(d.x() == 2);
+    CHECK(d.y() == 1);
+    CHECK(d.z() == 1);
+
+    d = b * 5.0 + c;
+
+    CHECK(d.x() == 6);
+    CHECK(d.y() == 0);
+    CHECK(d.z() == 0);
+
+    // Vector3(1,3) * Vector3(1,3)
+    CHECK_THROWS(b * c);
+
+    // Vector3(3,1) * Vector3(1,3)
+    CHECK_NOTHROW(b.transpose() * c);
+
+    // Vector3 = Matrix(1,1)
+    CHECK_THROWS(d = b * c);
+
+    b = Vector3({6, 0, 0});
+
+    CHECK(b != c);
+    CHECK(b != m);
+    CHECK(d == b);
+
     //TODO: more tests
 }
