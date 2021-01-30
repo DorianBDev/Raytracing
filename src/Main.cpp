@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-int main(int argc, char* argv[])
+int main()
 {
     Matrix a(3, 3, {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}});
     a.print();

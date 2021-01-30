@@ -4,6 +4,13 @@ Vector3::Vector3() : Matrix(1, 3)
 {
 }
 
+Vector3::Vector3(double x, double y, double z) : Matrix(1, 3)
+{
+    setX(x);
+    setY(y);
+    setZ(z);
+}
+
 Vector3::Vector3(const Vector3& vector) : Matrix(1, 3)
 {
     Matrix::fill(vector);
@@ -73,6 +80,20 @@ Vector3& Vector3::operator=(const Matrix& matrix)
 
     allocate(1, 3);
     Matrix::fill(matrix);
+
+    return *this;
+}
+
+Vector3& Vector3::operator=(const Vector3& vector)
+{
+    if (this == &vector)
+        return *this;
+
+    allocate(1, 3);
+
+    setX(vector.x());
+    setY(vector.y());
+    setZ(vector.z());
 
     return *this;
 }

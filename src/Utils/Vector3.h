@@ -18,6 +18,15 @@ public:
     Vector3();
 
     /**
+     * @brief Create an empty 3D vector.
+     *
+     * @param x The x coordinate value.
+     * @param y The y coordinate value.
+     * @param z The z coordinate value.
+     */
+    Vector3(double x, double y, double z);
+
+    /**
      * @brief Create a 3D vector from another one.
      *
      * @param vector The vector to copy from.
@@ -84,6 +93,7 @@ public:
     void setZ(double value);
 
     Vector3& operator=(const Matrix& matrix);
+    Vector3& operator=(const Vector3& vector);
 
 protected:
     /**
