@@ -196,7 +196,170 @@ TEST_CASE("testing matrix 2")
     CHECK(Matrix::areApproximatelyEqual(b, c));
     CHECK(!Matrix::areApproximatelyEqual(b, c, 0.00000000000000001));
 
-    //TODO: test operators
-    //TODO: test matrix.functions()
-    //TODO: test (1,3) and (3,1) for operators
+    Matrix a1 = Matrix(2, 2, {{1, 0}, {0, 1}});
+    Matrix b1 = Matrix(2, 2, {{0, 1}, {1, 0}});
+
+    /* + */
+    Matrix c1 = a1 + b1;
+    CHECK(c1.value(0, 0) == 1);
+    CHECK(c1.value(0, 1) == 1);
+    CHECK(c1.value(1, 0) == 1);
+    CHECK(c1.value(1, 1) == 1);
+
+    /* - */
+    Matrix c2 = a1 - b1;
+    CHECK(c2.value(0, 0) == 1);
+    CHECK(c2.value(0, 1) == -1);
+    CHECK(c2.value(1, 0) == -1);
+    CHECK(c2.value(1, 1) == 1);
+
+    /* *(matrix) */
+    Matrix c3 = a1 * b1;
+    CHECK(c3.value(0, 0) == 0);
+    CHECK(c3.value(0, 1) == 1);
+    CHECK(c3.value(1, 0) == 1);
+    CHECK(c3.value(1, 1) == 0);
+
+    /* *(scalar) */
+    Matrix c4 = a1 * 2;
+    //Matrix c4 = 2 * a1; not allowed
+    CHECK(c4.value(0, 0) == 2);
+    CHECK(c4.value(0, 1) == 0);
+    CHECK(c4.value(1, 0) == 0);
+    CHECK(c4.value(1, 1) == 2);
+
+    /* += */
+    Matrix c5 = Matrix(2, 2, {{1, 0}, {0, 1}});
+    c5 += a1;
+    CHECK(c5.value(0, 0) == 2);
+    CHECK(c5.value(0, 1) == 0);
+    CHECK(c5.value(1, 0) == 0);
+    CHECK(c5.value(1, 1) == 2);
+
+    /* -= */
+    Matrix c6 = Matrix(2, 2, {{1, 0}, {0, 1}});
+    c6 -= a1;
+    CHECK(c6.value(0, 0) == 0);
+    CHECK(c6.value(0, 1) == 0);
+    CHECK(c6.value(1, 0) == 0);
+    CHECK(c6.value(1, 1) == 0);
+
+    /* *= (matrix) */
+    Matrix c7 = a1;
+    c7 *= b1;
+    CHECK(c7.value(0, 0) == 0);
+    CHECK(c7.value(0, 1) == 1);
+    CHECK(c7.value(1, 0) == 1);
+    CHECK(c7.value(1, 1) == 0);
+
+    /* *= (scalar) */
+    Matrix c8 = a1;
+    c8 *= 2;
+    CHECK(c8.value(0, 0) == 2);
+    CHECK(c8.value(0, 1) == 0);
+    CHECK(c8.value(1, 0) == 0);
+    CHECK(c8.value(1, 1) == 2);
+
+    Matrix d(3, 1, {{3}, {5}, {0.2}});
+    Matrix d1(3, 1, {{0}, {1}, {0}});
+
+    d.translate(d1);
+    CHECK(d.value(0, 0) == 3);
+    CHECK(d.value(1, 0) == 6);
+    CHECK(d.value(2, 0) == 0.2);
+
+    Matrix d2(3, 1, {{3}, {5}, {0.2}});
+
+    d2.rotateX(0.25);
+    CHECK(areDoubleApproximatelyEqual(d2.value(0, 0), 3));
+    CHECK(areDoubleApproximatelyEqual(d2.value(1, 0), 4.79508));
+    CHECK(areDoubleApproximatelyEqual(d2.value(2, 0), 1.4308022806));
+
+    Matrix d3(3, 1, {{3}, {5}, {0.2}});
+    d3.rotateY(0.25);
+    CHECK(areDoubleApproximatelyEqual(d3.value(0, 0), 2.95622));
+    CHECK(areDoubleApproximatelyEqual(d3.value(1, 0), 5));
+    CHECK(areDoubleApproximatelyEqual(d3.value(2, 0), -0.548429));
+
+    Matrix d4(3, 1, {{3}, {5}, {0.2}});
+    d4.rotateZ(0.25);
+    CHECK(areDoubleApproximatelyEqual(d4.value(0, 0), 1.66972));
+    CHECK(areDoubleApproximatelyEqual(d4.value(1, 0), 5.58677));
+    CHECK(areDoubleApproximatelyEqual(d4.value(2, 0), 0.2));
+
+    Matrix d5(3, 1, {{1}, {2}, {3}});
+    d5.scale(1, 2, 3);
+    CHECK(areDoubleApproximatelyEqual(d5.value(0, 0), 1));
+    CHECK(areDoubleApproximatelyEqual(d5.value(1, 0), 4));
+    CHECK(areDoubleApproximatelyEqual(d5.value(2, 0), 9));
+
+    d5.transpose();
+    CHECK(areDoubleApproximatelyEqual(d5.value(0, 0), 1));
+    CHECK(areDoubleApproximatelyEqual(d5.value(0, 1), 4));
+    CHECK(areDoubleApproximatelyEqual(d5.value(0, 2), 9));
+
+    Matrix vec3(3, 1, {{3}, {5}, {0.2}});
+    double norm = vec3.getNorm();
+    CHECK(areDoubleApproximatelyEqual(norm, 5.8343808583));
+
+    vec3.normalize();
+    double norm2 = vec3.getNorm();
+    CHECK(areDoubleApproximatelyEqual(norm2, 1));
+
+    Matrix calcDet(3, 3, {{1, 0.25, 2}, {3, 1, 2}, {0.4, 0.7, 1}});
+    double det = calcDet.determinant();
+    CHECK(areDoubleApproximatelyEqual(det, 2.45));
+
+    Matrix toInvert(3, 3, {{-1, 2, 5}, {1, 2, 3}, {-2, 8, 10}});
+    toInvert.invert();
+
+    CHECK(toInvert.value(0, 0) == -0.125);
+    CHECK(toInvert.value(0, 1) == 0.625);
+    CHECK(toInvert.value(0, 2) == -0.125);
+    CHECK(toInvert.value(1, 0) == -0.5);
+    CHECK(toInvert.value(1, 1) == 0);
+    CHECK(toInvert.value(1, 2) == 0.25);
+    CHECK(toInvert.value(2, 0) == 0.375);
+    CHECK(toInvert.value(2, 1) == 0.125);
+    CHECK(toInvert.value(2, 2) == -0.125);
+
+    Matrix e(1, 3, {{3, 5, 0.2}});
+    Matrix e1(1, 3, {{0, 1, 0}});
+
+    e.translate(e1);
+    CHECK(e.value(0, 0) == 3);
+    CHECK(e.value(0, 1) == 6);
+    CHECK(e.value(0, 2) == 0.2);
+
+    Matrix e2(1, 3, {{3, 5, 0.2}});
+    e2.rotateX(0.25);
+    CHECK(areDoubleApproximatelyEqual(e2.value(0, 0), 3));
+    CHECK(areDoubleApproximatelyEqual(e2.value(0, 1), 4.79508));
+    CHECK(areDoubleApproximatelyEqual(e2.value(0, 2), 1.4308022806));
+
+    Matrix e3(1, 3, {{3, 5, 0.2}});
+    e3.rotateY(0.25);
+    CHECK(areDoubleApproximatelyEqual(e3.value(0, 0), 2.95622));
+    CHECK(areDoubleApproximatelyEqual(e3.value(0, 1), 5));
+    CHECK(areDoubleApproximatelyEqual(e3.value(0, 2), -0.548429));
+
+    Matrix e4(1, 3, {{3, 5, 0.2}});
+    e4.rotateZ(0.25);
+    CHECK(areDoubleApproximatelyEqual(e4.value(0, 0), 1.66972));
+    CHECK(areDoubleApproximatelyEqual(e4.value(0, 1), 5.58677));
+    CHECK(areDoubleApproximatelyEqual(e4.value(0, 2), 0.2));
+
+    Matrix e5(1, 3, {{1, 2, 3}});
+    e5.scale(1, 2, 3);
+    CHECK(areDoubleApproximatelyEqual(e5.value(0, 0), 1));
+    CHECK(areDoubleApproximatelyEqual(e5.value(0, 1), 4));
+    CHECK(areDoubleApproximatelyEqual(e5.value(0, 2), 9));
+
+    Matrix vec32(1, 3, {{3, 5, 0.2}});
+    double norm32 = vec32.getNorm();
+    CHECK(areDoubleApproximatelyEqual(norm32, 5.8343808583));
+
+    vec32.normalize();
+    double norm322 = vec32.getNorm();
+    CHECK(areDoubleApproximatelyEqual(norm322, 1));
 }

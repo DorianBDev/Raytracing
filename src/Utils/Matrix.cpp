@@ -331,21 +331,14 @@ Matrix Matrix::matrixProduct(const Matrix& a, const Matrix& b)
 
 Matrix Matrix::translation(const Matrix& a, const Matrix& b)
 {
-    /* check if it's Vec3 */
-    if (a.m_columnCount == 1 && a.m_rowCount == 3)
+    if (a.m_columnCount != b.getColumnCount() && a.m_rowCount != b.m_rowCount)
     {
-        if (b.m_columnCount == 1 && b.m_rowCount == 3)
-        {
-            Matrix c = Matrix(3, 1);
-            c = Matrix::addMatrix(a, b);
-
-            return c;
-        }
-
-        throw std::runtime_error("The second argument isn't a Vec3.");
+        throw std::runtime_error("The 2 matrix haven't the same size.");
     }
 
-    throw std::runtime_error("The first argument isn't a Vec3.");
+    Matrix c = Matrix::addMatrix(a, b);
+
+    return c;
 }
 
 Matrix Matrix::rotationX(double alpha, const Matrix& a)
@@ -502,8 +495,6 @@ Matrix Matrix::scale(double x, double y, double z, const Matrix& a)
         scale.m_matrix[1][1] = y;
         scale.m_matrix[2][2] = z;
 
-        scale.print();
-
         Matrix res = matrixProduct(scale, a);
 
         return res;
@@ -516,8 +507,6 @@ Matrix Matrix::scale(double x, double y, double z, const Matrix& a)
         scale.m_matrix[0][0] = x;
         scale.m_matrix[1][1] = y;
         scale.m_matrix[2][2] = z;
-
-        scale.print();
 
         auto transposedA = Matrix::transposed(a);
         Matrix res = scale * transposedA;
