@@ -151,6 +151,11 @@ double Matrix::determinant() const
     return Matrix::determinant(*this);
 }
 
+double Matrix::scalarProduct(const Matrix& b) const
+{
+    return Matrix::scalarProduct(*this, b);
+}
+
 Matrix& Matrix::round()
 {
     *this = Matrix::round(*this);
@@ -675,16 +680,59 @@ double Matrix::determinant(const Matrix& a)
     throw std::runtime_error("the m_matrix is not a 3*3 matrix");
 }
 
-Matrix Matrix::reflection(const Matrix& originPrimary,
-                          const Matrix& directionPrimary,
-                          const Matrix& intersectionPoint,
-                          const Matrix& intersectionNormal)
+double Matrix::scalarProduct(const Matrix& a, const Matrix& b)
 {
-    //TODO
+    if (a.m_columnCount != b.getColumnCount() && a.m_rowCount != b.m_rowCount)
+    {
+        throw std::runtime_error("The 2 matrix haven't the same size .");
+    }
 
-    throw std::runtime_error("Not implemented.");
+    if (a.m_columnCount == 1 && a.m_rowCount == 3)
+    {
 
-    //return Matrix(1, 1);
+        double value = 0;
+        for (size_t i = 0; i < a.m_rowCount; i++)
+        {
+            value += a.m_matrix[i][0] * b.m_matrix[i][0];
+        }
+
+        return value;
+    }
+
+    if (a.m_columnCount == 3 && a.m_rowCount == 1)
+    {
+        double value = 0;
+        for (size_t i = 0; i < a.m_columnCount; i++)
+        {
+            value += a.m_matrix[0][i] * b.m_matrix[0][i];
+        }
+
+        return value;
+    }
+
+    throw std::runtime_error("The matrix aren't Vec3 .");
+}
+
+Matrix Matrix::reflection(const Matrix& directionPrimary, const Matrix& intersectionNormal)
+{
+    if ((directionPrimary.m_rowCount != 3 && directionPrimary.m_rowCount != 1) ||
+        (intersectionNormal.m_rowCount != 3 && intersectionNormal.m_rowCount != 1))
+    {
+        throw std::runtime_error("There is a problem with the size of the vectors. Must be (1*3).");
+    }
+
+    // normalize the 2 vectors
+    Matrix incident = Matrix::normalize(directionPrimary);
+    Matrix normal = Matrix::normalize(intersectionNormal);
+
+    // calculate the reflected vector : I - 2 * (I.N)*N
+    double scalarProd = incident.scalarProduct(normal);
+    scalarProd *= 2;
+    normal *= scalarProd;
+
+    Matrix reflectedDir = Matrix::subMatrix(incident, normal);
+
+    return reflectedDir;
 }
 
 Matrix Matrix::round(const Matrix& matrix)
@@ -791,7 +839,7 @@ void Matrix::fill(double value)
     {
         for (std::size_t j = 0; j < m_columnCount; j++)
         {
-            m_matrix[i][j] = 0;
+            m_matrix[i][j] = value;
         }
     }
 }

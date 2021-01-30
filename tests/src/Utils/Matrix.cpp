@@ -174,6 +174,19 @@ TEST_CASE("testing matrix 1")
     CHECK(toTest.value(2, 0) == 0.375);
     CHECK(toTest.value(2, 1) == 0.125);
     CHECK(toTest.value(2, 2) == -0.125);
+
+    Matrix vec32(3, 1, {{1}, {0}, {0}});
+    double scalProd = Matrix::scalarProduct(vec32, vec32);
+    CHECK(scalProd == 1);
+
+    Matrix vec321(3, 1, {{2}, {4}, {6}});
+    Matrix vec322(3, 1, {{0.2}, {1}, {3.5}});
+    double scalProd2 = Matrix::scalarProduct(vec321, vec322);
+    CHECK(scalProd2 == 25.4);
+
+    Matrix vec33(1, 3, {{1, 0, 0}});
+    double scalProd3 = Matrix::scalarProduct(vec33, vec33);
+    CHECK(scalProd3 == 1);
 }
 
 TEST_CASE("testing matrix 2")
@@ -362,4 +375,26 @@ TEST_CASE("testing matrix 2")
     vec32.normalize();
     double norm322 = vec32.getNorm();
     CHECK(areDoubleApproximatelyEqual(norm322, 1));
+
+    Matrix vec323(3, 1, {{1}, {0}, {0}});
+    double scalProd = vec323.scalarProduct(vec323);
+    CHECK(scalProd == 1);
+
+    Matrix vec321(3, 1, {{2}, {4}, {6}});
+    Matrix vec322(3, 1, {{0.2}, {1}, {3.5}});
+    double scalProd2 = vec321.scalarProduct(vec322);
+    CHECK(scalProd2 == 25.4);
+
+    Matrix vec33(1, 3, {{1, 0, 0}});
+    double scalProd3 = vec33.scalarProduct(vec33);
+    CHECK(scalProd3 == 1);
+
+    Matrix incident(1, 3, {{-0.34, 2.83, -1}});
+    Matrix normal(1, 3, {{-0.03, 0.57, 0.81}});
+
+    Matrix reflected = Matrix::reflection(incident, normal);
+
+    Matrix reflectedTest(1, 3, {{-0.29, 1.90, -2.317}});
+    reflectedTest.normalize();
+
 }

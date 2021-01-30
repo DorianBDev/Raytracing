@@ -221,6 +221,13 @@ public:
     double determinant() const;
 
     /**
+     * @brief Get the scalar product of 2 vec3.
+     *
+     * @return Returns the the scalar product of 2 vec3.
+     */
+    double scalarProduct(const Matrix& b) const;
+
+    /**
      * @brief Round this matrix.
      *
      * @return Returns *this.
@@ -430,6 +437,16 @@ public:
     static double determinant(const Matrix& a);
 
     /**
+    * @brief Get the scalar product of 2 Vec3.
+    *
+    * @param a   The first vec3.
+    * @param b   The second vec3.
+    *
+    * @return Returns the scalar production of the 2 Vec3.
+    */
+    static double scalarProduct(const Matrix& a, const Matrix& b);
+
+    /**
      * @brief Reflection implementation.
      *
      * @param originPrimary      The origin point of the primary ray.
@@ -439,10 +456,7 @@ public:
      *
      * @return Returns the reflected ray direction. The reflected ray will be intersectionPoint + reflectedDirection.
      */
-    static Matrix reflection(const Matrix& originPrimary,       // (1,3)
-                             const Matrix& directionPrimary,    // (1,3)
-                             const Matrix& intersectionPoint,   // (1,3)
-                             const Matrix& intersectionNormal); // (1,3)
+    static Matrix reflection(const Matrix& directionPrimary, const Matrix& intersectionNormal);
 
     /**
      * @brief Round a matrix.
