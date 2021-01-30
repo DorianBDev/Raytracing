@@ -684,7 +684,7 @@ Matrix Matrix::reflection(const Matrix& originPrimary,
 
     throw std::runtime_error("Not implemented.");
 
-    return Matrix(1, 1);
+    //return Matrix(1, 1);
 }
 
 Matrix Matrix::round(const Matrix& matrix)
