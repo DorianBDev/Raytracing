@@ -396,5 +396,4 @@ TEST_CASE("testing matrix 2")
 
     Matrix reflectedTest(1, 3, {{-0.29, 1.90, -2.317}});
     reflectedTest.normalize();
-
 }
