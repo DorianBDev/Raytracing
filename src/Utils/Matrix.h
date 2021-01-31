@@ -1,6 +1,7 @@
 #ifndef H_RAYTRACING_MATRIX_H
 #define H_RAYTRACING_MATRIX_H
 
+#include <cmath>
 #include <initializer_list>
 #include <iostream>
 #include <stdexcept>

@@ -1,10 +1,10 @@
 #include "Camera.h"
 
-Camera::Camera(const Matrix& coordinates, const Matrix& direction, const Matrix& resolution, double focale)
+Camera::Camera(const Matrix& coordinates, const Matrix& direction, const Matrix& resolution, double focal)
     : m_coordinates(coordinates),
       m_direction(direction),
       m_resolution(resolution),
-      m_focale(focale)
+      m_focal(focal)
 {
     m_ratio = m_resolution.value(0, 0) / m_resolution.value(1, 0);
 }
@@ -19,9 +19,9 @@ void Camera::setDirection(const Matrix& direction)
     m_direction = direction;
 }
 
-void Camera::setFocale(double focale)
+void Camera::setFocal(double focal)
 {
-    m_focale = focale;
+    m_focal = focal;
 }
 
 void Camera::setRatio(double ratio)
@@ -39,9 +39,9 @@ Matrix Camera::getDirection()
     return m_direction;
 }
 
-double Camera::getFocale() const
+double Camera::getFocal() const
 {
-    return m_focale;
+    return m_focal;
 }
 
 double Camera::getRatio() const

@@ -51,7 +51,5 @@ std::optional<Vector3> Sphere::getIntersection(Ray ray)
 }
 std::optional<Ray> Sphere::getSecondaryRay(Ray ray)
 {
-    //Vector3 reflect = Matrix::reflection(ray.getDirection(), ray.getDirection());
-
     return std::optional<Ray>(ray);
 }

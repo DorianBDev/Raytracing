@@ -24,9 +24,9 @@ public:
      * @param coordinates Coordinates for the camera.
      * @param direction   Direction of the camera.
      * @param resolution  Resolution of the camera.
-     * @param focale      Focale of the camera.
+     * @param focal      Focal of the camera.
      */
-    Camera(const Matrix& coordinates, const Matrix& direction, const Matrix& resolution, double focale);
+    Camera(const Matrix& coordinates, const Matrix& direction, const Matrix& resolution, double focal);
 
     /**
      * @brief Method.
@@ -49,11 +49,11 @@ public:
     /**
      * @brief Method.
      *
-     * This method change the camera's focale.
+     * This method change the camera's focal.
      *
-     * @param focale Focale of the camera.
+     * @param focal Focal of the camera.
      */
-    void setFocale(double focale);
+    void setFocal(double focal);
 
     /**
      * @brief Method.
@@ -85,11 +85,11 @@ public:
     /**
      * @brief Method.
      *
-     * This method return the camera's focale.
+     * This method return the camera's focal.
      *
-     * @param Returns the focale length.
+     * @param Returns the focal length.
      */
-    double getFocale() const;
+    double getFocal() const;
 
     /**
      * @brief Method.
@@ -117,9 +117,9 @@ private:
     Matrix m_resolution;
 
     /**
-     * The focale of the camera.
+     * The focal of the camera.
      */
-    double m_focale;
+    double m_focal;
 
     /**
      * The ratio of the picture.
