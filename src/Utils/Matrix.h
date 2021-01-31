@@ -449,9 +449,7 @@ public:
     /**
      * @brief Reflection implementation.
      *
-     * @param originPrimary      The origin point of the primary ray.
      * @param directionPrimary   The direction of the primary ray.
-     * @param intersectionPoint  The intersection point.
      * @param intersectionNormal The intersection normal.
      *
      * @return Returns the reflected ray direction. The reflected ray will be intersectionPoint + reflectedDirection.

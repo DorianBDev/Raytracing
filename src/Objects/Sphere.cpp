@@ -6,18 +6,17 @@ Sphere::Sphere(const Vector3& coordinates, Color color, double radius) : Object(
 
 std::optional<Vector3> Sphere::getIntersection(Ray ray)
 {
-    double a = std::pow(ray.getDirection().x(), 2) + std::pow(ray.getDirection().y(), 2) +
-               std::pow(ray.getDirection().z(), 2);
+    double a = pow(ray.getDirection().x(), 2) + pow(ray.getDirection().y(), 2) + pow(ray.getDirection().z(), 2);
 
     double b = 2 * ((ray.getOrigin().x() - this->getCoordinates().x()) * ray.getDirection().x() +
                     (ray.getOrigin().y() - this->getCoordinates().y()) * ray.getDirection().y() +
                     (ray.getOrigin().z() - this->getCoordinates().z()) * ray.getDirection().z());
 
-    double c = std::pow(ray.getOrigin().x() - this->getCoordinates().x(), 2) +
-               std::pow(ray.getOrigin().y() - this->getCoordinates().y(), 2) +
-               std::pow(ray.getOrigin().z() - this->getCoordinates().z(), 2) - std::pow(m_radius, 2);
+    double c = pow(ray.getOrigin().x() - this->getCoordinates().x(), 2) +
+               pow(ray.getOrigin().y() - this->getCoordinates().y(), 2) +
+               pow(ray.getOrigin().z() - this->getCoordinates().z(), 2) - pow(m_radius, 2);
 
-    double discriminant = std::pow(b, 2) - 4 * a * c;
+    double discriminant = pow(b, 2) - 4 * a * c;
 
     Vector3 res;
 
@@ -31,8 +30,8 @@ std::optional<Vector3> Sphere::getIntersection(Ray ray)
 
     if (discriminant > 0)
     {
-        double t1 = (-b - std::sqrt(discriminant)) / (2 * a);
-        double t2 = (-b + std::sqrt(discriminant)) / (2 * a);
+        double t1 = (-b - sqrt(discriminant)) / (2 * a);
+        double t2 = (-b + sqrt(discriminant)) / (2 * a);
 
         if (t1 > 0)
         {
@@ -51,5 +50,7 @@ std::optional<Vector3> Sphere::getIntersection(Ray ray)
 }
 std::optional<Ray> Sphere::getSecondaryRay(Ray ray)
 {
+    //Vector3 reflect = Matrix::reflection(ray.getDirection(), ray.getDirection());
+
     return std::optional<Ray>(ray);
 }
