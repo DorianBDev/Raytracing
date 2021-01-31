@@ -3,6 +3,8 @@
 
 #include "Object.h"
 
+#include <cmath>
+
 /**
  * @class Sphere
  * @brief Class that manage the sphere.
