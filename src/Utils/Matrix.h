@@ -1,6 +1,8 @@
 #ifndef H_RAYTRACING_MATRIX_H
 #define H_RAYTRACING_MATRIX_H
 
+#include "Exceptions.h"
+
 #include <cmath>
 #include <initializer_list>
 #include <iostream>

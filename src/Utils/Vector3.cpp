@@ -24,7 +24,7 @@ Vector3::Vector3(const Matrix& matrix) : Matrix(matrix)
         Matrix::fill(Matrix::transposed(matrix));
     }
     else if (matrix.getRowCount() != 1 || matrix.getColumnCount() != 3)
-        throw std::runtime_error("Wrong matrix size to initialize a Vector3.");
+        throw Exception::Matrix::NotVector3("Can't initialize a Vector3 with this size (!= (1,3)).");
 }
 
 Vector3::Vector3(const Matrix&& matrix) : Matrix(matrix)
@@ -35,7 +35,7 @@ Vector3::Vector3(const Matrix&& matrix) : Matrix(matrix)
         Matrix::fill(Matrix::transposed(matrix));
     }
     else if (matrix.getRowCount() != 1 || matrix.getColumnCount() != 3)
-        throw std::runtime_error("Wrong matrix size to initialize a Vector3.");
+        throw Exception::Matrix::NotVector3("Can't initialize a Vector3 with this size (!= (1,3)).");
 }
 
 Vector3::Vector3(const std::initializer_list<double>& initializerList) : Matrix(1, 3)
@@ -76,7 +76,7 @@ void Vector3::setZ(double value)
 Vector3& Vector3::operator=(const Matrix& matrix)
 {
     if (!isVector3(matrix))
-        throw std::runtime_error("The matrix can't be cast to a vector3, wrong size.");
+        throw Exception::Matrix::NotVector3("The matrix can't be cast to a Vector3.");
 
     allocate(1, 3);
     Matrix::fill(matrix);
@@ -104,7 +104,7 @@ void Vector3::fill(const std::initializer_list<double>& initializerList)
     for (const auto& value : initializerList)
     {
         if (column >= 3)
-            throw std::runtime_error("Wrong initializer list.");
+            throw Exception::Vector3::WrongInitializerList();
 
         setValue(0, column, value);
         column++;

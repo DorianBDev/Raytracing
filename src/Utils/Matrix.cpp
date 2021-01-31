@@ -44,7 +44,7 @@ void Matrix::print() const
 {
     if (m_columnCount == 0 || m_rowCount == 0)
     {
-        throw std::runtime_error("The m_matrix isn't init");
+        throw Exception::Matrix::NotInitialized();
     }
 
     for (std::size_t i = 0; i < m_rowCount; i++)
@@ -60,7 +60,7 @@ void Matrix::print() const
 double Matrix::value(std::size_t row, std::size_t column) const
 {
     if (row >= m_rowCount || column >= m_columnCount)
-        throw std::runtime_error("Wrong coordinates to get a value.");
+        throw Exception::Matrix::WrongCoordinates("Can't get value.");
 
     return m_matrix[row][column];
 }
@@ -68,7 +68,7 @@ double Matrix::value(std::size_t row, std::size_t column) const
 void Matrix::setValue(std::size_t row, std::size_t column, double value)
 {
     if (row >= m_rowCount || column >= m_columnCount)
-        throw std::runtime_error("Wrong coordinates to set a value.");
+        throw Exception::Matrix::WrongCoordinates("Can't set value.");
 
     m_matrix[row][column] = value;
 }
@@ -86,7 +86,7 @@ std::size_t Matrix::getColumnCount() const
 Vector3 Matrix::toVector3() const
 {
     if (m_rowCount != 1 || m_columnCount != 3)
-        throw std::runtime_error("Can't create Vector3 from a matrix != (1,3).");
+        throw Exception::Matrix::NotVector3("Can't cast to Vector3.");
 
     return Vector3(*this);
 }
@@ -253,7 +253,7 @@ Matrix Matrix::addMatrix(const Matrix& a, const Matrix& b)
 {
     if ((a.m_columnCount != b.m_columnCount) || (a.m_rowCount != b.m_rowCount))
     {
-        throw std::runtime_error("The m_matrix haven't the same dimension");
+        throw Exception::Matrix::NotSameSize("Can't add matrices.");
     }
 
     Matrix c = Matrix(a.m_rowCount, a.m_columnCount);
@@ -273,7 +273,7 @@ Matrix Matrix::subMatrix(const Matrix& a, const Matrix& b)
 {
     if ((a.m_columnCount != b.m_columnCount) || (a.m_rowCount != b.m_rowCount))
     {
-        throw std::runtime_error("The m_matrix haven't the same dimension");
+        throw Exception::Matrix::NotSameSize("Can't subtract matrices.");
     }
 
     Matrix c = Matrix(a.m_rowCount, a.m_columnCount);
@@ -293,7 +293,7 @@ Matrix Matrix::scalarProduct(const Matrix& a, double scalar)
 {
     if (a.m_columnCount == 0 || a.m_rowCount == 0)
     {
-        throw std::runtime_error("The m_matrix isn't init");
+        throw Exception::Matrix::NotInitialized();
     }
 
     Matrix c = Matrix(a.m_rowCount, a.m_columnCount);
@@ -313,7 +313,7 @@ Matrix Matrix::matrixProduct(const Matrix& a, const Matrix& b)
 {
     if (a.m_columnCount == 0 || a.m_columnCount != b.m_rowCount)
     {
-        throw std::runtime_error("Problem with dimension to multiply the m_matrix");
+        throw Exception::Matrix::WrongSizesForProduct();
     }
 
     Matrix c = Matrix(a.m_rowCount, b.m_columnCount);
@@ -336,7 +336,7 @@ Matrix Matrix::translation(const Matrix& a, const Matrix& b)
 {
     if (a.m_columnCount != b.getColumnCount() && a.m_rowCount != b.m_rowCount)
     {
-        throw std::runtime_error("The 2 matrix haven't the same size.");
+        throw Exception::Matrix::NotSameSize("For translation.");
     }
 
     Matrix c = Matrix::addMatrix(a, b);
@@ -389,7 +389,7 @@ Matrix Matrix::rotationX(double alpha, const Matrix& a)
         return res.transpose();
     }
 
-    throw std::runtime_error("The matrix must be a Vec3.");
+    throw Exception::Matrix::NotVector3("Need to have a Vector3 ((3,1) or (1,3)) to do a rotation.");
 }
 
 Matrix Matrix::rotationY(double alpha, const Matrix& a)
@@ -437,7 +437,7 @@ Matrix Matrix::rotationY(double alpha, const Matrix& a)
         return res.transpose();
     }
 
-    throw std::runtime_error("The matrix must be a Vec3.");
+    throw Exception::Matrix::NotVector3("Need to have a Vector3 ((3,1) or (1,3)) to do a rotation.");
 }
 
 Matrix Matrix::rotationZ(double alpha, const Matrix& a)
@@ -485,7 +485,7 @@ Matrix Matrix::rotationZ(double alpha, const Matrix& a)
         return res.transpose();
     }
 
-    throw std::runtime_error("The matrix must be a Vec3.");
+    throw Exception::Matrix::NotVector3("Need to have a Vector3 ((3,1) or (1,3)) to do a rotation.");
 }
 
 Matrix Matrix::scale(double x, double y, double z, const Matrix& a)
@@ -517,7 +517,7 @@ Matrix Matrix::scale(double x, double y, double z, const Matrix& a)
         return res.transpose();
     }
 
-    throw std::runtime_error("The matrix must be a Vec3.");
+    throw Exception::Matrix::NotVector3("Need to have a Vector3 ((3,1) or (1,3)) to scale.");
 }
 
 Matrix Matrix::transposed(const Matrix& a)
@@ -537,7 +537,7 @@ Matrix Matrix::transposed(const Matrix& a)
         return res;
     }
 
-    throw std::runtime_error("The m_matrix isn't init.");
+    throw Exception::Matrix::NotInitialized("Impossible to transpose the matrix.");
 }
 
 double Matrix::getNorm(const Matrix& a)
@@ -564,7 +564,7 @@ double Matrix::getNorm(const Matrix& a)
         return norm;
     }
 
-    throw std::runtime_error("The matrix must be a Vec3.");
+    throw Exception::Matrix::NotVector3("Need to have a Vector3 ((3,1) or (1,3)) to get the norm.");
 }
 
 Matrix Matrix::normalize(const Matrix& a)
@@ -599,21 +599,21 @@ Matrix Matrix::normalize(const Matrix& a)
         return a;
     }
 
-    throw std::runtime_error("The matrix must be a Vec3.");
+    throw Exception::Matrix::NotVector3("Need to have a Vector3 ((3,1) or (1,3)) to normalize.");
 }
 
 Matrix Matrix::invert(const Matrix& a)
 {
     if (a.m_columnCount != 3 && a.m_rowCount != 3)
     {
-        throw std::runtime_error("the m_matrix is not a 3*3 matrix");
+        throw Exception::Matrix::WrongSize("Need to be a (3,3) matrix to invert it.");
     }
 
     double matrixDet = Matrix::determinant(a);
 
     if (matrixDet == 0)
     {
-        throw std::runtime_error("the m_matrix is not invertible");
+        throw Exception::Matrix::NotInvertible();
     }
 
     // Create submatrix to have the determinant
@@ -675,14 +675,14 @@ double Matrix::determinant(const Matrix& a)
         return det;
     }
 
-    throw std::runtime_error("the m_matrix is not a 3*3 matrix");
+    throw Exception::Matrix::WrongSize("Need to be a (3,3) matrix to get the determinant.");
 }
 
 double Matrix::scalarProduct(const Matrix& a, const Matrix& b)
 {
     if (a.m_columnCount != b.getColumnCount() && a.m_rowCount != b.m_rowCount)
     {
-        throw std::runtime_error("The 2 matrix haven't the same size .");
+        throw Exception::Matrix::NotSameSize("For the scalar product.");
     }
 
     if (a.m_columnCount == 1 && a.m_rowCount == 3)
@@ -708,7 +708,7 @@ double Matrix::scalarProduct(const Matrix& a, const Matrix& b)
         return value;
     }
 
-    throw std::runtime_error("The matrix aren't Vec3 .");
+    throw Exception::Matrix::NotVector3("For the scalar product.");
 }
 
 Matrix Matrix::reflection(const Matrix& directionPrimary, const Matrix& intersectionNormal)
@@ -716,7 +716,7 @@ Matrix Matrix::reflection(const Matrix& directionPrimary, const Matrix& intersec
     if ((directionPrimary.m_rowCount != 3 && directionPrimary.m_rowCount != 1) ||
         (intersectionNormal.m_rowCount != 3 && intersectionNormal.m_rowCount != 1))
     {
-        throw std::runtime_error("There is a problem with the size of the vectors. Must be (1*3).");
+        throw Exception::Matrix::WrongSize("Must be (1,3) to calculate the reflection.");
     }
 
     // normalize the 2 vectors
@@ -804,12 +804,12 @@ void Matrix::fill(const std::initializer_list<std::initializer_list<double>>& in
     for (const auto& list : initializerList)
     {
         if (line >= m_rowCount)
-            throw std::runtime_error("Wrong initializer list.");
+            throw Exception::Matrix::WrongInitializerList();
 
         for (const auto& value : list)
         {
             if (column >= m_columnCount)
-                throw std::runtime_error("Wrong initializer list.");
+                throw Exception::Matrix::WrongInitializerList();
 
             m_matrix[line][column] = value;
             column++;
