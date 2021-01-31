@@ -39,13 +39,14 @@ public:
     virtual std::optional<Vector3> getIntersection(Ray ray) = 0;
 
     /**
-     * @brief Get the secondary ray from a primary ray, if there is an intersection.
+     * @brief Get the secondary ray from an intersection and origin point if there is an intersection.
      *
-     * @param ray The primary ray to use.
+     * @param intersectionPoint The intersection point with the primary ray.
+     * @param originLight       The origin point of the light.
      *
      * @return Returns the secondary ray if there is an intersection, nothing otherwise.
      */
-    virtual std::optional<Ray> getSecondaryRay(Ray ray) = 0;
+    virtual std::optional<Ray> getSecondaryRay(Vector3 intersectionPoint, Vector3 originLight) = 0;
 
     /**
      * @brief Method.

@@ -3,6 +3,8 @@
 
 TEST_CASE("testing sphere")
 {
+    // To test the intersection point found with the primary ray
+
     Vector3 coordinates({{1, 1, 1}});
     Color color{};
     Sphere sphere(coordinates, color, 1);
@@ -10,6 +12,7 @@ TEST_CASE("testing sphere")
     // b = (0, 0, 0)
     // y = a_i * x + b
 
+    // Initialization of 5 rays with their results
     Vector3 a1({{1, 1, 1}});
     Ray r1({{0, 0, 0}}, a1, PRIMARY);
     Vector3 res1({{0.42265, 0.42265, 0.42265}});
@@ -28,15 +31,32 @@ TEST_CASE("testing sphere")
     Ray r5({{0, 0, 0}}, a5, PRIMARY);
     Vector3 res5({{0.60, 0.60, 0.18}});
 
-    sphere.getIntersection(r1).value().print();
-    sphere.getIntersection(r2).value().print();
-    //sphere.getIntersection(r3).value().print();
-    //sphere.getIntersection(r4).value().print();
-    sphere.getIntersection(r5).value().print();
-
     CHECK(Matrix::areApproximatelyEqual(sphere.getIntersection(r1).value(), res1)); // OK
     CHECK(Matrix::areApproximatelyEqual(sphere.getIntersection(r2).value(), res2)); // OK
     CHECK(sphere.getIntersection(r3) == std::nullopt);                              // NO
     CHECK(sphere.getIntersection(r4) == std::nullopt);                              // NO
     CHECK(Matrix::areApproximatelyEqual(sphere.getIntersection(r5).value(), res5)); // OK
+
+    // The coordinates of the light in the scene
+    Vector3 light({{5, 5, 5}});
+
+    // 6 Rays to test the result of getSecondaryRay
+    Ray s1(sphere.getIntersection(r1).value(), (light - sphere.getIntersection(r1).value()).toVector3(), SECONDARY);
+    Ray s1prime(sphere.getIntersection(r1).value(), (light - sphere.getIntersection(r1).value()).toVector3(), PRIMARY);
+
+    Ray s2(sphere.getIntersection(r1).value(), (sphere.getIntersection(r1).value() - light).toVector3(), SECONDARY);
+    Ray s2prime(sphere.getIntersection(r1).value(), (sphere.getIntersection(r1).value() - light).toVector3(), PRIMARY);
+
+    Ray s3(sphere.getIntersection(r1).value(), (light - sphere.getIntersection(r1).value()).toVector3(), SECONDARY);
+    Ray s3prime(sphere.getIntersection(r1).value(),
+                (sphere.getIntersection(r1).value() - light).toVector3(),
+                SECONDARY);
+
+    // Test if there is an intersection point found
+    CHECK(sphere.getSecondaryRay(sphere.getIntersection(r1).value(), light) == s1);
+    CHECK(sphere.getSecondaryRay(sphere.getIntersection(r1).value(), light) != s1prime);
+    CHECK(sphere.getSecondaryRay(sphere.getIntersection(r1).value(), light) != s2);
+    CHECK(sphere.getSecondaryRay(sphere.getIntersection(r1).value(), light) != s2prime);
+    CHECK(sphere.getSecondaryRay(sphere.getIntersection(r1).value(), light) == s3);
+    CHECK(sphere.getSecondaryRay(sphere.getIntersection(r1).value(), light) != s3prime);
 }

@@ -36,3 +36,14 @@ void Ray::setOrigin(const Vector3& origin)
 {
     m_origin = origin;
 }
+
+bool Ray::operator==(const Ray& ray) const
+{
+    return !(!Matrix::areApproximatelyEqual(ray.getOrigin(), getOrigin()) ||
+             !Matrix::areApproximatelyEqual(ray.getDirection(), getDirection()) || ray.getType() != getType());
+}
+
+bool Ray::operator!=(const Ray& ray) const
+{
+    return !(*this == ray);
+}

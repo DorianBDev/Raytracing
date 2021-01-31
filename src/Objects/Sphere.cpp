@@ -49,7 +49,7 @@ std::optional<Vector3> Sphere::getIntersection(Ray ray)
 
     return std::nullopt;
 }
-std::optional<Ray> Sphere::getSecondaryRay(Ray ray)
+std::optional<Ray> Sphere::getSecondaryRay(Vector3 intersectionPoint, Vector3 originLight)
 {
-    return std::optional<Ray>(ray);
+    return Ray(intersectionPoint, (originLight - intersectionPoint).toVector3(), SECONDARY);
 }

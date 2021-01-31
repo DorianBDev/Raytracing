@@ -77,6 +77,13 @@ public:
      */
     void setOrigin(const Vector3& origin);
 
+    /////////////////////////////////////////////////////////////////////
+    /// Operators
+    /////////////////////////////////////////////////////////////////////
+
+    bool operator==(const Ray& ray) const;
+    bool operator!=(const Ray& ray) const;
+
 private:
     RayType m_type = PRIMARY;
     Vector3 m_direction;
