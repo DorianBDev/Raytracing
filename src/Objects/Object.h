@@ -27,7 +27,7 @@ public:
      * @param coordinates Coordinates for the object.
      * @param color       Object's color.
      */
-    Object(const Matrix& coordinates, Color color);
+    Object(const Vector3& coordinates, Color color);
 
     /**
      * @brief Check if the ray intersect with the object, if this is the case it will return the intersection point.
@@ -54,7 +54,7 @@ public:
      *
      * @param coordinates Coordinates for the object.
      */
-    void setCoordinates(const Matrix& coordinates);
+    void setCoordinates(const Vector3& coordinates);
 
     /**
      * @brief Method.
@@ -74,7 +74,7 @@ public:
      *
      * @return Returns the object's coordinates.
      */
-    Matrix getCoordinates();
+    Vector3 getCoordinates();
 
     /**
      * @brief Method.
@@ -91,7 +91,7 @@ private:
     /**
      * The object's coordinates.
      */
-    Matrix m_coordinates;
+    Vector3 m_coordinates;
 
     /**
      * The object's color.
