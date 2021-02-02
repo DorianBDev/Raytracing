@@ -37,7 +37,7 @@ public:
      *
      * @return Returns true if the ray is enlightened.
      */
-    virtual bool isEnLight([[maybe_unused]] Ray intersection) = 0;
+    virtual bool isEnLight(Ray intersection) = 0;
 
     /**
      * @brief Method to get the origin of the light.
@@ -46,7 +46,7 @@ public:
      *
      * @return Returns the origin point of the light.
      */
-    virtual std::optional<Vector3> getOrigin([[maybe_unused]] Ray intersection) = 0;
+    virtual std::optional<Vector3> getOrigin(Ray intersection) = 0;
 
     /**
      * @brief Method to get the direction of the light.
