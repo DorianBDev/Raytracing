@@ -1,30 +1,30 @@
-#ifndef H_RAYTRACING_SPHERE_H
-#define H_RAYTRACING_SPHERE_H
+#ifndef H_RAYTRACING_PLANE_H
+#define H_RAYTRACING_PLANE_H
 
 #include "Object.h"
 
 /**
- * @class Sphere
- * @brief Class that manage the sphere.
+ * @class Plane
+ * @brief Class that manage the plane.
  *
- * This class provides information about the sphere object and the intersection point with a radius.
+ * This class provides information about the plane object and the intersection point.
  *
  * @see Object, Vector3, Matrix, Color
  */
-class Sphere : public Object
+class Plane : public Object
 {
 public:
     /**
-     * @brief Constructor that initialize the sphere object.
+     * @brief Constructor to initialize a plane object.
      *
-     * @param coordinates Coordinates of the sphere's center
-     * @param color       The color of the sphere
-     * @param radius      The radius of the sphere
+     * @param coordinates The equation of the plane
+     * @param color       The color of the plane
+     * @param d           The const of the plane
      */
-    Sphere(const Vector3& coordinates, Color color, double radius);
+    Plane(const Vector3& coordinates, Color color, double d);
 
     /**
-     * @brief Method to get the intersection point with a ray and the sphere.
+     * @brief Method to get the intersection point with a ray and the plane.
      *
      * @param ray The ray
      *
@@ -44,9 +44,9 @@ public:
 
 private:
     /**
-     * The radius of the sphere.
+     * The const of the plane.
      */
-    double m_radius;
+    double m_d;
 };
 
-#endif //H_RAYTRACING_SPHERE_H
+#endif //H_RAYTRACING_PLANE_H

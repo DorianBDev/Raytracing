@@ -13,7 +13,7 @@ constexpr double pi = 3.14;
  *
  * @see Vector3, Matrix, Light
  */
-class Spot : Light
+class Spot : public Light
 {
 public:
     /**

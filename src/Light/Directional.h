@@ -11,7 +11,7 @@
  *
  * @see Vector3, Matrix, Light
  */
-class Directional : Light
+class Directional : public Light
 {
 public:
     /**

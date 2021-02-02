@@ -11,7 +11,7 @@
  *
  * @see Vector3, Matrix, Light
  */
-class Punctual : Light
+class Punctual : public Light
 {
 public:
     /**
