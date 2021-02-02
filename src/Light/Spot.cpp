@@ -3,7 +3,7 @@ Spot::Spot(double intensity, const Vector3& origin, const Vector3& direction, do
     : Light(intensity),
       m_origin(origin),
       m_direction(direction),
-      m_angle(angle)
+      m_angle(angle * pi / 180)
 {
 }
 
@@ -16,15 +16,17 @@ bool Spot::isEnLight(Ray intersection)
     intersection.setDirection((intersection.getDirection() * -1).toVector3());
 
     double cosA =
-            (intersection.getDirection().x() * m_direction.x() + intersection.getDirection().y() * m_direction.y() +
-             intersection.getDirection().z() * m_direction.z()) /
-            std::sqrt((std::pow(intersection.getDirection().x(), 2) + std::pow(intersection.getDirection().y(), 2) +
-                       std::pow(m_direction.z(), 2)) *
+            (intersection.getOrigin().x() * m_direction.x() + intersection.getOrigin().y() * m_direction.y() +
+             intersection.getOrigin().z() * m_direction.z()) /
+            std::sqrt((std::pow(intersection.getOrigin().x(), 2) + std::pow(intersection.getOrigin().y(), 2) +
+                       std::pow(intersection.getOrigin().z(), 2)) *
                       (std::pow(m_direction.x(), 2) + std::pow(m_direction.y(), 2) + std::pow(m_direction.z(), 2)));
 
     double angle = std::acos(cosA);
 
-    return angle <= m_angle;
+    double padding = 0.001;
+    // Padding in case of comparison between two double that aren't exact values
+    return angle <= m_angle + padding;
 }
 
 std::optional<Vector3> Spot::getOrigin(Ray intersection)

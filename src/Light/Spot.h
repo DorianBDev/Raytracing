@@ -3,6 +3,8 @@
 
 #include "Light.h"
 
+constexpr double pi = 3.14;
+
 /**
  * @class Punctual
  * @brief Class that manage the spot light.
