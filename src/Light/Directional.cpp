@@ -16,20 +16,19 @@ bool Directional::isEnLight(Ray intersection)
     Vector3 ab = (m_originB - m_originA).toVector3();
     intersection.setDirection((m_direction * -1).toVector3());
 
+    double den = ab.x() * intersection.getDirection().y() - ab.y() * intersection.getDirection().x();
+
     // Verify if the vector aren't parallel
-    if (ab.x() * intersection.getDirection().y() - ab.y() * intersection.getDirection().x() == 0)
+    if (den == 0)
         return false;
 
-    //std::cout << "pass 1" << std::endl;
-
-    // y = ab * x +  m_originA
     double x = -((m_originA.x() - intersection.getOrigin().x()) * intersection.getDirection().y() -
                  (m_originA.y() - intersection.getOrigin().y()) * intersection.getDirection().x()) /
-               (ab.x() * intersection.getDirection().y() - ab.y() * intersection.getDirection().x());
+               den;
 
     double m = -((intersection.getOrigin().y() - m_originA.y()) * ab.x() -
                  (intersection.getOrigin().x() - m_originA.x()) * ab.y()) /
-               (ab.x() * intersection.getDirection().y() - ab.y() * intersection.getDirection().x());
+               den;
 
     // Verify if it is in the range of originA and originB
     if (x < 0 || x > 1)
@@ -54,8 +53,10 @@ std::optional<Vector3> Directional::getOrigin(Ray intersection)
     Vector3 ab = (m_originB - m_originA).toVector3();
     intersection.setDirection((m_direction * -1).toVector3());
 
+    double den = ab.x() * intersection.getDirection().y() - ab.y() * intersection.getDirection().x();
+
     // Verify if the vector aren't parallel
-    if (ab.x() * intersection.getDirection().y() - ab.y() * intersection.getDirection().x() == 0)
+    if (den == 0)
         return std::nullopt;
 
     //std::cout << "pass 1" << std::endl;
@@ -63,11 +64,11 @@ std::optional<Vector3> Directional::getOrigin(Ray intersection)
     // y = ab * x +  m_originA
     double x = -((m_originA.x() - intersection.getOrigin().x()) * intersection.getDirection().y() -
                  (m_originA.y() - intersection.getOrigin().y()) * intersection.getDirection().x()) /
-               (ab.x() * intersection.getDirection().y() - ab.y() * intersection.getDirection().x());
+               den;
 
     double m = -((intersection.getOrigin().y() - m_originA.y()) * ab.x() -
                  (intersection.getOrigin().x() - m_originA.x()) * ab.y()) /
-               (ab.x() * intersection.getDirection().y() - ab.y() * intersection.getDirection().x());
+               den;
 
     // Verify if it is in the range of originA and originB
     if (x < 0 || x > 1)

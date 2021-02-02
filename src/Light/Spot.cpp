@@ -15,13 +15,15 @@ bool Spot::isEnLight(Ray intersection)
 
     intersection.setDirection((intersection.getDirection() * -1).toVector3());
 
-    double cosA =
-            (intersection.getOrigin().x() * m_direction.x() + intersection.getOrigin().y() * m_direction.y() +
-             intersection.getOrigin().z() * m_direction.z()) /
-            std::sqrt((std::pow(intersection.getOrigin().x(), 2) + std::pow(intersection.getOrigin().y(), 2) +
-                       std::pow(intersection.getOrigin().z(), 2)) *
-                      (std::pow(m_direction.x(), 2) + std::pow(m_direction.y(), 2) + std::pow(m_direction.z(), 2)));
+    double num = intersection.getOrigin().x() * m_direction.x() + intersection.getOrigin().y() * m_direction.y() +
+                 intersection.getOrigin().z() * m_direction.z();
 
+    double den1 = std::pow(intersection.getOrigin().x(), 2) + std::pow(intersection.getOrigin().y(), 2) +
+                  std::pow(intersection.getOrigin().z(), 2);
+
+    double den2 = std::pow(m_direction.x(), 2) + std::pow(m_direction.y(), 2) + std::pow(m_direction.z(), 2);
+
+    double cosA = num / std::sqrt(den1 * den2);
     double angle = std::acos(cosA);
 
     double padding = 0.001;

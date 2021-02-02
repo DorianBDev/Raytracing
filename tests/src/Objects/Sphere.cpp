@@ -31,11 +31,11 @@ TEST_CASE("testing sphere")
     Ray r5({{0, 0, 0}}, a5, PRIMARY);
     Vector3 res5({{0.60, 0.60, 0.18}});
 
-    CHECK(Matrix::areApproximatelyEqual(sphere.getIntersection(r1).value(), res1)); // OK
-    CHECK(Matrix::areApproximatelyEqual(sphere.getIntersection(r2).value(), res2)); // OK
-    CHECK(sphere.getIntersection(r3) == std::nullopt);                              // NO
-    CHECK(sphere.getIntersection(r4) == std::nullopt);                              // NO
-    CHECK(Matrix::areApproximatelyEqual(sphere.getIntersection(r5).value(), res5)); // OK
+    CHECK(Matrix::areApproximatelyEqual(sphere.getIntersection(r1).value(), res1));
+    CHECK(Matrix::areApproximatelyEqual(sphere.getIntersection(r2).value(), res2));
+    CHECK(sphere.getIntersection(r3) == std::nullopt);
+    CHECK(sphere.getIntersection(r4) == std::nullopt);
+    CHECK(Matrix::areApproximatelyEqual(sphere.getIntersection(r5).value(), res5));
 
     // The coordinates of the light in the scene
     Vector3 light({{5, 5, 5}});

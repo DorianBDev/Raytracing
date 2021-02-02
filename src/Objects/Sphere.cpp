@@ -6,6 +6,9 @@ Sphere::Sphere(const Vector3& coordinates, Color color, double radius) : Object(
 
 std::optional<Vector3> Sphere::getIntersection(Ray ray)
 {
+    if (ray.getType() != PRIMARY)
+        return std::nullopt;
+
     double a = std::pow(ray.getDirection().x(), 2) + std::pow(ray.getDirection().y(), 2) +
                std::pow(ray.getDirection().z(), 2);
 
@@ -19,14 +22,12 @@ std::optional<Vector3> Sphere::getIntersection(Ray ray)
 
     double discriminant = std::pow(b, 2) - 4 * a * c;
 
-    Vector3 res;
-
     if (discriminant == 0)
     {
         // One solution exist, it is a tangent point
         double t = -b / (2 * a);
-        res = ray.getDirection() * t + ray.getOrigin();
-        return res;
+
+        return (ray.getDirection() * t + ray.getOrigin()).toVector3();
     }
 
     if (discriminant > 0)
@@ -35,16 +36,10 @@ std::optional<Vector3> Sphere::getIntersection(Ray ray)
         double t2 = (-b + std::sqrt(discriminant)) / (2 * a);
 
         if (t1 > 0)
-        {
-            res = ray.getDirection() * t1 + ray.getOrigin();
-            return res;
-        }
+            return (ray.getDirection() * t1 + ray.getOrigin()).toVector3();
 
         if (t2 > 0)
-        {
-            res = ray.getDirection() * t2 + ray.getOrigin();
-            return res;
-        }
+            return (ray.getDirection() * t2 + ray.getOrigin()).toVector3();
     }
 
     return std::nullopt;
