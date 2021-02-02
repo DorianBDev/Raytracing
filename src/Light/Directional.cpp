@@ -39,7 +39,7 @@ bool Directional::isEnLight(Ray intersection)
         return false;
 
     // Verify if the direction have the same orientation
-    if (m_direction.x() / (intersection.getOrigin() - m_direction).toVector3().x() < 0)
+    if (m_direction.x() != 0 && (intersection.getOrigin() - m_direction).toVector3().x() / m_direction.x() < 0)
         return false;
 
     return true;

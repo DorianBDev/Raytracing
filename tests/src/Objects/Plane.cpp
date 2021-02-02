@@ -29,4 +29,24 @@ TEST_CASE("Testing plane object")
     CHECK(plane.getIntersection(r3) == std::nullopt);
     CHECK(plane.getIntersection(r4) == std::nullopt);
     CHECK(plane.getIntersection(r5) == std::nullopt);
+
+    Vector3 light({{5, 5, 5}});
+
+    // 6 Rays to test the result of getSecondaryRay
+    Ray s1(plane.getIntersection(r1).value(), (light - plane.getIntersection(r1).value()).toVector3(), SECONDARY);
+    Ray s1prime(plane.getIntersection(r1).value(), (light - plane.getIntersection(r1).value()).toVector3(), PRIMARY);
+
+    Ray s2(plane.getIntersection(r1).value(), (plane.getIntersection(r1).value() - light).toVector3(), SECONDARY);
+    Ray s2prime(plane.getIntersection(r1).value(), (plane.getIntersection(r1).value() - light).toVector3(), PRIMARY);
+
+    Ray s3(plane.getIntersection(r1).value(), (light - plane.getIntersection(r1).value()).toVector3(), SECONDARY);
+    Ray s3prime(plane.getIntersection(r1).value(), (plane.getIntersection(r1).value() - light).toVector3(), SECONDARY);
+
+    // Test if there is an intersection point found
+    CHECK(plane.getSecondaryRay(plane.getIntersection(r1).value(), light) == s1);
+    CHECK(plane.getSecondaryRay(plane.getIntersection(r1).value(), light) != s1prime);
+    CHECK(plane.getSecondaryRay(plane.getIntersection(r1).value(), light) != s2);
+    CHECK(plane.getSecondaryRay(plane.getIntersection(r1).value(), light) != s2prime);
+    CHECK(plane.getSecondaryRay(plane.getIntersection(r1).value(), light) == s3);
+    CHECK(plane.getSecondaryRay(plane.getIntersection(r1).value(), light) != s3prime);
 }

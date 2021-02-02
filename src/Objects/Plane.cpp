@@ -23,7 +23,7 @@ std::optional<Vector3> Plane::getIntersection(Ray ray)
 
     Vector3 intersection = (ray.getDirection() * t + ray.getOrigin()).toVector3();
 
-    if ((intersection.x() - ray.getOrigin().x()) / ray.getDirection().x() < 0)
+    if (ray.getDirection().x() != 0 && (intersection.x() - ray.getOrigin().x()) / ray.getDirection().x() < 0)
         return std::nullopt;
 
     return intersection;
