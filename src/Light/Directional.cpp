@@ -79,7 +79,9 @@ std::optional<Vector3> Directional::getOrigin(Ray intersection)
         return std::nullopt;
 
     // Orientation validation
-    if (m_direction.x() / (intersection.getOrigin() - m_direction).toVector3().x() < 0)
+    if ((m_direction.x() != 0 && (intersection.getOrigin() - m_direction).toVector3().x() / m_direction.x() < 0) ||
+        (m_direction.y() != 0 && (intersection.getOrigin() - m_direction).toVector3().y() / m_direction.y() < 0) ||
+        (m_direction.z() != 0 && (intersection.getOrigin() - m_direction).toVector3().z() / m_direction.z() < 0))
         return std::nullopt;
 
     return (intersection.getDirection() * m + intersection.getOrigin()).toVector3();
