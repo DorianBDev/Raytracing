@@ -3,10 +3,13 @@
 Endian endianness()
 {
     std::uint16_t i = 0x1;
-    std::uint8_t* ptr = (std::uint8_t*)&i;
+    auto* ptr = (std::uint8_t*)&i; // NOLINT
 
+    Endian res;
     if (ptr[0] == 1)
-        return Endian::LITTLE;
+        res = Endian::LITTLE;
     else
-        return Endian::BIG;
+        res = Endian::BIG;
+
+    return res;
 }
