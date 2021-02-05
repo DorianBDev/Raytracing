@@ -1,7 +1,8 @@
 #ifndef RAYTRACING_CAMERA_H
 #define RAYTRACING_CAMERA_H
 
-#include "Utils/Matrix.h"
+#include "Utils/Size.h"
+#include "Utils/Vector3.h"
 
 /**
  * @class Camera
@@ -24,9 +25,9 @@ public:
      * @param coordinates Coordinates for the camera.
      * @param direction   Direction of the camera.
      * @param resolution  Resolution of the camera.
-     * @param focal      Focal of the camera.
+     * @param focal       Focal of the camera.
      */
-    Camera(const Matrix& coordinates, const Matrix& direction, const Matrix& resolution, double focal);
+    Camera(const Vector3& coordinates, const Vector3& direction, const Size& resolution, double focal);
 
     /**
      * @brief Method.
@@ -35,7 +36,7 @@ public:
      *
      * @param coordinates Coordinates for the camera.
      */
-    void setCoordinates(const Matrix& coordinates);
+    void setCoordinates(const Vector3& coordinates);
 
     /**
      * @brief Method.
@@ -44,7 +45,7 @@ public:
      *
      * @param direction Direction for the camera.
      */
-    void setDirection(const Matrix& direction);
+    void setDirection(const Vector3& direction);
 
     /**
      * @brief Method.
@@ -56,13 +57,11 @@ public:
     void setFocal(double focal);
 
     /**
-     * @brief Method.
+     * @brief Get camera resolution.
      *
-     * This method change the camera's ratio.
-     *
-     * @param ratio Ratio of the camera.
+     * @return Returns the camera resolution.
      */
-    void setRatio(double ratio);
+    Size getResolution();
 
     /**
      * @brief Method.
@@ -71,7 +70,7 @@ public:
      *
      * @return Returns the coordinates matrix.
      */
-    Matrix getCoordinates();
+    Vector3 getCoordinates();
 
     /**
      * @brief Method.
@@ -80,7 +79,7 @@ public:
      *
      * @return Returns the direction matrix.
      */
-    Matrix getDirection();
+    Vector3 getDirection();
 
     /**
      * @brief Method.
@@ -104,17 +103,17 @@ private:
     /**
      * The coordinates of the camera.
      */
-    Matrix m_coordinates;
+    Vector3 m_coordinates;
 
     /**
      * The direction of the camera.
      */
-    Matrix m_direction;
+    Vector3 m_direction;
 
     /**
      * The resolution of the camera.
      */
-    Matrix m_resolution;
+    Size m_resolution;
 
     /**
      * The focal of the camera.

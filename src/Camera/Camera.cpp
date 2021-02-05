@@ -1,20 +1,20 @@
 #include "Camera.h"
 
-Camera::Camera(const Matrix& coordinates, const Matrix& direction, const Matrix& resolution, double focal)
+Camera::Camera(const Vector3& coordinates, const Vector3& direction, const Size& resolution, double focal)
     : m_coordinates(coordinates),
       m_direction(direction),
       m_resolution(resolution),
       m_focal(focal)
 {
-    m_ratio = m_resolution.value(0, 0) / m_resolution.value(1, 0);
+    m_ratio = static_cast<double>(m_resolution.width()) / static_cast<double>(m_resolution.height());
 }
 
-void Camera::setCoordinates(const Matrix& coordinates)
+void Camera::setCoordinates(const Vector3& coordinates)
 {
     m_coordinates = coordinates;
 }
 
-void Camera::setDirection(const Matrix& direction)
+void Camera::setDirection(const Vector3& direction)
 {
     m_direction = direction;
 }
@@ -24,17 +24,17 @@ void Camera::setFocal(double focal)
     m_focal = focal;
 }
 
-void Camera::setRatio(double ratio)
+Size Camera::getResolution()
 {
-    m_ratio = ratio;
+    return m_resolution;
 }
 
-Matrix Camera::getCoordinates()
+Vector3 Camera::getCoordinates()
 {
     return m_coordinates;
 }
 
-Matrix Camera::getDirection()
+Vector3 Camera::getDirection()
 {
     return m_direction;
 }
