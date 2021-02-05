@@ -6,6 +6,6 @@
  *
  * Mainly used in the Scene implementation.
  */
-#define PARALLELIZATION
+//#define PARALLELIZATION
 
 #endif //H_RAYTRACING_CONFIG_H

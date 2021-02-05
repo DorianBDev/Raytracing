@@ -3,8 +3,11 @@
 #include "Config.h"
 #include "Utils/Utils.h"
 
+#ifdef PARALLELIZATION
 #include <algorithm>
 #include <execution>
+#endif
+
 #include <map>
 #include <numeric>
 #include <utility>
@@ -60,8 +63,10 @@ std::shared_ptr<sf::Image> Scene::compute()
 #ifdef PARALLELIZATION
     std::for_each(std::execution::par, std::begin(count), std::end(count), [&](std::size_t x) {
 #else
-    std::for_each(std::execution::seq, std::begin(count), std::end(count), [&](std::size_t x) {
+    for (std::size_t x = 0; x < resolution.width(); x++)
+    {
 #endif
+
         for (std::size_t y = 0; y < resolution.height(); y++)
         {
             // Coordinates
@@ -80,7 +85,12 @@ std::shared_ptr<sf::Image> Scene::compute()
             // Compute the pixel color
             res->setPixel(static_cast<unsigned int>(x), static_cast<unsigned int>(y), getPixelColor(ray));
         }
+
+#ifdef PARALLELIZATION
     });
+#else
+    }
+#endif
 
     return res;
 }
