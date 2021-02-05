@@ -6,6 +6,7 @@
 #include "Objects/Object.h"
 
 #include <SFML/Graphics/Image.hpp>
+#include <memory>
 #include <vector>
 
 /**
