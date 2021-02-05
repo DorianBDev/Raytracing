@@ -160,6 +160,12 @@ Matrix& Matrix::round()
     return *this;
 }
 
+Matrix& Matrix::vectProd(const Matrix& a)
+{
+    *this = Matrix::vectProduct(*this,a);
+    return *this;
+}
+
 /////////////////////////////////////////////////////////////////////
 /// Operators
 /////////////////////////////////////////////////////////////////////
@@ -762,6 +768,22 @@ bool Matrix::areApproximatelyEqual(const Matrix& a, const Matrix& b, double prec
     }
 
     return true;
+}
+
+Matrix Matrix::vectProduct(const Matrix& a, const Matrix& b)
+{
+    if(a.getRowCount() != 1 && a.getColumnCount() != 3 && b.getRowCount() != 1 && b.getColumnCount() != 3)
+    {
+        throw Exception::Matrix::WrongSize("The 2 matrix must be a Vec3 (1,3).");
+    }
+
+    double xValue = a.m_matrix[0][1] * b.m_matrix[0][2] - a.m_matrix[0][2] * b.m_matrix[0][1];
+    double yValue = - a.m_matrix[0][0] * b.m_matrix[0][2] + a.m_matrix[0][2] * b.m_matrix[0][0];
+    double zValue =  a.m_matrix[0][0] * b.m_matrix[0][1] - a.m_matrix[0][1] * b.m_matrix[0][0];
+
+    Matrix res(a.getRowCount(),a.getColumnCount(),{{xValue, yValue, zValue}});
+
+    return res;
 }
 
 void Matrix::allocate(std::size_t rowCount, std::size_t columnCount)

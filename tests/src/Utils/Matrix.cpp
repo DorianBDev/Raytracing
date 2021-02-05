@@ -396,4 +396,16 @@ TEST_CASE("testing matrix 2")
 
     Matrix reflectedTest(1, 3, {{-0.29, 1.90, -2.317}});
     reflectedTest.normalize();
+
+    Matrix vec41(1, 3, {{1, 0, 0}});
+    Matrix vec42(1, 3, {{3, 5, 0.2}});
+    Matrix testCrossProd = Matrix::vectProduct(vec41,vec42);
+    CHECK(testCrossProd.value(0,0) == 0);
+    CHECK(testCrossProd.value(0,1) == -0.2);
+    CHECK(testCrossProd.value(0,2) == 5);
+
+    vec41.vectProd(vec42);
+    CHECK(vec41.value(0,0) == 0);
+    CHECK(vec41.value(0,1) == -0.2);
+    CHECK(vec41.value(0,2) == 5);
 }

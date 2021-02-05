@@ -237,6 +237,13 @@ public:
      */
     Matrix& round();
 
+    /**
+     * @brief Get the vector product of 2 Vec3.
+     *
+     * @return Returns vector product of the 2 Vec3, a^b.
+     */
+    Matrix& vectProd(const Matrix& a);
+
     /////////////////////////////////////////////////////////////////////
     /// Operators
     /////////////////////////////////////////////////////////////////////
@@ -478,6 +485,18 @@ public:
      * @return Returns true if a and b are approximately equal.
      */
     static bool areApproximatelyEqual(const Matrix& a, const Matrix& b, double precision = 0.01);
+
+    /**
+     * @brief Get the vector product of 2 Vec3.
+     *
+     * @param a   The first Vec3
+     * @param b   The second Vec3.
+     *
+     * @return Returns vector product of the 2 Vec3, a^b.
+     */
+    static Matrix vectProduct(const Matrix& a, const Matrix& b);
+
+
 
 protected:
     /**
