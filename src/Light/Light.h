@@ -22,6 +22,7 @@ public:
      * @param intensity   The intensity of the light
      */
     explicit Light(double intensity);
+    virtual ~Light() = default;
 
     /**
      * @brief Method that return the intensity of the light.

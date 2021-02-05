@@ -28,6 +28,7 @@ public:
      * @param color       Object's color.
      */
     Object(const Vector3& coordinates, Color color);
+    virtual ~Object() = default;
 
     /**
      * @brief Check if the ray intersect with the object, if this is the case it will return the intersection point.
