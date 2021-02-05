@@ -496,8 +496,6 @@ public:
      */
     static Matrix vectProduct(const Matrix& a, const Matrix& b);
 
-
-
 protected:
     /**
      * @brief Allocate the matrix.
