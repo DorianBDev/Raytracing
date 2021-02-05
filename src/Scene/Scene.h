@@ -26,20 +26,49 @@ public:
     /**
      * @brief Add a light to the scene.
      *
-     * @param light The light to add.
+     * @tparam T The type to create.
+     *
+     * @param args Args to use to create the light T.
      *
      * @return Returns *this.
      */
-    Scene& addLight(const std::shared_ptr<Light>& light);
+    template<typename T, typename... Args>
+    Scene& addLight(Args... args)
+    {
+        m_lights.push_back(std::make_shared<T>(args...));
+
+        return *this;
+    }
 
     /**
      * @brief Add an object to the scene.
      *
-     * @param object The object to add.
+     * @tparam T The type to create.
+     *
+     * @param args Args to use to create the object T.
      *
      * @return Returns *this.
      */
-    Scene& addObject(const std::shared_ptr<Object>& object);
+    template<typename T, typename... Args>
+    Scene& addObject(Args... args)
+    {
+        m_objects.push_back(std::make_shared<T>(args...));
+
+        return *this;
+    }
+
+    /**
+     * @brief Create a camera for the scene.
+     *
+     * @param args Args to use to create the camera.
+     *
+     * @return Returns *this.
+     */
+    template<typename... Args>
+    static std::shared_ptr<Camera> camera(Args... args)
+    {
+        return std::make_shared<Camera>(args...);
+    }
 
     /**
      * @brief Generate an image from the scene.

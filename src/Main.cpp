@@ -6,14 +6,26 @@
 
 int main()
 {
-    Scene scene(std::make_shared<Camera>(Vector3(0, 0, 0), Vector3(0, 0, 1), Size(1920, 1080), 1));
+    try
+    {
+        Scene scene(Scene::camera(Vector3(0, 0, 0), Vector3(0, 0, 1), Size(720, 480), 1));
 
-    scene.addLight(std::make_shared<Punctual>(10, Vector3(5, 0, 10)))
-            .addObject(std::make_shared<Sphere>(Vector3(0, 4, 15), Colors::blue(), 3))
-            .addObject(std::make_shared<Sphere>(Vector3(0, 4, 8), Colors::white(), 1))
-            .addObject(std::make_shared<Sphere>(Vector3(0, -4, 20), Colors::red(), 2))
-            .addObject(std::make_shared<Sphere>(Vector3(5, -2, 30), Colors::green(), 2))
-            .generate("out.png");
+        // Add light
+        scene.addLight<Punctual>(10, Vector3(5, 0, 10));
+
+        // Add objects
+        scene.addObject<Sphere>(Vector3(0, 4, 15), Colors::blue(), 3);
+        scene.addObject<Sphere>(Vector3(0, 4, 8), Colors::white(), 1);
+        scene.addObject<Sphere>(Vector3(0, -4, 20), Colors::red(), 2);
+        scene.addObject<Sphere>(Vector3(5, -2, 30), Colors::green(), 2);
+
+        // Generate image
+        scene.generate("out.png");
+    }
+    catch (std::exception& exception)
+    {
+        std::cout << exception.what() << std::endl;
+    }
 
     return 0;
 }

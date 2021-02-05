@@ -100,27 +100,27 @@ private:
  */
 namespace Colors
 {
-    static constexpr Color red()
+    constexpr Color red()
     {
         return Color(255, 0, 0);
     }
 
-    static constexpr Color green()
+    constexpr Color green()
     {
         return Color(0, 255, 0);
     }
 
-    static constexpr Color blue()
+    constexpr Color blue()
     {
         return Color(0, 0, 255);
     }
 
-    static constexpr Color black()
+    constexpr Color black()
     {
         return Color(0, 0, 0);
     }
 
-    static constexpr Color white()
+    constexpr Color white()
     {
         return Color(255, 255, 255);
     }

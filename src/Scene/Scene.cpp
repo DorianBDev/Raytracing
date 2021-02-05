@@ -1,26 +1,16 @@
 #include "Scene.h"
 
+#include "Config.h"
 #include "Utils/Utils.h"
 
+#include <algorithm>
+#include <execution>
 #include <map>
+#include <numeric>
 #include <utility>
 
 Scene::Scene(std::shared_ptr<Camera> camera) : m_camera(std::move(camera))
 {
-}
-
-Scene& Scene::addLight(const std::shared_ptr<Light>& light)
-{
-    m_lights.push_back(light);
-
-    return *this;
-}
-
-Scene& Scene::addObject(const std::shared_ptr<Object>& object)
-{
-    m_objects.push_back(object);
-
-    return *this;
 }
 
 Scene& Scene::generate(const std::string& imagePath)
@@ -62,9 +52,16 @@ std::shared_ptr<sf::Image> Scene::compute()
     double stepX = projectionPlanSizeX / static_cast<double>(resolution.width());
     double stepY = projectionPlanSizeY / static_cast<double>(resolution.height());
 
+    // Prepare parallelization
+    std::vector<std::size_t> count(resolution.width());
+    std::iota(std::begin(count), std::end(count), 0);
+
     // Create the image, pixel by pixel
-    for (std::size_t x = 0; x < resolution.width(); x++)
-    {
+#ifdef PARALLELIZATION
+    std::for_each(std::execution::par, std::begin(count), std::end(count), [&](std::size_t x) {
+#else
+    std::for_each(std::execution::seq, std::begin(count), std::end(count), [&](std::size_t x) {
+#endif
         for (std::size_t y = 0; y < resolution.height(); y++)
         {
             // Coordinates
@@ -83,7 +80,7 @@ std::shared_ptr<sf::Image> Scene::compute()
             // Compute the pixel color
             res->setPixel(static_cast<unsigned int>(x), static_cast<unsigned int>(y), getPixelColor(ray));
         }
-    }
+    });
 
     return res;
 }
