@@ -75,8 +75,7 @@ std::shared_ptr<sf::Image> Scene::compute()
             double projectionPlanPointY = y * stepY + imagePlanMin.y();
 
             // Direction
-            Vector3 direction;
-            direction = Vector3(projectionPlanPointX, projectionPlanPointY, projectionPlanCenter.y());
+            Vector3 direction = Vector3(projectionPlanPointX, projectionPlanPointY, projectionPlanCenter.y());
 
             // Create the ray
             Ray ray(m_camera->getCoordinates(),

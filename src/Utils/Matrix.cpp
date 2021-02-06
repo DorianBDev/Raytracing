@@ -1,6 +1,7 @@
 #include "Matrix.h"
 
 #include "Math.h"
+#include "Utils.h"
 #include "Vector3.h"
 
 Matrix::Matrix(std::size_t rowCount, std::size_t columnCount) : m_rowCount(rowCount), m_columnCount(columnCount)
@@ -572,7 +573,7 @@ double Matrix::getNorm(const Matrix& a)
         double y = a.matrix(1, 0);
         double z = a.matrix(2, 0);
 
-        double norm = std::sqrt(std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2));
+        double norm = std::sqrt(pow2(x) + pow2(y) + pow2(z));
 
         return norm;
     }
@@ -583,7 +584,7 @@ double Matrix::getNorm(const Matrix& a)
         double y = a.matrix(0, 1);
         double z = a.matrix(0, 2);
 
-        double norm = std::sqrt(std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2));
+        double norm = std::sqrt(pow2(x) + pow2(y) + pow2(z));
 
         return norm;
     }
@@ -842,22 +843,10 @@ void Matrix::fill(const std::initializer_list<std::initializer_list<double>>& in
 
 void Matrix::fill(const Matrix& a)
 {
-    for (std::size_t i = 0; i < m_rowCount; i++)
-    {
-        for (std::size_t j = 0; j < m_columnCount; j++)
-        {
-            matrix(i, j) = a.matrix(i, j);
-        }
-    }
+    std::memcpy(m_matrix, a.m_matrix, m_rowCount * m_columnCount * sizeof(double));
 }
 
 void Matrix::fill(double value)
 {
-    for (std::size_t i = 0; i < m_rowCount; i++)
-    {
-        for (std::size_t j = 0; j < m_columnCount; j++)
-        {
-            matrix(i, j) = value;
-        }
-    }
+    std::fill(&m_matrix[0], &m_matrix[0] + m_rowCount * m_columnCount, value);
 }
