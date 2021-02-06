@@ -54,7 +54,7 @@ public:
      *
      * @return Returns the direction of the ray.
      */
-    Vector3 getDirection() const;
+    const Vector3& getDirection() const;
 
     /**
      * @brief Set the direction of the ray.
@@ -68,7 +68,7 @@ public:
      *
      * @return Returns the ray's origin.
      */
-    Vector3 getOrigin() const;
+    const Vector3& getOrigin() const;
 
     /**
      * @brief Set the ray's origin.

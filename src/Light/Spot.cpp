@@ -16,7 +16,7 @@ bool Spot::isEnLight(Ray intersection)
         return false;
     // See with all the objects if there is an interception with the ray
 
-    Vector3 origin = intersection.getOrigin();
+    const Vector3& origin = intersection.getOrigin();
 
     double num = origin.x() * m_direction.x() + origin.y() * m_direction.y() + origin.z() * m_direction.z();
 

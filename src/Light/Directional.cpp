@@ -17,8 +17,8 @@ bool Directional::isEnLight(Ray intersection)
 
     Vector3 ab = m_originB - m_originA;
 
-    Vector3 origin = intersection.getOrigin();
-    Vector3 direction = intersection.getDirection() * -1;
+    const Vector3& origin = intersection.getOrigin();
+    const Vector3& direction = intersection.getDirection() * -1;
 
     double den = ab.x() * direction.y() - ab.y() * direction.x();
 
@@ -54,8 +54,8 @@ std::optional<Vector3> Directional::getOrigin(Ray intersection)
 
     Vector3 ab = m_originB - m_originA;
 
-    Vector3 origin = intersection.getOrigin();
-    Vector3 direction = intersection.getDirection() * -1;
+    const Vector3& origin = intersection.getOrigin();
+    const Vector3& direction = intersection.getDirection() * -1;
 
     double den = ab.x() * direction.y() - ab.y() * direction.x();
 

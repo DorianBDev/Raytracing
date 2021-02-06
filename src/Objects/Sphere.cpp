@@ -14,8 +14,8 @@ std::optional<Vector3> Sphere::getIntersection(Ray ray)
     if (ray.getType() != PRIMARY)
         return std::nullopt;
 
-    Vector3 origin = ray.getOrigin();
-    Vector3 direction = ray.getDirection();
+    const Vector3& origin = ray.getOrigin();
+    const Vector3& direction = ray.getDirection();
 
     double a = std::pow(direction.x(), 2) + std::pow(direction.y(), 2) + std::pow(direction.z(), 2);
 

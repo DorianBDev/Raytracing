@@ -11,8 +11,8 @@ std::optional<Vector3> Plane::getIntersection(Ray ray)
     if (ray.getType() != PRIMARY)
         return std::nullopt;
 
-    Vector3 origin = ray.getOrigin();
-    Vector3 direction = ray.getDirection();
+    const Vector3& origin = ray.getOrigin();
+    const Vector3& direction = ray.getDirection();
 
     double num = origin.x() * m_coordinates.x() + origin.y() * m_coordinates.y() + origin.z() * m_coordinates.z();
 
