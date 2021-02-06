@@ -27,7 +27,7 @@ public:
      * @param resolution  Resolution of the camera.
      * @param focal       Focal of the camera.
      */
-    Camera(const Vector3& coordinates, const Vector3& direction, const Size& resolution, double focal);
+    Camera(Vector3 coordinates, Vector3 direction, const Size& resolution, double focal);
 
     /**
      * @brief Method.

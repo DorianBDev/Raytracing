@@ -34,12 +34,17 @@ public:
     Vector3(const Vector3& vector);
 
     /**
+     * @brief Constructor by move.
+     */
+    Vector3(Vector3&& vector) noexcept;
+
+    /**
      * @brief Create a 3D vector from a matrix (1,3).
      *
      * @param matrix The matrix to copy from.
      */
-    explicit Vector3(const Matrix& matrix);
-    explicit Vector3(const Matrix&& matrix);
+    Vector3(const Matrix& matrix); // NOLINT
+    Vector3(Matrix&& matrix);      // NOLINT
 
     /**
      * @brief Create a 3D vector from an initialized list.
@@ -55,21 +60,30 @@ public:
      *
      * @return Returns the x coordinate of the 3D vector.
      */
-    double x() const;
+    constexpr double x() const
+    {
+        return value(0, 0);
+    }
 
     /**
      * @brief Get the y coordinate of the 3D vector.
      *
      * @return Returns the y coordinate of the 3D vector.
      */
-    double y() const;
+    constexpr double y() const
+    {
+        return value(0, 1);
+    }
 
     /**
      * @brief Get the z coordinate of the 3D vector.
      *
      * @return Returns the z coordinate of the 3D vector.
      */
-    double z() const;
+    constexpr double z() const
+    {
+        return value(0, 2);
+    }
 
     /**
      * @brief Set the value of the x coordinate of the 3D vector.
@@ -94,6 +108,8 @@ public:
 
     Vector3& operator=(const Matrix& matrix);
     Vector3& operator=(const Vector3& vector);
+    Vector3& operator=(Matrix&& matrix) noexcept(false);
+    Vector3& operator=(Vector3&& vector) noexcept;
 
 protected:
     /**

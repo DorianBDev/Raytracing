@@ -27,7 +27,7 @@ public:
      * @param coordinates Coordinates for the object.
      * @param color       Object's color.
      */
-    Object(const Vector3& coordinates, Color color);
+    Object(Vector3 coordinates, Color color);
     virtual ~Object() = default;
 
     /**

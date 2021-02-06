@@ -1,10 +1,12 @@
 #include "Directional.h"
 
-Directional::Directional(double intensity, const Vector3& originA, const Vector3& originB, const Vector3& direction)
+#include <utility>
+
+Directional::Directional(double intensity, Vector3 originA, Vector3 originB, Vector3 direction)
     : Light(intensity),
-      m_originA(originA),
-      m_originB(originB),
-      m_direction(direction)
+      m_originA(std::move(originA)),
+      m_originB(std::move(originB)),
+      m_direction(std::move(direction))
 {
 }
 

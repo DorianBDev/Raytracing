@@ -24,7 +24,7 @@ public:
      * @param direction The direction of the spot light
      * @param angle     The angle of the spot light
      */
-    Spot(double intensity, const Vector3& origin, const Vector3& direction, double angle);
+    Spot(double intensity, Vector3 origin, Vector3 direction, double angle);
 
     /*
      * @brief Method that return if the intersection is enlightened.

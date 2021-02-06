@@ -29,10 +29,15 @@ Matrix::Matrix(std::size_t rowCount,
     fill(initializerList);
 }
 
-Matrix::Matrix(const Matrix& a) : m_rowCount(a.m_rowCount), m_columnCount(a.m_columnCount)
+Matrix::Matrix(const Matrix& matrix) : m_rowCount(matrix.m_rowCount), m_columnCount(matrix.m_columnCount)
 {
     allocate(m_rowCount, m_columnCount);
-    fill(a);
+    fill(matrix);
+}
+
+Matrix::Matrix(Matrix&& matrix) noexcept
+{
+    MOVE(matrix);
 }
 
 Matrix::~Matrix()
@@ -40,37 +45,43 @@ Matrix::~Matrix()
     deallocate();
 }
 
-void Matrix::print() const
+void Matrix::create(std::size_t rowCount, std::size_t columnCount)
+{
+    allocate(rowCount, columnCount);
+}
+
+void Matrix::print(const std::string& name) const
 {
     if (m_columnCount == 0 || m_rowCount == 0)
     {
         throw Exception::Matrix::NotInitialized();
     }
 
+    if (!name.empty())
+        std::cout << "Matrix '" << name << "' print:" << std::endl;
+    else
+        std::cout << "Matrix print:" << std::endl;
+
     for (std::size_t i = 0; i < m_rowCount; i++)
     {
+        std::cout << "[ ";
         for (std::size_t j = 0; j < m_columnCount; j++)
         {
-            std::cout << m_matrix[i][j] << " ";
+            std::cout << matrix(i, j) << " ";
         }
-        std::cout << std::endl;
+        std::cout << "]" << std::endl;
     }
-}
-
-double Matrix::value(std::size_t row, std::size_t column) const
-{
-    if (row >= m_rowCount || column >= m_columnCount)
-        throw Exception::Matrix::WrongCoordinates("Can't get value.");
-
-    return m_matrix[row][column];
 }
 
 void Matrix::setValue(std::size_t row, std::size_t column, double value)
 {
+    if (m_matrix == nullptr)
+        throw Exception::Matrix::NotInitialized();
+
     if (row >= m_rowCount || column >= m_columnCount)
         throw Exception::Matrix::WrongCoordinates("Can't set value.");
 
-    m_matrix[row][column] = value;
+    matrix(row, column) = value;
 }
 
 std::size_t Matrix::getRowCount() const
@@ -181,6 +192,13 @@ Matrix& Matrix::operator=(const Matrix& matrix)
     return *this;
 }
 
+Matrix& Matrix::operator=(Matrix&& matrix) noexcept
+{
+    MOVE(matrix);
+
+    return *this;
+}
+
 Matrix& Matrix::operator+=(const Matrix& matrix)
 {
     *this = Matrix::addMatrix(*this, matrix);
@@ -238,7 +256,7 @@ bool Matrix::operator==(const Matrix& matrix) const
     {
         for (std::size_t column = 0; column < m_columnCount; column++)
         {
-            if (!areDoubleEqual(matrix.m_matrix[row][column], m_matrix[row][column]))
+            if (!areDoubleEqual(matrix.matrix(row, column), this->matrix(row, column)))
                 return false;
         }
     }
@@ -268,7 +286,7 @@ Matrix Matrix::addMatrix(const Matrix& a, const Matrix& b)
     {
         for (std::size_t j = 0; j < c.m_columnCount; j++)
         {
-            c.m_matrix[i][j] = a.m_matrix[i][j] + b.m_matrix[i][j];
+            c.matrix(i, j) = a.matrix(i, j) + b.matrix(i, j);
         }
     }
 
@@ -288,7 +306,7 @@ Matrix Matrix::subMatrix(const Matrix& a, const Matrix& b)
     {
         for (std::size_t j = 0; j < c.m_columnCount; j++)
         {
-            c.m_matrix[i][j] = a.m_matrix[i][j] - b.m_matrix[i][j];
+            c.matrix(i, j) = a.matrix(i, j) - b.matrix(i, j);
         }
     }
 
@@ -308,7 +326,7 @@ Matrix Matrix::scalarProduct(const Matrix& a, double scalar)
     {
         for (std::size_t j = 0; j < c.m_columnCount; j++)
         {
-            c.m_matrix[i][j] = a.m_matrix[i][j] * scalar;
+            c.matrix(i, j) = a.matrix(i, j) * scalar;
         }
     }
 
@@ -330,7 +348,7 @@ Matrix Matrix::matrixProduct(const Matrix& a, const Matrix& b)
         {
             for (std::size_t k = 0; k < b.m_rowCount; k++)
             {
-                c.m_matrix[i][j] = a.m_matrix[i][k] * b.m_matrix[k][j] + c.m_matrix[i][j];
+                c.matrix(i, j) = a.matrix(i, k) * b.matrix(k, j) + c.matrix(i, j);
             }
         }
     }
@@ -356,17 +374,17 @@ Matrix Matrix::rotationX(double alpha, const Matrix& a)
     {
         Matrix rotaMatX = Matrix(3, 3);
 
-        rotaMatX.m_matrix[0][0] = 1;
-        rotaMatX.m_matrix[0][1] = 0;
-        rotaMatX.m_matrix[0][2] = 0;
+        rotaMatX.matrix(0, 0) = 1;
+        rotaMatX.matrix(0, 1) = 0;
+        rotaMatX.matrix(0, 2) = 0;
 
-        rotaMatX.m_matrix[1][0] = 0;
-        rotaMatX.m_matrix[1][1] = std::cos(alpha);
-        rotaMatX.m_matrix[1][2] = -std::sin(alpha);
+        rotaMatX.matrix(1, 0) = 0;
+        rotaMatX.matrix(1, 1) = std::cos(alpha);
+        rotaMatX.matrix(1, 2) = -std::sin(alpha);
 
-        rotaMatX.m_matrix[2][0] = 0;
-        rotaMatX.m_matrix[2][1] = std::sin(alpha);
-        rotaMatX.m_matrix[2][2] = std::cos(alpha);
+        rotaMatX.matrix(2, 0) = 0;
+        rotaMatX.matrix(2, 1) = std::sin(alpha);
+        rotaMatX.matrix(2, 2) = std::cos(alpha);
 
         Matrix res = rotaMatX * a;
 
@@ -377,17 +395,17 @@ Matrix Matrix::rotationX(double alpha, const Matrix& a)
     {
         Matrix rotaMatX = Matrix(3, 3);
 
-        rotaMatX.m_matrix[0][0] = 1;
-        rotaMatX.m_matrix[0][1] = 0;
-        rotaMatX.m_matrix[0][2] = 0;
+        rotaMatX.matrix(0, 0) = 1;
+        rotaMatX.matrix(0, 1) = 0;
+        rotaMatX.matrix(0, 2) = 0;
 
-        rotaMatX.m_matrix[1][0] = 0;
-        rotaMatX.m_matrix[1][1] = std::cos(alpha);
-        rotaMatX.m_matrix[1][2] = -std::sin(alpha);
+        rotaMatX.matrix(1, 0) = 0;
+        rotaMatX.matrix(1, 1) = std::cos(alpha);
+        rotaMatX.matrix(1, 2) = -std::sin(alpha);
 
-        rotaMatX.m_matrix[2][0] = 0;
-        rotaMatX.m_matrix[2][1] = std::sin(alpha);
-        rotaMatX.m_matrix[2][2] = std::cos(alpha);
+        rotaMatX.matrix(2, 0) = 0;
+        rotaMatX.matrix(2, 1) = std::sin(alpha);
+        rotaMatX.matrix(2, 2) = std::cos(alpha);
 
         auto transposedA = Matrix::transposed(a);
         Matrix res = rotaMatX * transposedA;
@@ -404,17 +422,17 @@ Matrix Matrix::rotationY(double alpha, const Matrix& a)
     {
         Matrix rotaMatY = Matrix(3, 3);
 
-        rotaMatY.m_matrix[0][0] = std::cos(alpha);
-        rotaMatY.m_matrix[0][1] = 0;
-        rotaMatY.m_matrix[0][2] = std::sin(alpha);
+        rotaMatY.matrix(0, 0) = std::cos(alpha);
+        rotaMatY.matrix(0, 1) = 0;
+        rotaMatY.matrix(0, 2) = std::sin(alpha);
 
-        rotaMatY.m_matrix[1][0] = 0;
-        rotaMatY.m_matrix[1][1] = 1;
-        rotaMatY.m_matrix[1][2] = 0;
+        rotaMatY.matrix(1, 0) = 0;
+        rotaMatY.matrix(1, 1) = 1;
+        rotaMatY.matrix(1, 2) = 0;
 
-        rotaMatY.m_matrix[2][0] = -std::sin(alpha);
-        rotaMatY.m_matrix[2][1] = 0;
-        rotaMatY.m_matrix[2][2] = std::cos(alpha);
+        rotaMatY.matrix(2, 0) = -std::sin(alpha);
+        rotaMatY.matrix(2, 1) = 0;
+        rotaMatY.matrix(2, 2) = std::cos(alpha);
 
         Matrix res = matrixProduct(rotaMatY, a);
 
@@ -425,17 +443,17 @@ Matrix Matrix::rotationY(double alpha, const Matrix& a)
     {
         Matrix rotaMatY = Matrix(3, 3);
 
-        rotaMatY.m_matrix[0][0] = std::cos(alpha);
-        rotaMatY.m_matrix[0][1] = 0;
-        rotaMatY.m_matrix[0][2] = std::sin(alpha);
+        rotaMatY.matrix(0, 0) = std::cos(alpha);
+        rotaMatY.matrix(0, 1) = 0;
+        rotaMatY.matrix(0, 2) = std::sin(alpha);
 
-        rotaMatY.m_matrix[1][0] = 0;
-        rotaMatY.m_matrix[1][1] = 1;
-        rotaMatY.m_matrix[1][2] = 0;
+        rotaMatY.matrix(1, 0) = 0;
+        rotaMatY.matrix(1, 1) = 1;
+        rotaMatY.matrix(1, 2) = 0;
 
-        rotaMatY.m_matrix[2][0] = -std::sin(alpha);
-        rotaMatY.m_matrix[2][1] = 0;
-        rotaMatY.m_matrix[2][2] = std::cos(alpha);
+        rotaMatY.matrix(2, 0) = -std::sin(alpha);
+        rotaMatY.matrix(2, 1) = 0;
+        rotaMatY.matrix(2, 2) = std::cos(alpha);
 
         auto transposedA = Matrix::transposed(a);
         Matrix res = rotaMatY * transposedA;
@@ -452,17 +470,17 @@ Matrix Matrix::rotationZ(double alpha, const Matrix& a)
     {
         Matrix rotaMatZ = Matrix(3, 3);
 
-        rotaMatZ.m_matrix[0][0] = std::cos(alpha);
-        rotaMatZ.m_matrix[0][1] = -std::sin(alpha);
-        rotaMatZ.m_matrix[0][2] = 0;
+        rotaMatZ.matrix(0, 0) = std::cos(alpha);
+        rotaMatZ.matrix(0, 1) = -std::sin(alpha);
+        rotaMatZ.matrix(0, 2) = 0;
 
-        rotaMatZ.m_matrix[1][0] = std::sin(alpha);
-        rotaMatZ.m_matrix[1][1] = std::cos(alpha);
-        rotaMatZ.m_matrix[1][2] = 0;
+        rotaMatZ.matrix(1, 0) = std::sin(alpha);
+        rotaMatZ.matrix(1, 1) = std::cos(alpha);
+        rotaMatZ.matrix(1, 2) = 0;
 
-        rotaMatZ.m_matrix[2][0] = 0;
-        rotaMatZ.m_matrix[2][1] = 0;
-        rotaMatZ.m_matrix[2][2] = 1;
+        rotaMatZ.matrix(2, 0) = 0;
+        rotaMatZ.matrix(2, 1) = 0;
+        rotaMatZ.matrix(2, 2) = 1;
 
         Matrix res = matrixProduct(rotaMatZ, a);
 
@@ -473,17 +491,17 @@ Matrix Matrix::rotationZ(double alpha, const Matrix& a)
     {
         Matrix rotaMatZ = Matrix(3, 3);
 
-        rotaMatZ.m_matrix[0][0] = std::cos(alpha);
-        rotaMatZ.m_matrix[0][1] = -std::sin(alpha);
-        rotaMatZ.m_matrix[0][2] = 0;
+        rotaMatZ.matrix(0, 0) = std::cos(alpha);
+        rotaMatZ.matrix(0, 1) = -std::sin(alpha);
+        rotaMatZ.matrix(0, 2) = 0;
 
-        rotaMatZ.m_matrix[1][0] = std::sin(alpha);
-        rotaMatZ.m_matrix[1][1] = std::cos(alpha);
-        rotaMatZ.m_matrix[1][2] = 0;
+        rotaMatZ.matrix(1, 0) = std::sin(alpha);
+        rotaMatZ.matrix(1, 1) = std::cos(alpha);
+        rotaMatZ.matrix(1, 2) = 0;
 
-        rotaMatZ.m_matrix[2][0] = 0;
-        rotaMatZ.m_matrix[2][1] = 0;
-        rotaMatZ.m_matrix[2][2] = 1;
+        rotaMatZ.matrix(2, 0) = 0;
+        rotaMatZ.matrix(2, 1) = 0;
+        rotaMatZ.matrix(2, 2) = 1;
 
         auto transposedA = Matrix::transposed(a);
         Matrix res = rotaMatZ * transposedA;
@@ -500,9 +518,9 @@ Matrix Matrix::scale(double x, double y, double z, const Matrix& a)
     {
         Matrix scale = Matrix(3, 3);
 
-        scale.m_matrix[0][0] = x;
-        scale.m_matrix[1][1] = y;
-        scale.m_matrix[2][2] = z;
+        scale.matrix(0, 0) = x;
+        scale.matrix(1, 1) = y;
+        scale.matrix(2, 2) = z;
 
         Matrix res = matrixProduct(scale, a);
 
@@ -513,9 +531,9 @@ Matrix Matrix::scale(double x, double y, double z, const Matrix& a)
     {
         Matrix scale = Matrix(3, 3);
 
-        scale.m_matrix[0][0] = x;
-        scale.m_matrix[1][1] = y;
-        scale.m_matrix[2][2] = z;
+        scale.matrix(0, 0) = x;
+        scale.matrix(1, 1) = y;
+        scale.matrix(2, 2) = z;
 
         auto transposedA = Matrix::transposed(a);
         Matrix res = scale * transposedA;
@@ -528,7 +546,7 @@ Matrix Matrix::scale(double x, double y, double z, const Matrix& a)
 
 Matrix Matrix::transposed(const Matrix& a)
 {
-    if (a.m_columnCount != 0 || a.m_rowCount != 0)
+    if (a.m_columnCount != 0 && a.m_rowCount != 0)
     {
         Matrix res = Matrix(a.m_columnCount, a.m_rowCount);
 
@@ -536,7 +554,7 @@ Matrix Matrix::transposed(const Matrix& a)
         {
             for (std::size_t j = 0; j < a.m_columnCount; j++)
             {
-                res.m_matrix[j][i] = a.m_matrix[i][j];
+                res.matrix(j, i) = a.matrix(i, j);
             }
         }
 
@@ -550,9 +568,9 @@ double Matrix::getNorm(const Matrix& a)
 {
     if (a.m_columnCount == 1 && a.m_rowCount == 3)
     {
-        double x = a.m_matrix[0][0];
-        double y = a.m_matrix[1][0];
-        double z = a.m_matrix[2][0];
+        double x = a.matrix(0, 0);
+        double y = a.matrix(1, 0);
+        double z = a.matrix(2, 0);
 
         double norm = std::sqrt(std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2));
 
@@ -561,9 +579,9 @@ double Matrix::getNorm(const Matrix& a)
 
     if (a.m_columnCount == 3 && a.m_rowCount == 1)
     {
-        double x = a.m_matrix[0][0];
-        double y = a.m_matrix[0][1];
-        double z = a.m_matrix[0][2];
+        double x = a.matrix(0, 0);
+        double y = a.matrix(0, 1);
+        double z = a.matrix(0, 2);
 
         double norm = std::sqrt(std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2));
 
@@ -579,13 +597,13 @@ Matrix Matrix::normalize(const Matrix& a)
     {
         double norm = Matrix::getNorm(a);
 
-        double x = a.m_matrix[0][0] / norm;
-        double y = a.m_matrix[1][0] / norm;
-        double z = a.m_matrix[2][0] / norm;
+        double x = a.matrix(0, 0) / norm;
+        double y = a.matrix(1, 0) / norm;
+        double z = a.matrix(2, 0) / norm;
 
-        a.m_matrix[0][0] = x;
-        a.m_matrix[1][0] = y;
-        a.m_matrix[2][0] = z;
+        a.matrix(0, 0) = x;
+        a.matrix(1, 0) = y;
+        a.matrix(2, 0) = z;
 
         return a;
     }
@@ -594,13 +612,13 @@ Matrix Matrix::normalize(const Matrix& a)
     {
         double norm = Matrix::getNorm(a);
 
-        double x = a.m_matrix[0][0] / norm;
-        double y = a.m_matrix[0][1] / norm;
-        double z = a.m_matrix[0][2] / norm;
+        double x = a.matrix(0, 0) / norm;
+        double y = a.matrix(0, 1) / norm;
+        double z = a.matrix(0, 2) / norm;
 
-        a.m_matrix[0][0] = x;
-        a.m_matrix[0][1] = y;
-        a.m_matrix[0][2] = z;
+        a.matrix(0, 0) = x;
+        a.matrix(0, 1) = y;
+        a.matrix(0, 2) = z;
 
         return a;
     }
@@ -623,17 +641,17 @@ Matrix Matrix::invert(const Matrix& a)
     }
 
     // Create submatrix to have the determinant
-    Matrix subMat00(2, 2, {{a.m_matrix[1][1], a.m_matrix[1][2]}, {a.m_matrix[2][1], a.m_matrix[2][2]}});
-    Matrix subMat01(2, 2, {{a.m_matrix[1][0], a.m_matrix[1][2]}, {a.m_matrix[2][0], a.m_matrix[2][2]}});
-    Matrix subMat02(2, 2, {{a.m_matrix[1][0], a.m_matrix[1][1]}, {a.m_matrix[2][0], a.m_matrix[2][1]}});
+    Matrix subMat00(2, 2, {{a.matrix(1, 1), a.matrix(1, 2)}, {a.matrix(2, 1), a.matrix(2, 2)}});
+    Matrix subMat01(2, 2, {{a.matrix(1, 0), a.matrix(1, 2)}, {a.matrix(2, 0), a.matrix(2, 2)}});
+    Matrix subMat02(2, 2, {{a.matrix(1, 0), a.matrix(1, 1)}, {a.matrix(2, 0), a.matrix(2, 1)}});
 
-    Matrix subMat10(2, 2, {{a.m_matrix[0][1], a.m_matrix[0][2]}, {a.m_matrix[2][1], a.m_matrix[2][2]}});
-    Matrix subMat11(2, 2, {{a.m_matrix[0][0], a.m_matrix[0][2]}, {a.m_matrix[2][0], a.m_matrix[2][2]}});
-    Matrix subMat12(2, 2, {{a.m_matrix[0][0], a.m_matrix[0][1]}, {a.m_matrix[2][0], a.m_matrix[2][1]}});
+    Matrix subMat10(2, 2, {{a.matrix(0, 1), a.matrix(0, 2)}, {a.matrix(2, 1), a.matrix(2, 2)}});
+    Matrix subMat11(2, 2, {{a.matrix(0, 0), a.matrix(0, 2)}, {a.matrix(2, 0), a.matrix(2, 2)}});
+    Matrix subMat12(2, 2, {{a.matrix(0, 0), a.matrix(0, 1)}, {a.matrix(2, 0), a.matrix(2, 1)}});
 
-    Matrix subMat20(2, 2, {{a.m_matrix[0][1], a.m_matrix[0][2]}, {a.m_matrix[1][1], a.m_matrix[1][2]}});
-    Matrix subMat21(2, 2, {{a.m_matrix[0][0], a.m_matrix[0][2]}, {a.m_matrix[1][0], a.m_matrix[1][2]}});
-    Matrix subMat22(2, 2, {{a.m_matrix[0][0], a.m_matrix[0][1]}, {a.m_matrix[1][0], a.m_matrix[1][1]}});
+    Matrix subMat20(2, 2, {{a.matrix(0, 1), a.matrix(0, 2)}, {a.matrix(1, 1), a.matrix(1, 2)}});
+    Matrix subMat21(2, 2, {{a.matrix(0, 0), a.matrix(0, 2)}, {a.matrix(1, 0), a.matrix(1, 2)}});
+    Matrix subMat22(2, 2, {{a.matrix(0, 0), a.matrix(0, 1)}, {a.matrix(1, 0), a.matrix(1, 1)}});
 
     // Get the determinant for each submatrix
     double det00 = Matrix::determinant(subMat00);
@@ -664,19 +682,19 @@ double Matrix::determinant(const Matrix& a)
     // 3*3 matrix
     if (a.m_columnCount == 3 && a.m_rowCount == 3)
     {
-        double det = a.m_matrix[0][0] * a.m_matrix[1][1] * a.m_matrix[2][2];
-        det -= a.m_matrix[2][0] * a.m_matrix[1][1] * a.m_matrix[0][2];
-        det += a.m_matrix[0][1] * a.m_matrix[1][2] * a.m_matrix[2][0];
-        det -= a.m_matrix[2][1] * a.m_matrix[1][2] * a.m_matrix[0][0];
-        det += a.m_matrix[0][2] * a.m_matrix[1][0] * a.m_matrix[2][1];
-        det -= a.m_matrix[2][2] * a.m_matrix[1][0] * a.m_matrix[0][1];
+        double det = a.matrix(0, 0) * a.matrix(1, 1) * a.matrix(2, 2);
+        det -= a.matrix(2, 0) * a.matrix(1, 1) * a.matrix(0, 2);
+        det += a.matrix(0, 1) * a.matrix(1, 2) * a.matrix(2, 0);
+        det -= a.matrix(2, 1) * a.matrix(1, 2) * a.matrix(0, 0);
+        det += a.matrix(0, 2) * a.matrix(1, 0) * a.matrix(2, 1);
+        det -= a.matrix(2, 2) * a.matrix(1, 0) * a.matrix(0, 1);
 
         return det;
     }
     // 2*2 matrix
     if (a.m_columnCount == 2 && a.m_rowCount == 2)
     {
-        double det = a.m_matrix[0][0] * a.m_matrix[1][1] - (a.m_matrix[0][1] * a.m_matrix[1][0]);
+        double det = a.matrix(0, 0) * a.matrix(1, 1) - (a.matrix(0, 1) * a.matrix(1, 0));
 
         return det;
     }
@@ -697,7 +715,7 @@ double Matrix::scalarProduct(const Matrix& a, const Matrix& b)
         double value = 0;
         for (size_t i = 0; i < a.m_rowCount; i++)
         {
-            value += a.m_matrix[i][0] * b.m_matrix[i][0];
+            value += a.matrix(i, 0) * b.matrix(i, 0);
         }
 
         return value;
@@ -708,7 +726,7 @@ double Matrix::scalarProduct(const Matrix& a, const Matrix& b)
         double value = 0;
         for (size_t i = 0; i < a.m_columnCount; i++)
         {
-            value += a.m_matrix[0][i] * b.m_matrix[0][i];
+            value += a.matrix(0, i) * b.matrix(0, i);
         }
 
         return value;
@@ -746,7 +764,7 @@ Matrix Matrix::round(const Matrix& matrix)
     {
         for (std::size_t j = 0; j < res.m_columnCount; j++)
         {
-            res.m_matrix[i][j] = std::round(res.m_matrix[i][j]);
+            res.matrix(i, j) = std::round(res.matrix(i, j));
         }
     }
 
@@ -777,9 +795,9 @@ Matrix Matrix::vectProduct(const Matrix& a, const Matrix& b)
         throw Exception::Matrix::WrongSize("The 2 matrix must be a Vec3 (1,3).");
     }
 
-    double xValue = a.m_matrix[0][1] * b.m_matrix[0][2] - a.m_matrix[0][2] * b.m_matrix[0][1];
-    double yValue = -a.m_matrix[0][0] * b.m_matrix[0][2] + a.m_matrix[0][2] * b.m_matrix[0][0];
-    double zValue = a.m_matrix[0][0] * b.m_matrix[0][1] - a.m_matrix[0][1] * b.m_matrix[0][0];
+    double xValue = a.matrix(0, 1) * b.matrix(0, 2) - a.matrix(0, 2) * b.matrix(0, 1);
+    double yValue = -a.matrix(0, 0) * b.matrix(0, 2) + a.matrix(0, 2) * b.matrix(0, 0);
+    double zValue = a.matrix(0, 0) * b.matrix(0, 1) - a.matrix(0, 1) * b.matrix(0, 0);
 
     Matrix res(a.getRowCount(), a.getColumnCount(), {{xValue, yValue, zValue}});
 
@@ -796,27 +814,7 @@ void Matrix::allocate(std::size_t rowCount, std::size_t columnCount)
     m_rowCount = rowCount;
     m_columnCount = columnCount;
 
-    m_matrix = new double*[m_rowCount];
-
-    for (std::size_t i = 0; i < m_rowCount; i++)
-    {
-        m_matrix[i] = new double[m_columnCount];
-    }
-}
-
-void Matrix::deallocate()
-{
-    if (m_matrix != nullptr)
-    {
-        for (std::size_t i = 0; i < m_rowCount; i++)
-        {
-            delete[] m_matrix[i];
-        }
-
-        delete[] m_matrix;
-
-        m_matrix = nullptr;
-    }
+    m_matrix = new double[m_rowCount * m_columnCount];
 }
 
 void Matrix::fill(const std::initializer_list<std::initializer_list<double>>& initializerList)
@@ -833,7 +831,7 @@ void Matrix::fill(const std::initializer_list<std::initializer_list<double>>& in
             if (column >= m_columnCount)
                 throw Exception::Matrix::WrongInitializerList();
 
-            m_matrix[line][column] = value;
+            matrix(line, column) = value;
             column++;
         }
 
@@ -848,7 +846,7 @@ void Matrix::fill(const Matrix& a)
     {
         for (std::size_t j = 0; j < m_columnCount; j++)
         {
-            m_matrix[i][j] = a.m_matrix[i][j];
+            matrix(i, j) = a.matrix(i, j);
         }
     }
 }
@@ -859,7 +857,7 @@ void Matrix::fill(double value)
     {
         for (std::size_t j = 0; j < m_columnCount; j++)
         {
-            m_matrix[i][j] = value;
+            matrix(i, j) = value;
         }
     }
 }

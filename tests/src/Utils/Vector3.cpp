@@ -52,8 +52,14 @@ TEST_CASE("testing vector3")
     // Vector3(3,1) * Vector3(1,3)
     CHECK_NOTHROW(b.transpose() * c);
 
-    // Vector3 = Matrix(1,1)
+    // Vector3 = Matrix(3,3)
     CHECK_THROWS(d = b * c);
+
+    // Matrix(3,1) * Matrix(1,3) = (3,3)
+    CHECK_NOTHROW(b * c);
+
+    // Vector3 = Matrix(1,1)
+    CHECK_THROWS(d = c * b);
 
     b = Vector3({6, 0, 0});
 
@@ -70,5 +76,9 @@ TEST_CASE("testing vector3")
     std::optional<Vector3> res(Vector3({1, 1, 1}));
     CHECK(res.value() == Vector3({1, 1, 1}));
 
-    //TODO: more tests
+    b = Vector3({6, 0, 0});
+    Vector3 v = b.transpose();
+    CHECK(v.x() == 6);
+    CHECK(v.y() == 0);
+    CHECK(v.z() == 0);
 }

@@ -29,7 +29,7 @@ public:
      *
      * @see RayType
      */
-    Ray(const Vector3& origin, const Vector3& direction, RayType type);
+    Ray(Vector3 origin, Vector3 direction, RayType type);
 
     /**
      * @brief Get the type of the ray.

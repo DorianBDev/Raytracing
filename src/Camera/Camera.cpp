@@ -1,8 +1,10 @@
 #include "Camera.h"
 
-Camera::Camera(const Vector3& coordinates, const Vector3& direction, const Size& resolution, double focal)
-    : m_coordinates(coordinates),
-      m_direction(direction),
+#include <utility>
+
+Camera::Camera(Vector3 coordinates, Vector3 direction, const Size& resolution, double focal)
+    : m_coordinates(std::move(coordinates)),
+      m_direction(std::move(direction)),
       m_resolution(resolution),
       m_focal(focal)
 {

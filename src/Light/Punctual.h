@@ -20,7 +20,7 @@ public:
      * @param intensity The intensity of the light
      * @param origin   The origin of the light
      */
-    Punctual(double intensity, const Vector3& origin);
+    Punctual(double intensity, Vector3 origin);
 
     /*
      * @brief Method that return if intersection is enlightened.

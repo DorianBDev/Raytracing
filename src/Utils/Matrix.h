@@ -11,6 +11,11 @@
 class Vector3;
 
 /**
+ * @brief Move a matrix into this.
+ */
+#define MOVE(matrix) move(std::move(matrix)) // NOLINT
+
+/**
  * @class Matrix
  * @brief Class that manage matrix calculations.
  *
@@ -20,6 +25,11 @@ class Vector3;
 class Matrix
 {
 public:
+    /**
+     * @brief Default constructor (no allocation).
+     */
+    Matrix() = default;
+
     /**
      * @brief Basic constructor with line and column.
      *
@@ -50,7 +60,12 @@ public:
     /**
      * @brief Constructor by copy.
      */
-    Matrix(const Matrix& /*A*/);
+    Matrix(const Matrix& matrix);
+
+    /**
+     * @brief Constructor by move.
+     */
+    Matrix(Matrix&& matrix) noexcept;
 
     /**
      * @brief Destructor of our class.
@@ -60,9 +75,19 @@ public:
     ~Matrix();
 
     /**
+     * @brief Create the matrix.
+     *
+     * @param rowCount     Number of line for the matrix.
+     * @param columnCount  Number of column for the matrix.
+     *
+     * Useful when creating with the empty constructor.
+     */
+    void create(std::size_t rowCount, std::size_t columnCount);
+
+    /**
      * @brief Print a matrix.
      */
-    void print() const;
+    void print(const std::string& name = "") const;
 
     /**
      * @brief Get the value of one item in the matrix.
@@ -72,7 +97,16 @@ public:
      *
      * @return Returns the value of the element at the given line and column.
      */
-    double value(std::size_t row, std::size_t column) const;
+    constexpr double value(std::size_t row, std::size_t column) const
+    {
+        if (m_matrix == nullptr)
+            throw Exception::Matrix::NotInitialized();
+
+        if (row >= m_rowCount || column >= m_columnCount)
+            throw Exception::Matrix::WrongCoordinates("Can't get value.");
+
+        return matrix(row, column);
+    }
 
     /**
      * @brief
@@ -249,6 +283,7 @@ public:
     /////////////////////////////////////////////////////////////////////
 
     Matrix& operator=(const Matrix& matrix);
+    Matrix& operator=(Matrix&& matrix) noexcept;
     Matrix& operator+=(const Matrix& matrix);
     Matrix& operator-=(const Matrix& matrix);
     Matrix& operator*=(const Matrix& matrix);
@@ -508,7 +543,15 @@ protected:
     /**
      * @brief Deallocate the matrix.
      */
-    void deallocate();
+    constexpr void deallocate()
+    {
+        if (m_matrix != nullptr)
+        {
+            delete[] m_matrix;
+
+            m_matrix = nullptr;
+        }
+    }
 
     /**
      * @brief Fill the matrix from an initializer list.
@@ -531,6 +574,42 @@ protected:
      */
     void fill(double value);
 
+    /**
+     * @brief Proxy to access the matrix easily.
+     *
+     * @param row    The row index to the element.
+     * @param column The column index to the element.
+     *
+     * @return Returns a reference on the element.
+     */
+    constexpr double& matrix(std::size_t row, std::size_t column) const
+    {
+        if (m_matrix == nullptr)
+            throw Exception::Matrix::NotInitialized();
+
+        if (row >= m_rowCount || column >= m_columnCount)
+            throw Exception::Matrix::WrongCoordinates("Can't get value.");
+
+        return m_matrix[m_columnCount * row + column];
+    }
+
+    constexpr void move(Matrix&& matrix)
+    {
+        if (this == &matrix)
+            return;
+
+        deallocate();
+
+        m_matrix = matrix.m_matrix;
+        matrix.m_matrix = nullptr;
+
+        m_rowCount = matrix.m_rowCount;
+        matrix.m_rowCount = 0;
+
+        m_columnCount = matrix.m_columnCount;
+        matrix.m_columnCount = 0;
+    }
+
 private:
     /**
      * The number of the line of our matrix.
@@ -545,7 +624,7 @@ private:
     /**
      * Store the element of our matrix.
      */
-    double** m_matrix = nullptr;
+    double* m_matrix = nullptr;
 };
 
 #endif //H_RAYTRACING_MATRIX_H

@@ -1,6 +1,8 @@
 #include "Object.h"
 
-Object::Object(const Vector3& coordinates, Color color) : m_coordinates(coordinates), m_color(color)
+#include <utility>
+
+Object::Object(Vector3 coordinates, Color color) : m_coordinates(std::move(coordinates)), m_color(color)
 {
 }
 

@@ -55,12 +55,13 @@ std::shared_ptr<sf::Image> Scene::compute()
     double stepX = projectionPlanSizeX / static_cast<double>(resolution.width());
     double stepY = projectionPlanSizeY / static_cast<double>(resolution.height());
 
+    // Create the image, pixel by pixel
+#ifdef PARALLELIZATION
+
     // Prepare parallelization
     std::vector<std::size_t> count(resolution.width());
     std::iota(std::begin(count), std::end(count), 0);
 
-    // Create the image, pixel by pixel
-#ifdef PARALLELIZATION
     std::for_each(std::execution::par, std::begin(count), std::end(count), [&](std::size_t x) {
 #else
     for (std::size_t x = 0; x < resolution.width(); x++)
@@ -115,7 +116,7 @@ sf::Color Scene::getPixelColor(const Ray& ray)
 
     // Get closer object
     std::shared_ptr<Object> closerObject = intersections.begin()->first;
-    Vector3 closerNorm = intersections.begin()->second;
+    Vector3& closerNorm = intersections.begin()->second;
     for (auto& [object, intersection] : intersections)
     {
         if (intersection.getNorm() < closerNorm.getNorm())

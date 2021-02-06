@@ -16,23 +16,33 @@ Vector3::Vector3(const Vector3& vector) : Matrix(1, 3)
     Matrix::fill(vector);
 }
 
-Vector3::Vector3(const Matrix& matrix) : Matrix(matrix)
+Vector3::Vector3(Vector3&& vector) noexcept : Matrix(std::move(vector))
 {
-    if (matrix.getRowCount() == 3 && matrix.getColumnCount() == 1)
+}
+
+Vector3::Vector3(const Matrix& matrix) : Matrix(1, 3)
+{
+    if (matrix.getRowCount() == 1 && matrix.getColumnCount() == 3)
     {
-        allocate(1, 3);
-        Matrix::fill(Matrix::transposed(matrix));
+        *this = matrix;
+    }
+    else if (matrix.getRowCount() == 3 && matrix.getColumnCount() == 1)
+    {
+        *this = Matrix::transposed(matrix);
     }
     else if (matrix.getRowCount() != 1 || matrix.getColumnCount() != 3)
         throw Exception::Matrix::NotVector3("Can't initialize a Vector3 with this size (!= (1,3)).");
 }
 
-Vector3::Vector3(const Matrix&& matrix) : Matrix(matrix)
+Vector3::Vector3(Matrix&& matrix) : Matrix(1, 3)
 {
-    if (matrix.getRowCount() == 3 || matrix.getColumnCount() == 1)
+    if (matrix.getRowCount() == 1 && matrix.getColumnCount() == 3)
     {
-        allocate(1, 3);
-        Matrix::fill(Matrix::transposed(matrix));
+        *this = std::move(matrix);
+    }
+    else if (matrix.getRowCount() == 3 || matrix.getColumnCount() == 1)
+    {
+        *this = Matrix::transposed(matrix);
     }
     else if (matrix.getRowCount() != 1 || matrix.getColumnCount() != 3)
         throw Exception::Matrix::NotVector3("Can't initialize a Vector3 with this size (!= (1,3)).");
@@ -43,34 +53,19 @@ Vector3::Vector3(const std::initializer_list<double>& initializerList) : Matrix(
     fill(initializerList);
 }
 
-double Vector3::x() const
-{
-    return value(0, 0);
-}
-
-double Vector3::y() const
-{
-    return value(0, 1);
-}
-
-double Vector3::z() const
-{
-    return value(0, 2);
-}
-
 void Vector3::setX(double value)
 {
-    setValue(0, 0, value);
+    matrix(0, 0) = value;
 }
 
 void Vector3::setY(double value)
 {
-    setValue(0, 1, value);
+    matrix(0, 1) = value;
 }
 
 void Vector3::setZ(double value)
 {
-    setValue(0, 2, value);
+    matrix(0, 2) = value;
 }
 
 Vector3& Vector3::operator=(const Matrix& matrix)
@@ -98,6 +93,26 @@ Vector3& Vector3::operator=(const Vector3& vector)
     return *this;
 }
 
+Vector3& Vector3::operator=(Matrix&& matrix) noexcept(false)
+{
+    if (!isVector3(matrix))
+        throw Exception::Matrix::NotVector3("Can't initialize a Vector3 with this size (!= (1,3)).");
+
+    MOVE(matrix);
+
+    return *this;
+}
+
+Vector3& Vector3::operator=(Vector3&& vector) noexcept
+{
+    if (this == &vector)
+        return *this;
+
+    MOVE(vector);
+
+    return *this;
+}
+
 void Vector3::fill(const std::initializer_list<double>& initializerList)
 {
     std::size_t column = 0;
@@ -106,7 +121,7 @@ void Vector3::fill(const std::initializer_list<double>& initializerList)
         if (column >= 3)
             throw Exception::Vector3::WrongInitializerList();
 
-        setValue(0, column, value);
+        matrix(0, column) = value;
         column++;
     }
 }

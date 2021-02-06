@@ -22,7 +22,7 @@ public:
      * @param originB   The last origin of the light
      * @param direction The direction of the light
      */
-    Directional(double intensity, const Vector3& originA, const Vector3& originB, const Vector3& direction);
+    Directional(double intensity, Vector3 originA, Vector3 originB, Vector3 direction);
 
     /*
      * @brief Method that return if the intersection is enlightened.

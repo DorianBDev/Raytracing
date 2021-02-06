@@ -1,8 +1,11 @@
 #include "Spot.h"
-Spot::Spot(double intensity, const Vector3& origin, const Vector3& direction, double angle)
+
+#include <utility>
+
+Spot::Spot(double intensity, Vector3 origin, Vector3 direction, double angle)
     : Light(intensity),
-      m_origin(origin),
-      m_direction(direction),
+      m_origin(std::move(origin)),
+      m_direction(std::move(direction)),
       m_angle(angle * pi / 180)
 {
 }

@@ -1,5 +1,8 @@
 #include "Punctual.h"
-Punctual::Punctual(double intensity, const Vector3& origin) : Light(intensity), m_origin(origin)
+
+#include <utility>
+
+Punctual::Punctual(double intensity, Vector3 origin) : Light(intensity), m_origin(std::move(origin))
 {
 }
 

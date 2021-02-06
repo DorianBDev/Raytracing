@@ -1,9 +1,11 @@
 #include "Ray.h"
 
-Ray::Ray(const Vector3& origin, const Vector3& direction, RayType type)
+#include <utility>
+
+Ray::Ray(Vector3 origin, Vector3 direction, RayType type)
     : m_type(type),
-      m_direction(direction),
-      m_origin(origin)
+      m_direction(std::move(direction)),
+      m_origin(std::move(origin))
 {
 }
 
