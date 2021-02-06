@@ -11,10 +11,10 @@ TEST_CASE("Testing scene")
     CHECK_NOTHROW(scene.addLight<Punctual>(10, Vector3(5, 0, 10)));
 
     // Create objects
-    CHECK_NOTHROW(scene.addObject<Sphere>(Vector3(0, 4, 15), Colors::blue(), 3));
-    CHECK_NOTHROW(scene.addObject<Sphere>(Vector3(0, 4, 8), Colors::white(), 1));
-    CHECK_NOTHROW(scene.addObject<Sphere>(Vector3(0, -4, 20), Colors::red(), 2));
-    CHECK_NOTHROW(scene.addObject<Sphere>(Vector3(5, -2, 30), Colors::green(), 2));
+    CHECK_NOTHROW(scene.addObject<Sphere>(Colors::blue(), Vector3(0, 4, 15), 3));
+    CHECK_NOTHROW(scene.addObject<Sphere>(Colors::white(), Vector3(0, 4, 8), 1));
+    CHECK_NOTHROW(scene.addObject<Sphere>(Colors::red(), Vector3(0, -4, 20), 2));
+    CHECK_NOTHROW(scene.addObject<Sphere>(Colors::green(), Vector3(5, -2, 30), 2));
 
     // Generate output
     CHECK_NOTHROW(scene.generate("out.png"));

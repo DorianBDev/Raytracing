@@ -7,7 +7,7 @@ TEST_CASE("testing sphere")
 
     Vector3 coordinates({{1, 1, 1}});
     Color color{};
-    Sphere sphere(coordinates, color, 1);
+    Sphere sphere(color, coordinates, 1);
 
     // b = (0, 0, 0)
     // y = a_i * x + b

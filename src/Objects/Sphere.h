@@ -17,11 +17,11 @@ public:
     /**
      * @brief Constructor that initialize the sphere object.
      *
-     * @param coordinates Coordinates of the sphere's center
      * @param color       The color of the sphere
+     * @param coordinates Coordinates of the sphere's center
      * @param radius      The radius of the sphere
      */
-    Sphere(const Vector3& coordinates, Color color, double radius);
+    Sphere(Color color, Vector3 coordinates, double radius);
 
     /**
      * @brief Method to get the intersection point with a ray and the sphere.
@@ -43,6 +43,11 @@ public:
     std::optional<Ray> getSecondaryRay(Vector3 intersectionPoint, Vector3 originLight) override;
 
 private:
+    /**
+     * The coordinates of the sphere.
+     */
+    Vector3 m_coordinates;
+
     /**
      * The radius of the sphere.
      */

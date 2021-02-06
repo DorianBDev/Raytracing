@@ -17,11 +17,11 @@ public:
     /**
      * @brief Constructor to initialize a plane object.
      *
-     * @param coordinates The equation of the plane
      * @param color       The color of the plane
+     * @param coordinates The equation of the plane
      * @param d           The const of the plane
      */
-    Plane(const Vector3& coordinates, Color color, double d);
+    Plane(Color color, Vector3 coordinates, double d);
 
     /**
      * @brief Method to get the intersection point with a ray and the plane.
@@ -43,6 +43,11 @@ public:
     std::optional<Ray> getSecondaryRay(Vector3 intersectionPoint, Vector3 originLight) override;
 
 private:
+    /**
+     * The coordinates of the plane.
+     */
+    Vector3 m_coordinates;
+
     /**
      * The const of the plane.
      */

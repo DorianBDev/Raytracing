@@ -24,10 +24,9 @@ public:
      *
      * This constructor initialize the object.
      *
-     * @param coordinates Coordinates for the object.
      * @param color       Object's color.
      */
-    Object(Vector3 coordinates, Color color);
+    explicit Object(Color color);
     virtual ~Object() = default;
 
     /**
@@ -52,31 +51,11 @@ public:
     /**
      * @brief Method.
      *
-     * This method change the coordinates of the object.
-     *
-     * @param coordinates Coordinates for the object.
-     */
-    void setCoordinates(const Vector3& coordinates);
-
-    /**
-     * @brief Method.
-     *
      * This method change the color of the object.
      *
      * @param color Object's color.
      */
     void setColor(Color color);
-
-    /**
-     * @brief Method.
-     *
-     * This method return the coordinates of the object.
-     *
-     * @param coordinates Coordinates for the object.
-     *
-     * @return Returns the object's coordinates.
-     */
-    Vector3 getCoordinates();
 
     /**
      * @brief Method.
@@ -90,11 +69,6 @@ public:
     Color getColor();
 
 private:
-    /**
-     * The object's coordinates.
-     */
-    Vector3 m_coordinates;
-
     /**
      * The object's color.
      */

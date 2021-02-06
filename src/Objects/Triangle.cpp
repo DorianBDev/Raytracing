@@ -2,15 +2,13 @@
 
 #include "Plane.h"
 
-Triangle::Triangle(const Vector3& coordinates,
-                   Color color,
-                   const Vector3& originA,
-                   const Vector3& originB,
-                   const Vector3& originC)
-    : Object(coordinates, color),
-      m_originA(originA + coordinates),
-      m_originB(originB + coordinates),
-      m_originC(originC + coordinates)
+#include <utility>
+
+Triangle::Triangle(Color color, Vector3 originA, Vector3 originB, Vector3 originC)
+    : Object(color),
+      m_originA(std::move(originA)),
+      m_originB(std::move(originB)),
+      m_originC(std::move(originC))
 {
 }
 
@@ -27,7 +25,7 @@ std::optional<Vector3> Triangle::getIntersection(Ray ray)
     double d = coordinates.x() * m_originA.x() + coordinates.y() * m_originA.y() + coordinates.z() * m_originA.z();
 
     Color color{};
-    Plane plane({coordinates.x(), coordinates.y(), coordinates.z()}, color, d);
+    Plane plane(color, {coordinates.x(), coordinates.y(), coordinates.z()}, d);
 
     std::optional<Vector3> intersection = plane.getIntersection(ray);
 

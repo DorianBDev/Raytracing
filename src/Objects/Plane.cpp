@@ -1,6 +1,8 @@
 #include "Plane.h"
 
-Plane::Plane(const Vector3& coordinates, Color color, double d) : Object(coordinates, color), m_d(d)
+#include <utility>
+
+Plane::Plane(Color color, Vector3 coordinates, double d) : Object(color), m_coordinates(std::move(coordinates)), m_d(d)
 {
 }
 
@@ -12,11 +14,10 @@ std::optional<Vector3> Plane::getIntersection(Ray ray)
     Vector3 origin = ray.getOrigin();
     Vector3 direction = ray.getDirection();
 
-    double num = origin.x() * this->getCoordinates().x() + origin.y() * this->getCoordinates().y() +
-                 origin.z() * this->getCoordinates().z();
+    double num = origin.x() * m_coordinates.x() + origin.y() * m_coordinates.y() + origin.z() * m_coordinates.z();
 
-    double den = direction.x() * this->getCoordinates().x() + direction.y() * this->getCoordinates().y() +
-                 direction.z() * this->getCoordinates().z();
+    double den =
+            direction.x() * m_coordinates.x() + direction.y() * m_coordinates.y() + direction.z() * m_coordinates.z();
 
     if (den == 0)
         return std::nullopt;
