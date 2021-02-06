@@ -38,13 +38,12 @@ bool Directional::isEnLight(Ray intersection)
     if (ab.z() * x + m_originA.z() != origin.z() + direction.z() * m)
         return false;
 
-    // Verify if the direction have the same orientation
-    if ((m_direction.x() != 0 && (origin - m_direction).toVector3().x() / m_direction.x() < 0) ||
-        (m_direction.y() != 0 && (origin - m_direction).toVector3().y() / m_direction.y() < 0) ||
-        (m_direction.z() != 0 && (origin - m_direction).toVector3().z() / m_direction.z() < 0))
-        return false;
+    Vector3 vector = origin - m_direction;
 
-    return true;
+    // Verify if the direction have the same orientation
+    return !((m_direction.x() != 0 && vector.x() / m_direction.x() < 0) ||
+             (m_direction.y() != 0 && vector.y() / m_direction.y() < 0) ||
+             (m_direction.z() != 0 && vector.z() / m_direction.z() < 0));
 }
 
 std::optional<Vector3> Directional::getOrigin(Ray intersection)
@@ -75,10 +74,12 @@ std::optional<Vector3> Directional::getOrigin(Ray intersection)
     if (ab.z() * x + m_originA.z() != origin.z() + direction.z() * m)
         return std::nullopt;
 
+    Vector3 vector = origin - m_direction;
+
     // Verify if the direction have the same orientation
-    if ((m_direction.x() != 0 && (origin - m_direction).toVector3().x() / m_direction.x() < 0) ||
-        (m_direction.y() != 0 && (origin - m_direction).toVector3().y() / m_direction.y() < 0) ||
-        (m_direction.z() != 0 && (origin - m_direction).toVector3().z() / m_direction.z() < 0))
+    if ((m_direction.x() != 0 && vector.x() / m_direction.x() < 0) ||
+        (m_direction.y() != 0 && vector.y() / m_direction.y() < 0) ||
+        (m_direction.z() != 0 && vector.z() / m_direction.z() < 0))
         return std::nullopt;
 
     return direction * m + origin;
