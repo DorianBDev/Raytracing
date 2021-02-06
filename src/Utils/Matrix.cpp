@@ -4,6 +4,9 @@
 #include "Utils.h"
 #include "Vector3.h"
 
+#include <algorithm>
+#include <cstring>
+
 Matrix::Matrix(std::size_t rowCount, std::size_t columnCount) : m_rowCount(rowCount), m_columnCount(columnCount)
 {
     allocate(rowCount, columnCount);
