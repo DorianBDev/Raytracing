@@ -1,5 +1,7 @@
 #include "Spot.h"
 
+#include "Utils/Utils.h"
+
 #include <utility>
 
 Spot::Spot(double intensity, Vector3 origin, Vector3 direction, double angle)
@@ -20,9 +22,9 @@ bool Spot::isEnLight(Ray intersection)
 
     double num = origin.x() * m_direction.x() + origin.y() * m_direction.y() + origin.z() * m_direction.z();
 
-    double den1 = std::pow(origin.x(), 2) + std::pow(origin.y(), 2) + std::pow(origin.z(), 2);
+    double den1 = pow2(origin.x()) + pow2(origin.y()) + pow2(origin.z());
 
-    double den2 = std::pow(m_direction.x(), 2) + std::pow(m_direction.y(), 2) + std::pow(m_direction.z(), 2);
+    double den2 = pow2(m_direction.x()) + pow2(m_direction.y()) + pow2(m_direction.z());
 
     double cosA = num / std::sqrt(den1 * den2);
     double angle = std::acos(cosA);

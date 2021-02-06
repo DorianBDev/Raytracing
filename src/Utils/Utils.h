@@ -20,4 +20,9 @@ enum class Endian
  */
 Endian endianness();
 
+inline constexpr double pow2(double value)
+{
+    return value * value;
+}
+
 #endif //H_RAYTRACING_UTILS_H

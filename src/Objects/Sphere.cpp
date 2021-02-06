@@ -1,5 +1,7 @@
 #include "Sphere.h"
 
+#include "Utils/Utils.h"
+
 #include <utility>
 
 Sphere::Sphere(Color color, Vector3 coordinates, double radius)
@@ -17,16 +19,16 @@ std::optional<Vector3> Sphere::getIntersection(Ray ray)
     const Vector3& origin = ray.getOrigin();
     const Vector3& direction = ray.getDirection();
 
-    double a = std::pow(direction.x(), 2) + std::pow(direction.y(), 2) + std::pow(direction.z(), 2);
+    double a = pow2(direction.x()) + pow2(direction.y()) + pow2(direction.z());
 
     double b =
             2 * ((origin.x() - m_coordinates.x()) * direction.x() + (origin.y() - m_coordinates.y()) * direction.y() +
                  (origin.z() - m_coordinates.z()) * direction.z());
 
-    double c = std::pow(origin.x() - m_coordinates.x(), 2) + std::pow(origin.y() - m_coordinates.y(), 2) +
-               std::pow(origin.z() - m_coordinates.z(), 2) - std::pow(m_radius, 2);
+    double c = pow2(origin.x() - m_coordinates.x()) + pow2(origin.y() - m_coordinates.y()) +
+               pow2(origin.z() - m_coordinates.z()) - pow2(m_radius);
 
-    double discriminant = std::pow(b, 2) - 4 * a * c;
+    double discriminant = pow2(b) - 4 * a * c;
 
     if (discriminant == 0)
     {
