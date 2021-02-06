@@ -20,10 +20,10 @@ std::optional<Vector3> Triangle::getIntersection(Ray ray)
         return std::nullopt;
 
     // We find the plane equation
-    Vector3 u = (m_originC - m_originA).toVector3();
-    Vector3 v = (m_originB - m_originA).toVector3();
+    Vector3 u = m_originC - m_originA;
+    Vector3 v = m_originB - m_originA;
 
-    Vector3 coordinates = Matrix::vectProduct(u, v).toVector3();
+    Vector3 coordinates = Matrix::vectProduct(u, v);
     double d = coordinates.x() * m_originA.x() + coordinates.y() * m_originA.y() + coordinates.z() * m_originA.z();
 
     Color color{};
@@ -51,7 +51,7 @@ std::optional<Vector3> Triangle::getIntersection(Ray ray)
 
 std::optional<Ray> Triangle::getSecondaryRay(Vector3 intersectionPoint, Vector3 originLight)
 {
-    return Ray(intersectionPoint, (originLight - intersectionPoint).toVector3(), SECONDARY);
+    return Ray(intersectionPoint, originLight - intersectionPoint, SECONDARY);
 }
 
 double Triangle::getArea(const Vector3& a, const Vector3& b, const Vector3& c)

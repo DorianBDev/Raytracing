@@ -9,23 +9,25 @@ std::optional<Vector3> Plane::getIntersection(Ray ray)
     if (ray.getType() != PRIMARY)
         return std::nullopt;
 
-    double num = ray.getOrigin().x() * this->getCoordinates().x() + ray.getOrigin().y() * this->getCoordinates().y() +
-                 ray.getOrigin().z() * this->getCoordinates().z();
+    Vector3 origin = ray.getOrigin();
+    Vector3 direction = ray.getDirection();
 
-    double den = ray.getDirection().x() * this->getCoordinates().x() +
-                 ray.getDirection().y() * this->getCoordinates().y() +
-                 ray.getDirection().z() * this->getCoordinates().z();
+    double num = origin.x() * this->getCoordinates().x() + origin.y() * this->getCoordinates().y() +
+                 origin.z() * this->getCoordinates().z();
+
+    double den = direction.x() * this->getCoordinates().x() + direction.y() * this->getCoordinates().y() +
+                 direction.z() * this->getCoordinates().z();
 
     if (den == 0)
         return std::nullopt;
 
     double t = (m_d - num) / den;
 
-    Vector3 intersection = (ray.getDirection() * t + ray.getOrigin()).toVector3();
+    Vector3 intersection = direction * t + origin;
 
-    if ((ray.getDirection().x() != 0 && (intersection.x() - ray.getOrigin().x()) / ray.getDirection().x() < 0) ||
-        (ray.getDirection().y() != 0 && (intersection.y() - ray.getOrigin().y()) / ray.getDirection().y() < 0) ||
-        (ray.getDirection().z() != 0 && (intersection.z() - ray.getOrigin().z()) / ray.getDirection().z() < 0))
+    if ((direction.x() != 0 && (intersection.x() - origin.x()) / direction.x() < 0) ||
+        (direction.y() != 0 && (intersection.y() - origin.y()) / direction.y() < 0) ||
+        (direction.z() != 0 && (intersection.z() - origin.z()) / direction.z() < 0))
         return std::nullopt;
 
     return intersection;
@@ -33,5 +35,5 @@ std::optional<Vector3> Plane::getIntersection(Ray ray)
 
 std::optional<Ray> Plane::getSecondaryRay(Vector3 intersectionPoint, Vector3 originLight)
 {
-    return Ray(intersectionPoint, (originLight - intersectionPoint).toVector3(), SECONDARY);
+    return Ray(intersectionPoint, originLight - intersectionPoint, SECONDARY);
 }

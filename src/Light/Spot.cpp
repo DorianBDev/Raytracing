@@ -16,13 +16,11 @@ bool Spot::isEnLight(Ray intersection)
         return false;
     // See with all the objects if there is an interception with the ray
 
-    intersection.setDirection((intersection.getDirection() * -1).toVector3());
+    Vector3 origin = intersection.getOrigin();
 
-    double num = intersection.getOrigin().x() * m_direction.x() + intersection.getOrigin().y() * m_direction.y() +
-                 intersection.getOrigin().z() * m_direction.z();
+    double num = origin.x() * m_direction.x() + origin.y() * m_direction.y() + origin.z() * m_direction.z();
 
-    double den1 = std::pow(intersection.getOrigin().x(), 2) + std::pow(intersection.getOrigin().y(), 2) +
-                  std::pow(intersection.getOrigin().z(), 2);
+    double den1 = std::pow(origin.x(), 2) + std::pow(origin.y(), 2) + std::pow(origin.z(), 2);
 
     double den2 = std::pow(m_direction.x(), 2) + std::pow(m_direction.y(), 2) + std::pow(m_direction.z(), 2);
 
@@ -44,5 +42,5 @@ std::optional<Vector3> Spot::getOrigin(Ray intersection)
 
 std::optional<Vector3> Spot::getDirection(Ray intersection)
 {
-    return (m_origin - intersection.getOrigin()).toVector3();
+    return m_origin - intersection.getOrigin();
 }

@@ -21,5 +21,5 @@ std::optional<Vector3> Punctual::getOrigin(Ray intersection)
 
 std::optional<Vector3> Punctual::getDirection(Ray intersection)
 {
-    return (m_origin - intersection.getOrigin()).toVector3();
+    return m_origin - intersection.getOrigin();
 }

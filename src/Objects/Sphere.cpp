@@ -9,16 +9,18 @@ std::optional<Vector3> Sphere::getIntersection(Ray ray)
     if (ray.getType() != PRIMARY)
         return std::nullopt;
 
-    double a = std::pow(ray.getDirection().x(), 2) + std::pow(ray.getDirection().y(), 2) +
-               std::pow(ray.getDirection().z(), 2);
+    Vector3 origin = ray.getOrigin();
+    Vector3 direction = ray.getDirection();
 
-    double b = 2 * ((ray.getOrigin().x() - this->getCoordinates().x()) * ray.getDirection().x() +
-                    (ray.getOrigin().y() - this->getCoordinates().y()) * ray.getDirection().y() +
-                    (ray.getOrigin().z() - this->getCoordinates().z()) * ray.getDirection().z());
+    double a = std::pow(direction.x(), 2) + std::pow(direction.y(), 2) + std::pow(direction.z(), 2);
 
-    double c = std::pow(ray.getOrigin().x() - this->getCoordinates().x(), 2) +
-               std::pow(ray.getOrigin().y() - this->getCoordinates().y(), 2) +
-               std::pow(ray.getOrigin().z() - this->getCoordinates().z(), 2) - std::pow(m_radius, 2);
+    double b = 2 * ((origin.x() - this->getCoordinates().x()) * direction.x() +
+                    (origin.y() - this->getCoordinates().y()) * direction.y() +
+                    (origin.z() - this->getCoordinates().z()) * direction.z());
+
+    double c = std::pow(origin.x() - this->getCoordinates().x(), 2) +
+               std::pow(origin.y() - this->getCoordinates().y(), 2) +
+               std::pow(origin.z() - this->getCoordinates().z(), 2) - std::pow(m_radius, 2);
 
     double discriminant = std::pow(b, 2) - 4 * a * c;
 
@@ -27,7 +29,7 @@ std::optional<Vector3> Sphere::getIntersection(Ray ray)
         // One solution exist, it is a tangent point
         double t = -b / (2 * a);
 
-        return (ray.getDirection() * t + ray.getOrigin()).toVector3();
+        return ray.getDirection() * t + origin;
     }
 
     if (discriminant > 0)
@@ -36,15 +38,16 @@ std::optional<Vector3> Sphere::getIntersection(Ray ray)
         double t2 = (-b + std::sqrt(discriminant)) / (2 * a);
 
         if (t1 > 0)
-            return (ray.getDirection() * t1 + ray.getOrigin()).toVector3();
+            return direction * t1 + origin;
 
         if (t2 > 0)
-            return (ray.getDirection() * t2 + ray.getOrigin()).toVector3();
+            return direction * t2 + origin;
     }
 
     return std::nullopt;
 }
+
 std::optional<Ray> Sphere::getSecondaryRay(Vector3 intersectionPoint, Vector3 originLight)
 {
-    return Ray(intersectionPoint, (originLight - intersectionPoint).toVector3(), SECONDARY);
+    return Ray(intersectionPoint, originLight - intersectionPoint, SECONDARY);
 }
