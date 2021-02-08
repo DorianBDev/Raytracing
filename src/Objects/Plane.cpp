@@ -38,3 +38,8 @@ std::optional<Ray> Plane::getSecondaryRay(Vector3 intersectionPoint, Vector3 ori
 {
     return Ray(intersectionPoint, originLight - intersectionPoint, SECONDARY);
 }
+
+Vector3 Plane::getNormal([[maybe_unused]] const Vector3& intersectionPoint)
+{
+    return m_coordinates;
+}

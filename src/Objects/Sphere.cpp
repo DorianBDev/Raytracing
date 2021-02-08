@@ -57,3 +57,8 @@ std::optional<Ray> Sphere::getSecondaryRay(Vector3 intersectionPoint, Vector3 or
 {
     return Ray(intersectionPoint, originLight - intersectionPoint, SECONDARY);
 }
+
+Vector3 Sphere::getNormal(const Vector3& intersectionPoint)
+{
+    return intersectionPoint - m_coordinates;
+}

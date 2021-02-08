@@ -61,3 +61,11 @@ double Triangle::getArea(const Vector3& a, const Vector3& b, const Vector3& c)
     double p = (ab + bc + ac) / 2;
     return std::sqrt(p * (p - ab) * (p - bc) * (p - ac));
 }
+
+Vector3 Triangle::getNormal([[maybe_unused]] const Vector3& intersectionPoint)
+{
+    Vector3 u = m_originC - m_originA;
+    Vector3 v = m_originB - m_originA;
+
+    return Matrix::vectProduct(u, v);
+}

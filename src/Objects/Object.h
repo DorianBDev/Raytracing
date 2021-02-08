@@ -49,6 +49,15 @@ public:
     virtual std::optional<Ray> getSecondaryRay(Vector3 intersectionPoint, Vector3 originLight) = 0;
 
     /**
+     * @brief Method to calculate the normal vector.
+     *
+     * @param intersectionPoint The intersection between the primary ray and the object.
+     *
+     * @return Returns the normal vector.
+     */
+    virtual Vector3 getNormal(const Vector3& intersectionPoint) = 0;
+
+    /**
      * @brief Method.
      *
      * This method change the color of the object.

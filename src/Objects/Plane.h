@@ -42,6 +42,15 @@ public:
      */
     std::optional<Ray> getSecondaryRay(Vector3 intersectionPoint, Vector3 originLight) override;
 
+    /**
+     * @brief Method to calculate the normal vector.
+     *
+     * @param intersectionPoint The intersection between the primary ray and the object.
+     *
+     * @return Returns the normal vector.
+     */
+    Vector3 getNormal([[maybe_unused]] const Vector3& intersectionPoint) override;
+
 private:
     /**
      * The coordinates of the plane.
