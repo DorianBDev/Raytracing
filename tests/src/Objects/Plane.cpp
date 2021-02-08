@@ -18,16 +18,12 @@ TEST_CASE("Testing plane object")
     Vector3 a3({{-1.5, 1.5, 0}});
     Ray r3({{0, 0, 0}}, a3, PRIMARY);
 
-    Vector3 a4({{0, 3, 0}});
-    Ray r4({{0, 0, 0}}, a4, SECONDARY);
-
     Vector3 a5({{-1, -1, 0}});
     Ray r5({{0, 0, 0}}, a5, PRIMARY);
 
     CHECK(Matrix::areApproximatelyEqual(plane.getIntersection(r1).value(), res1));
     CHECK(Matrix::areApproximatelyEqual(plane.getIntersection(r2).value(), res2));
     CHECK(plane.getIntersection(r3) == std::nullopt);
-    CHECK(plane.getIntersection(r4) == std::nullopt);
     CHECK(plane.getIntersection(r5) == std::nullopt);
 
     Vector3 light({{5, 5, 5}});

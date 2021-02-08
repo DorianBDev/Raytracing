@@ -45,9 +45,6 @@ TEST_CASE("Testing triangle object")
     Vector3 a11({{-2, -2, 0}});
     Ray r11({{0, 0, 0}}, a11, PRIMARY);
 
-    Vector3 a12({{1, 1, 0}});
-    Ray r12({{0, 0, 0}}, a12, SECONDARY);
-
     CHECK(triangle.getIntersection(r1).value() == a1);
     CHECK(triangle.getIntersection(r2).value() == a2);
     CHECK(triangle.getIntersection(r3).value() == a3);
@@ -59,7 +56,6 @@ TEST_CASE("Testing triangle object")
     CHECK(triangle.getIntersection(r9) == std::nullopt);
     CHECK(triangle.getIntersection(r10) == std::nullopt);
     CHECK(triangle.getIntersection(r11) == std::nullopt);
-    CHECK(triangle.getIntersection(r12) == std::nullopt);
 
     Vector3 light({{5, 5, 5}});
 

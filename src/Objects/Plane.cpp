@@ -11,9 +11,6 @@ Plane::Plane(const Color& color, Vector3 coordinates, double d)
 
 std::optional<Vector3> Plane::getIntersection(Ray ray)
 {
-    if (ray.getType() != PRIMARY)
-        return std::nullopt;
-
     const Vector3& origin = ray.getOrigin();
     const Vector3& direction = ray.getDirection();
 

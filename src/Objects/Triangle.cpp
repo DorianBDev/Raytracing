@@ -14,9 +14,6 @@ Triangle::Triangle(const Color& color, Vector3 originA, Vector3 originB, Vector3
 
 std::optional<Vector3> Triangle::getIntersection(Ray ray)
 {
-    if (ray.getType() != PRIMARY)
-        return std::nullopt;
-
     // We find the plane equation
     Vector3 u = m_originC - m_originA;
     Vector3 v = m_originB - m_originA;
