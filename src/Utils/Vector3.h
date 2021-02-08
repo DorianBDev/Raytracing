@@ -106,6 +106,15 @@ public:
      */
     void setZ(double value);
 
+    /**
+     * @brief Euclidean distance between this and another vector.
+     *
+     * @param vector The other vector to use in the calculation.
+     *
+     * @return Returns the euclidean distance.
+     */
+    double distance(const Vector3& vector);
+
     Vector3& operator=(const Matrix& matrix);
     Vector3& operator=(const Vector3& vector);
     Vector3& operator=(Matrix&& matrix) noexcept(false);

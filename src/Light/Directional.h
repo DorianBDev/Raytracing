@@ -18,11 +18,12 @@ public:
      * @brief Constructor to initialize a directional light.
      *
      * @param intensity The intensity of the light
+     * @param color     The color of the light
      * @param originA   The first origin of the light
      * @param originB   The last origin of the light
      * @param direction The direction of the light
      */
-    Directional(double intensity, Vector3 originA, Vector3 originB, Vector3 direction);
+    Directional(double intensity, Color color, Vector3 originA, Vector3 originB, Vector3 direction);
 
     /*
      * @brief Method that return if the intersection is enlightened.

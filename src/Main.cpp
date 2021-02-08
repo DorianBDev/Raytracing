@@ -11,7 +11,7 @@ int main()
         Scene scene(Scene::camera(Vector3(0, 0, 0), Vector3(0, 0, 1), Size(720, 480), 1));
 
         // Add light
-        scene.addLight<Punctual>(10, Vector3(5, 0, 10));
+        scene.addLight<Punctual>(10, Colors::white(), Vector3(5, 0, 10));
 
         // Add objects
         scene.addObject<Sphere>(Colors::blue(), Vector3(0, 4, 15), 3);

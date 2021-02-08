@@ -6,7 +6,7 @@ TEST_CASE("Testing punctual light")
     Vector3 origin({{0, 0, 0}});
     Vector3 direction({{0.75, 0.75, 1}});
 
-    Punctual punctual({10, origin});
+    Punctual punctual({10, Colors::white(), origin});
 
     Ray r1({{1, 1, 1}}, direction, SECONDARY);
     Ray r2({{1, 1, 1.5}}, direction, SECONDARY);

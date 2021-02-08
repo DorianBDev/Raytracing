@@ -2,6 +2,7 @@
 #define H_RAYTRACING_COLOR_H
 
 #include <cstdint>
+#include <SFML/Graphics/Color.hpp>
 
 /**
  * @struct Color
@@ -86,6 +87,27 @@ struct Color
     uint8_t alpha() const
     {
         return m_alpha;
+    }
+
+    /**
+     * @brief Scalar multiplication on each channel of the color.
+     */
+    Color& operator*(double value)
+    {
+        m_red *= value;
+        m_green *= value;
+        m_blue *= value;
+        m_alpha *= value;
+
+        return *this;
+    }
+
+    /**
+     * @brief Convert the color to sf::Color.
+     */
+    sf::Color toSFMLColor()
+    {
+        return sf::Color(m_red, m_green, m_blue, m_alpha);
     }
 
 private:

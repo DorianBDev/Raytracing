@@ -2,7 +2,7 @@
 
 #include <utility>
 
-Punctual::Punctual(double intensity, Vector3 origin) : Light(intensity), m_origin(std::move(origin))
+Punctual::Punctual(double intensity, Color color, Vector3 origin) : Light(intensity, color), m_origin(std::move(origin))
 {
 }
 

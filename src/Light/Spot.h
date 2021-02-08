@@ -20,11 +20,12 @@ public:
      * @brief Constructor to initialize a spot light.
      *
      * @param intensity The intensity of the spot light
+     * @param color     The color of the light
      * @param origin    The origin of the spot light
      * @param direction The direction of the spot light
      * @param angle     The angle of the spot light
      */
-    Spot(double intensity, Vector3 origin, Vector3 direction, double angle);
+    Spot(double intensity, Color color, Vector3 origin, Vector3 direction, double angle);
 
     /*
      * @brief Method that return if the intersection is enlightened.

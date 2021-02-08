@@ -4,8 +4,8 @@
 
 #include <utility>
 
-Spot::Spot(double intensity, Vector3 origin, Vector3 direction, double angle)
-    : Light(intensity),
+Spot::Spot(double intensity, Color color, Vector3 origin, Vector3 direction, double angle)
+    : Light(intensity, color),
       m_origin(std::move(origin)),
       m_direction(std::move(direction)),
       m_angle(angle * pi / 180)

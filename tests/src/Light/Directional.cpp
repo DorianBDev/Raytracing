@@ -7,7 +7,7 @@ TEST_CASE("Testing directional light")
     Vector3 originB({{0, 0.5, 0}});
     Vector3 direction({{0.75, 0.75, 1}});
 
-    Directional directional({10, originA, originB, direction});
+    Directional directional({10, Colors::white(), originA, originB, direction});
 
     Ray r1({{1, 1, 1}}, direction, SECONDARY);
     Ray r2({{1, 1, 1.5}}, direction, SECONDARY);

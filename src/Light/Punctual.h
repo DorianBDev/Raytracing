@@ -18,9 +18,10 @@ public:
      * @brief Constructor to initialize a punctual light.
      *
      * @param intensity The intensity of the light
-     * @param origin   The origin of the light
+     * @param color     The color of the light
+     * @param origin    The origin of the light
      */
-    Punctual(double intensity, Vector3 origin);
+    Punctual(double intensity, Color color, Vector3 origin);
 
     /*
      * @brief Method that return if intersection is enlightened.

@@ -2,8 +2,8 @@
 
 #include <utility>
 
-Directional::Directional(double intensity, Vector3 originA, Vector3 originB, Vector3 direction)
-    : Light(intensity),
+Directional::Directional(double intensity, Color color, Vector3 originA, Vector3 originB, Vector3 direction)
+    : Light(intensity, color),
       m_originA(std::move(originA)),
       m_originB(std::move(originB)),
       m_direction(std::move(direction))

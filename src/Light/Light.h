@@ -1,6 +1,7 @@
 #ifndef H_RAYTRACING_LIGHT_H
 #define H_RAYTRACING_LIGHT_H
 
+#include "Utils/Color.h"
 #include "Utils/Ray.h"
 
 #include <optional>
@@ -19,9 +20,10 @@ public:
     /**
      * @brief Constructor that initialize a light.
      *
-     * @param intensity   The intensity of the light
+     * @param intensity The intensity of the light
+     * @param color     The color of the light
      */
-    explicit Light(double intensity);
+    explicit Light(double intensity, Color color);
     virtual ~Light() = default;
 
     /**
@@ -30,6 +32,13 @@ public:
      * @return Returns the intensity of the light.
      */
     double getIntensity() const;
+
+    /**
+     * @brief Get the color of the light.
+     *
+     * @return Returns the color of the light.
+     */
+    Color getColor() const;
 
     /*
      * @brief Method that return if the secondary ray is enlightened.
@@ -63,6 +72,11 @@ private:
      * The intensity of the light.
      */
     double m_intensity;
+
+    /**
+     * Color of the light.
+     */
+    Color m_color;
 };
 
 #endif //H_RAYTRACING_LIGHT_H

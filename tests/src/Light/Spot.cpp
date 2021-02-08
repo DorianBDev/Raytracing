@@ -6,7 +6,7 @@ TEST_CASE("Testing spot light")
     Vector3 origin({{0, 0, 0}});
     Vector3 direction({{0, 2, 0}});
 
-    Spot spot({10, origin, direction, 45});
+    Spot spot({10, Colors::white(), origin, direction, 45});
 
     Ray r1({{0, 2, 0}}, direction, SECONDARY);
     Ray r2({{2, 2, 0}}, direction, SECONDARY);
