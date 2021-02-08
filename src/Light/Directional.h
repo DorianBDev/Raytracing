@@ -23,7 +23,7 @@ public:
      * @param originB   The last origin of the light
      * @param direction The direction of the light
      */
-    Directional(double intensity, Color color, Vector3 originA, Vector3 originB, Vector3 direction);
+    Directional(double intensity, const Color& color, Vector3 originA, Vector3 originB, Vector3 direction);
 
     /*
      * @brief Method that return if the intersection is enlightened.
@@ -32,7 +32,7 @@ public:
      *
      * @return Returns true if the intersection is enlightened.
      */
-    bool isEnLight(Vector3 origin) override;
+    bool isEnLight(const Vector3& origin) const override;
 
     /**
      * @brief Method to get the origin of the light.
@@ -41,7 +41,7 @@ public:
      *
      * @return Returns the origin point of the light.
      */
-    std::optional<Vector3> getOrigin(Vector3 origin) override;
+    std::optional<Vector3> getOrigin(const Vector3& origin) const override;
 
     /**
      * @brief Method to get the direction of the light.
@@ -50,7 +50,7 @@ public:
      *
      * @return Returns the direction of the light.
      */
-    std::optional<Vector3> getDirection(Vector3 origin) override;
+    std::optional<Vector3> getDirection(const Vector3& origin) const override;
 
 private:
     /**

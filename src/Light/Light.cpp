@@ -1,6 +1,6 @@
 #include "Light.h"
 
-Light::Light(double intensity, Color color) : m_intensity(intensity), m_color(color)
+Light::Light(double intensity, const Color& color) : m_intensity(intensity), m_color(color)
 {
 }
 

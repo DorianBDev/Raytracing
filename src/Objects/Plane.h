@@ -21,7 +21,7 @@ public:
      * @param coordinates The equation of the plane
      * @param d           The const of the plane
      */
-    Plane(Color color, Vector3 coordinates, double d);
+    Plane(const Color& color, Vector3 coordinates, double d);
 
     /**
      * @brief Method to get the intersection point with a ray and the plane.

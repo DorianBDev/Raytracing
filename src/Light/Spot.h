@@ -25,7 +25,7 @@ public:
      * @param direction The direction of the spot light
      * @param angle     The angle of the spot light
      */
-    Spot(double intensity, Color color, Vector3 origin, Vector3 direction, double angle);
+    Spot(double intensity, const Color& color, Vector3 origin, Vector3 direction, double angle);
 
     /*
      * @brief Method that return if the intersection is enlightened.
@@ -34,7 +34,7 @@ public:
      *
      * @return Returns true if the intersection is enlightened.
      */
-    bool isEnLight(Vector3 origin) override;
+    bool isEnLight(const Vector3& origin) const override;
 
     /**
      * @brief Method to get the origin of the light.
@@ -43,7 +43,7 @@ public:
      *
      * @return Returns the origin point of the light.
      */
-    std::optional<Vector3> getOrigin([[maybe_unused]] Vector3 origin) override;
+    std::optional<Vector3> getOrigin([[maybe_unused]] const Vector3& origin) const override;
 
     /**
      * @brief Method to get the direction of the light.
@@ -52,7 +52,7 @@ public:
      *
      * @return Returns the direction of the light.
      */
-    std::optional<Vector3> getDirection(Vector3 origin) override;
+    std::optional<Vector3> getDirection(const Vector3& origin) const override;
 
 private:
     /**

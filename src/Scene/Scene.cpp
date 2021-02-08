@@ -1,6 +1,7 @@
 #include "Scene.h"
 
 #include "Config.h"
+#include "Utils/Math.h"
 #include "Utils/Utils.h"
 
 #ifdef PARALLELIZATION
@@ -8,6 +9,7 @@
 #include <execution>
 #endif
 
+#include <cmath>
 #include <map>
 #include <numeric>
 #include <utility>
@@ -23,7 +25,7 @@ Scene& Scene::generate(const std::string& imagePath)
     return *this;
 }
 
-std::shared_ptr<sf::Image> Scene::compute()
+std::shared_ptr<sf::Image> Scene::compute() const
 {
     auto resolution = m_camera->getResolution();
 
@@ -67,7 +69,6 @@ std::shared_ptr<sf::Image> Scene::compute()
     for (std::size_t x = 0; x < resolution.width(); x++)
     {
 #endif
-
         for (std::size_t y = 0; y < resolution.height(); y++)
         {
             // Coordinates
@@ -82,8 +83,22 @@ std::shared_ptr<sf::Image> Scene::compute()
                     Matrix::normalize(m_camera->getDirection() + direction).toVector3(),
                     PRIMARY);
 
+            Color color(0, 0, 0, 255);
+
+            // Get the intersection object and point
+            auto intersection = getIntersectedObject(ray);
+            if (intersection.has_value())
+            {
+                auto& [object, point] = intersection.value();
+
+                // Set the color
+                color = object->getColor() + computeLight(object, point, ray);
+
+                //std::cout << computeLight(object, point, ray) << std::endl;
+            }
+
             // Compute the pixel color
-            res->setPixel(static_cast<unsigned int>(x), static_cast<unsigned int>(y), getPixelColor(ray));
+            res->setPixel(static_cast<unsigned int>(x), static_cast<unsigned int>(y), color.toSFMLColor());
         }
 
 #ifdef PARALLELIZATION
@@ -95,12 +110,12 @@ std::shared_ptr<sf::Image> Scene::compute()
     return res;
 }
 
-sf::Color Scene::getPixelColor(const Ray& ray)
+IntersectionResult Scene::getIntersectedObject(const Ray& ray) const
 {
     std::map<std::shared_ptr<Object>, Vector3> intersections;
 
     // Get all objects that intersect with the ray
-    for (auto& object : m_objects)
+    for (const auto& object : m_objects)
     {
         auto intersection = object->getIntersection(ray);
         if (intersection.has_value())
@@ -111,21 +126,112 @@ sf::Color Scene::getPixelColor(const Ray& ray)
 
     // Check if no intersection
     if (intersections.empty())
-        return sf::Color();
+        return {};
 
     // Get closer object
     std::shared_ptr<Object> closerObject = intersections.begin()->first;
     Vector3& closerNorm = intersections.begin()->second;
+    double minDistance = -1;
     for (auto& [object, intersection] : intersections)
     {
-        if (intersection.getNorm() < closerNorm.getNorm())
+        double distance = intersection.distance(m_camera->getCoordinates());
+
+        if (distance < minDistance || minDistance == -1)
         {
             closerObject = object;
             closerNorm = intersection;
+            minDistance = distance;
         }
     }
 
-    // Return the color of the nearest object
-    auto color = closerObject->getColor();
-    return sf::Color(color.red(), color.green(), color.blue(), color.alpha());
+    return {{closerObject, closerNorm}};
+}
+
+Color Scene::computeLight(const std::shared_ptr<Object>& intersectionObject,
+                          const Vector3& intersectionPoint,
+                          const Ray& primaryRay) const
+{
+    Color res(0, 0, 0, 0);
+
+    for (const auto& light : m_lights)
+    {
+        if (!light->isEnLight(intersectionPoint))
+            continue;
+
+        auto origin = light->getOrigin(intersectionPoint);
+
+        if (!origin.has_value())
+            continue;
+
+        if (intersectionObject == nullptr)
+            std::cout << "Pas ouf" << std::endl;
+
+        auto ray = intersectionObject->getSecondaryRay(intersectionPoint, origin.value());
+
+        if (!ray.has_value())
+            continue;
+
+        if (!isIlluminated(ray.value(), origin.value()))
+            continue;
+
+        double attenuation = 1 / origin->distance(ray->getOrigin());
+
+        Vector3 n = intersectionObject->getNormal(intersectionPoint);
+
+        Vector3 h = ray->getDirection() + primaryRay.getDirection();
+        h.normalize();
+
+        const double shininess = 2.0;
+
+        double intensity = attenuation * light->getIntensity() * std::pow(Matrix::scalarProduct(n, h), shininess);
+        res += light->getColor() * intensity;
+    }
+
+    //res.print();
+
+    return res;
+}
+
+bool Scene::isIlluminated(const Ray& secondaryRay, const Vector3& lightOrigin) const
+{
+    std::map<std::shared_ptr<Object>, Vector3> intersections;
+
+    // Change the origin of the secondary to the light origin, the direction stay the same
+    // It will allow to handle the case we need to gow throw a sphere (other extremity of a sphere)
+    Ray ray(lightOrigin, secondaryRay.getDirection() * -1, secondaryRay.getType());
+
+    // The intersection point
+    const auto& intersectionPoint = secondaryRay.getOrigin();
+
+    // Get all objects that intersect with the ray
+    for (const auto& object : m_objects)
+    {
+        auto intersection = object->getIntersection(ray);
+        if (intersection.has_value())
+        {
+            intersections[object] = intersection.value();
+        }
+    }
+
+    // Check if no intersection
+    if (intersections.empty())
+        return true;
+
+    // Distance to the light (from the intersection point)
+    double lightDistance = lightOrigin.distance(intersectionPoint);
+
+    // Get closer object
+    for (auto& [object, intersection] : intersections) // NOLINT
+    {
+        // Distance to the light (from the newly found intersection point)
+        double distance = lightOrigin.distance(intersection);
+
+        if (areDoubleApproximatelyEqual(distance, lightDistance, 0.0000001))
+            continue;
+
+        if (distance < lightDistance)
+            return false;
+    }
+
+    return true;
 }

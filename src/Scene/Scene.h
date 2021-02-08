@@ -9,6 +9,8 @@
 #include <memory>
 #include <vector>
 
+using IntersectionResult = std::optional<std::pair<std::shared_ptr<Object>, Vector3>>;
+
 /**
  * @brief Core class to store objects and primitives (like camera).
  */
@@ -85,16 +87,41 @@ protected:
      *
      * @return Returns the generated image.
      */
-    std::shared_ptr<sf::Image> compute();
+    std::shared_ptr<sf::Image> compute() const;
 
     /**
-     * @brief Get the pixel color from a ray.
+     * @brief Get the intersected object and intersection point by a primary ray.
      *
-     * @param ray The ray to use to get the color.
+     * @param ray The primary ray to use.
      *
-     * @return Returns the calculated color.
+     * @return Returns the intersected object and point.
      */
-    sf::Color getPixelColor(const Ray& ray);
+    IntersectionResult getIntersectedObject(const Ray& ray) const;
+
+    /**
+     * @brief Compute the light impact on the object color.
+     *
+     * @param intersectionObject The intersected object.
+     * @param intersectionPoint  The intersection point.
+     * @param primaryRay         The primary ray.
+     *
+     * @return Returns the color (to add with the object color).
+     */
+    Color computeLight(const std::shared_ptr<Object>& intersectionObject,
+                       const Vector3& intersectionPoint,
+                       const Ray& primaryRay) const;
+
+    /**
+     * @brief Check if the intersection point is illuminated.
+     *
+     * @warning Need to have the intersection point as the secondary ray origin.
+     *
+     * @param secondaryRay The secondary ray to use. See the warning above.
+     * @param lightOrigin  The light origin.
+     *
+     * @return Returns true if the intersection point is illuminated, false otherwise.
+     */
+    bool isIlluminated(const Ray& secondaryRay, const Vector3& lightOrigin) const;
 
 private:
     std::shared_ptr<Camera> m_camera;

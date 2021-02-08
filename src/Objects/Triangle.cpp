@@ -4,7 +4,7 @@
 
 #include <utility>
 
-Triangle::Triangle(Color color, Vector3 originA, Vector3 originB, Vector3 originC)
+Triangle::Triangle(const Color& color, Vector3 originA, Vector3 originB, Vector3 originC)
     : Object(color),
       m_originA(std::move(originA)),
       m_originB(std::move(originB)),

@@ -2,11 +2,11 @@
 
 #include <utility>
 
-Object::Object(Color color) : m_color(color)
+Object::Object(const Color& color) : m_color(color)
 {
 }
 
-void Object::setColor(Color color)
+void Object::setColor(const Color& color)
 {
     m_color = color;
 }

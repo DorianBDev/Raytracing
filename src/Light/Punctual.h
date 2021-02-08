@@ -21,7 +21,7 @@ public:
      * @param color     The color of the light
      * @param origin    The origin of the light
      */
-    Punctual(double intensity, Color color, Vector3 origin);
+    Punctual(double intensity, const Color& color, Vector3 origin);
 
     /*
      * @brief Method that return if the intersection is enlightened.
@@ -30,7 +30,7 @@ public:
      *
      * @return Returns true if the intersection is enlightened.
      */
-    bool isEnLight([[maybe_unused]] Vector3 origin) override;
+    bool isEnLight([[maybe_unused]] const Vector3& origin) const override;
 
     /**
      * @brief Method to get the origin of the light.
@@ -39,7 +39,7 @@ public:
      *
      * @return Returns the origin point of the light.
      */
-    std::optional<Vector3> getOrigin([[maybe_unused]] Vector3 origin) override;
+    std::optional<Vector3> getOrigin([[maybe_unused]] const Vector3& origin) const override;
 
     /**
      * @brief Method to get the direction of the light.
@@ -48,7 +48,7 @@ public:
      *
      * @return Returns the direction of the light.
      */
-    std::optional<Vector3> getDirection(Vector3 origin) override;
+    std::optional<Vector3> getDirection(const Vector3& origin) const override;
 
 private:
     /**

@@ -72,7 +72,7 @@ void Vector3::setZ(double value)
     matrix(0, 2) = value;
 }
 
-double Vector3::distance(const Vector3& vector)
+double Vector3::distance(const Vector3& vector) const
 {
     double x = pow2(matrix(0, 0) - vector.matrix(0, 0));
     double y = pow2(matrix(0, 1) - vector.matrix(0, 1));

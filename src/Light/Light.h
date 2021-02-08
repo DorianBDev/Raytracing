@@ -23,7 +23,7 @@ public:
      * @param intensity The intensity of the light
      * @param color     The color of the light
      */
-    explicit Light(double intensity, Color color);
+    explicit Light(double intensity, const Color& color);
     virtual ~Light() = default;
 
     /**
@@ -47,7 +47,7 @@ public:
      *
      * @return Returns true if the ray is enlightened.
      */
-    virtual bool isEnLight(Vector3 origin) = 0;
+    virtual bool isEnLight(const Vector3& origin) const = 0;
 
     /**
      * @brief Method to get the origin of the light.
@@ -56,7 +56,7 @@ public:
      *
      * @return Returns the origin point of the light.
      */
-    virtual std::optional<Vector3> getOrigin(Vector3 origin) = 0;
+    virtual std::optional<Vector3> getOrigin(const Vector3& origin) const = 0;
 
     /**
      * @brief Method to get the direction of the light.
@@ -65,7 +65,7 @@ public:
      *
      * @return Returns the direction of the light.
      */
-    virtual std::optional<Vector3> getDirection(Vector3 origin) = 0;
+    virtual std::optional<Vector3> getDirection(const Vector3& origin) const = 0;
 
 private:
     /**

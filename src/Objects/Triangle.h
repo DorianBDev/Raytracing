@@ -23,7 +23,7 @@ public:
      * @param originB     The vector to the second point B
      * @param originC     The vector to the third point C
      */
-    Triangle(Color color, Vector3 originA, Vector3 originB, Vector3 originC);
+    Triangle(const Color& color, Vector3 originA, Vector3 originB, Vector3 originC);
 
     /**
      * @brief Method to get the intersection point with a ray and the triangle.

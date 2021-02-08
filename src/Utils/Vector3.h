@@ -113,7 +113,7 @@ public:
      *
      * @return Returns the euclidean distance.
      */
-    double distance(const Vector3& vector);
+    double distance(const Vector3& vector) const;
 
     Vector3& operator=(const Matrix& matrix);
     Vector3& operator=(const Vector3& vector);

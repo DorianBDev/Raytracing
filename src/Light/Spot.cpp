@@ -4,7 +4,7 @@
 
 #include <utility>
 
-Spot::Spot(double intensity, Color color, Vector3 origin, Vector3 direction, double angle)
+Spot::Spot(double intensity, const Color& color, Vector3 origin, Vector3 direction, double angle)
     : Light(intensity, color),
       m_origin(std::move(origin)),
       m_direction(std::move(direction)),
@@ -12,7 +12,7 @@ Spot::Spot(double intensity, Color color, Vector3 origin, Vector3 direction, dou
 {
 }
 
-bool Spot::isEnLight(Vector3 origin)
+bool Spot::isEnLight(const Vector3& origin) const
 {
     // See with all the objects if there is an interception with the ray
     double num = origin.x() * m_direction.x() + origin.y() * m_direction.y() + origin.z() * m_direction.z();
@@ -29,12 +29,12 @@ bool Spot::isEnLight(Vector3 origin)
     return angle <= m_angle + padding;
 }
 
-std::optional<Vector3> Spot::getOrigin([[maybe_unused]] Vector3 origin)
+std::optional<Vector3> Spot::getOrigin([[maybe_unused]] const Vector3& origin) const
 {
     return m_origin;
 }
 
-std::optional<Vector3> Spot::getDirection(Vector3 origin)
+std::optional<Vector3> Spot::getDirection(const Vector3& origin) const
 {
     return m_origin - origin;
 }

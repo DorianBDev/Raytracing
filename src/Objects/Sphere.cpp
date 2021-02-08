@@ -4,7 +4,7 @@
 
 #include <utility>
 
-Sphere::Sphere(Color color, Vector3 coordinates, double radius)
+Sphere::Sphere(const Color& color, Vector3 coordinates, double radius)
     : Object(color),
       m_coordinates(std::move(coordinates)),
       m_radius(radius)
@@ -13,9 +13,6 @@ Sphere::Sphere(Color color, Vector3 coordinates, double radius)
 
 std::optional<Vector3> Sphere::getIntersection(Ray ray)
 {
-    if (ray.getType() != PRIMARY)
-        return std::nullopt;
-
     const Vector3& origin = ray.getOrigin();
     const Vector3& direction = ray.getDirection();
 

@@ -26,7 +26,7 @@ public:
      *
      * @param color       Object's color.
      */
-    explicit Object(Color color);
+    explicit Object(const Color& color);
     virtual ~Object() = default;
 
     /**
@@ -64,7 +64,7 @@ public:
      *
      * @param color Object's color.
      */
-    void setColor(Color color);
+    void setColor(const Color& color);
 
     /**
      * @brief Method.

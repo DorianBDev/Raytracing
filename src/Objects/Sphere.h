@@ -21,7 +21,7 @@ public:
      * @param coordinates Coordinates of the sphere's center
      * @param radius      The radius of the sphere
      */
-    Sphere(Color color, Vector3 coordinates, double radius);
+    Sphere(const Color& color, Vector3 coordinates, double radius);
 
     /**
      * @brief Method to get the intersection point with a ray and the sphere.

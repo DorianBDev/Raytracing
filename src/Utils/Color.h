@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics/Color.hpp>
 #include <cstdint>
+#include <iostream>
 
 /**
  * @struct Color
@@ -16,6 +17,17 @@ struct Color
      * @brief Create default color.
      */
     constexpr Color() = default;
+
+    /**
+     * @brief Color copy.
+     */
+    Color(const Color& color)
+    {
+        m_red = color.m_red;
+        m_green = color.m_green;
+        m_blue = color.m_blue;
+        m_alpha = color.m_alpha;
+    }
 
     /**
      * @brief Create a new color object.
@@ -92,12 +104,81 @@ struct Color
     /**
      * @brief Scalar multiplication on each channel of the color.
      */
-    Color& operator*(double value)
+    Color operator*(double value) const
     {
-        m_red = multiplyChannel(m_red, value);
-        m_green = multiplyChannel(m_green, value);
-        m_blue = multiplyChannel(m_blue, value);
-        m_alpha = multiplyChannel(m_alpha, value);
+        Color res;
+
+        res.setColor(multiplyChannel(m_red, value),
+                     multiplyChannel(m_green, value),
+                     multiplyChannel(m_blue, value),
+                     multiplyChannel(m_alpha, value));
+
+        return res;
+    }
+
+    /**
+     * @brief Add two colors.
+     */
+    inline Color operator+(const Color& color) const
+    {
+        Color res;
+
+        int red = static_cast<int>(m_red) + static_cast<int>(color.red());
+        int green = static_cast<int>(m_green) + static_cast<int>(color.green());
+        int blue = static_cast<int>(m_blue) + static_cast<int>(color.blue());
+        int alpha = static_cast<int>(m_alpha) + static_cast<int>(color.alpha());
+
+        if (red > 255)
+            red = 255;
+
+        if (green > 255)
+            green = 255;
+
+        if (blue > 255)
+            blue = 255;
+
+        if (alpha > 255)
+            alpha = 255;
+
+        if (red < 0)
+            red = 0;
+
+        if (green < 0)
+            green = 0;
+
+        if (blue < 0)
+            blue = 0;
+
+        if (alpha < 0)
+            alpha = 0;
+
+        res.setColor(static_cast<uint8_t>(red),
+                     static_cast<uint8_t>(green),
+                     static_cast<uint8_t>(blue),
+                     static_cast<uint8_t>(alpha));
+
+        return res;
+    }
+
+    /**
+     * @brief Add two colors.
+     */
+    Color& operator+=(const Color& color)
+    {
+        *this = *this + color;
+
+        return *this;
+    }
+
+    Color& operator=(const Color& color)
+    {
+        if (this == &color)
+            return *this;
+
+        m_red = color.m_red;
+        m_green = color.m_green;
+        m_blue = color.m_blue;
+        m_alpha = color.m_alpha;
 
         return *this;
     }
@@ -108,6 +189,19 @@ struct Color
     sf::Color toSFMLColor() const
     {
         return sf::Color(m_red, m_green, m_blue, m_alpha);
+    }
+
+    /**
+     * @brief Print color.
+     */
+    void print() const
+    {
+        std::cout << "Color("                          //
+                  << static_cast<int>(m_red) << ", "   //
+                  << static_cast<int>(m_green) << ", " //
+                  << static_cast<int>(m_blue) << ", "  //
+                  << static_cast<int>(m_alpha) << ")"  //
+                  << std::endl;                        //
     }
 
 protected:

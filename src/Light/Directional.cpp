@@ -2,7 +2,7 @@
 
 #include <utility>
 
-Directional::Directional(double intensity, Color color, Vector3 originA, Vector3 originB, Vector3 direction)
+Directional::Directional(double intensity, const Color& color, Vector3 originA, Vector3 originB, Vector3 direction)
     : Light(intensity, color),
       m_originA(std::move(originA)),
       m_originB(std::move(originB)),
@@ -10,7 +10,7 @@ Directional::Directional(double intensity, Color color, Vector3 originA, Vector3
 {
 }
 
-bool Directional::isEnLight(Vector3 origin)
+bool Directional::isEnLight(const Vector3& origin) const
 {
     Vector3 ab = m_originB - m_originA;
 
@@ -42,7 +42,7 @@ bool Directional::isEnLight(Vector3 origin)
              (m_direction.z() != 0 && vector.z() / m_direction.z() < 0));
 }
 
-std::optional<Vector3> Directional::getOrigin(Vector3 origin)
+std::optional<Vector3> Directional::getOrigin(const Vector3& origin) const
 {
     Vector3 ab = m_originB - m_originA;
 
@@ -77,7 +77,7 @@ std::optional<Vector3> Directional::getOrigin(Vector3 origin)
     return direction * m + origin;
 }
 
-std::optional<Vector3> Directional::getDirection(Vector3 origin)
+std::optional<Vector3> Directional::getDirection(const Vector3& origin) const
 {
     return m_direction - origin;
 }

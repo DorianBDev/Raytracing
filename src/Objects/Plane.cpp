@@ -2,7 +2,10 @@
 
 #include <utility>
 
-Plane::Plane(Color color, Vector3 coordinates, double d) : Object(color), m_coordinates(std::move(coordinates)), m_d(d)
+Plane::Plane(const Color& color, Vector3 coordinates, double d)
+    : Object(color),
+      m_coordinates(std::move(coordinates)),
+      m_d(d)
 {
 }
 
