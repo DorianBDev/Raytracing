@@ -86,4 +86,15 @@ TEST_CASE("Testing triangle object")
     CHECK(triangle.getSecondaryRay(triangle.getIntersection(r1).value(), light) != s2prime);
     CHECK(triangle.getSecondaryRay(triangle.getIntersection(r1).value(), light) == s3);
     CHECK(triangle.getSecondaryRay(triangle.getIntersection(r1).value(), light) != s3prime);
+
+    Vector3 u = originC - originA;
+    Vector3 v = originB - originA;
+
+    Vector3 normal = Matrix::vectProduct(u, v);
+
+    CHECK(triangle.getNormal(triangle.getIntersection(r1).value()) == normal);
+    CHECK(triangle.getNormal(triangle.getIntersection(r2).value()) == normal);
+    CHECK(triangle.getNormal(triangle.getIntersection(r3).value()) == normal);
+    CHECK(triangle.getNormal(triangle.getIntersection(r4).value()) == normal);
+    CHECK(triangle.getNormal(triangle.getIntersection(r5).value()) == normal);
 }

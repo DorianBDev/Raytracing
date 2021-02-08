@@ -21,11 +21,11 @@ std::optional<Vector3> Triangle::getIntersection(Ray ray)
     Vector3 u = m_originC - m_originA;
     Vector3 v = m_originB - m_originA;
 
-    Vector3 coordinates = Matrix::vectProduct(u, v);
-    double d = coordinates.x() * m_originA.x() + coordinates.y() * m_originA.y() + coordinates.z() * m_originA.z();
+    m_normal = Matrix::vectProduct(u, v);
+    double d = m_normal.x() * m_originA.x() + m_normal.y() * m_originA.y() + m_normal.z() * m_originA.z();
 
     Color color{};
-    Plane plane(color, {coordinates.x(), coordinates.y(), coordinates.z()}, d);
+    Plane plane(color, {m_normal.x(), m_normal.y(), m_normal.z()}, d);
 
     std::optional<Vector3> intersection = plane.getIntersection(ray);
 
@@ -64,8 +64,5 @@ double Triangle::getArea(const Vector3& a, const Vector3& b, const Vector3& c)
 
 Vector3 Triangle::getNormal([[maybe_unused]] const Vector3& intersectionPoint)
 {
-    Vector3 u = m_originC - m_originA;
-    Vector3 v = m_originB - m_originA;
-
-    return Matrix::vectProduct(u, v);
+    return m_normal;
 }

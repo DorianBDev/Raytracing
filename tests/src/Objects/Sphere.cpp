@@ -59,4 +59,8 @@ TEST_CASE("testing sphere")
     CHECK(sphere.getSecondaryRay(sphere.getIntersection(r1).value(), light) != s2prime);
     CHECK(sphere.getSecondaryRay(sphere.getIntersection(r1).value(), light) == s3);
     CHECK(sphere.getSecondaryRay(sphere.getIntersection(r1).value(), light) != s3prime);
+
+    CHECK(Matrix::areApproximatelyEqual(sphere.getNormal(sphere.getIntersection(r1).value()), (res1 - coordinates)));
+    CHECK(Matrix::areApproximatelyEqual(sphere.getNormal(sphere.getIntersection(r2).value()), (res2 - coordinates)));
+    CHECK(Matrix::areApproximatelyEqual(sphere.getNormal(sphere.getIntersection(r5).value()), (res5 - coordinates)));
 }

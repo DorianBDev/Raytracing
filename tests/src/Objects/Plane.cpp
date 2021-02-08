@@ -49,4 +49,7 @@ TEST_CASE("Testing plane object")
     CHECK(plane.getSecondaryRay(plane.getIntersection(r1).value(), light) != s2prime);
     CHECK(plane.getSecondaryRay(plane.getIntersection(r1).value(), light) == s3);
     CHECK(plane.getSecondaryRay(plane.getIntersection(r1).value(), light) != s3prime);
+
+    CHECK(plane.getNormal(plane.getIntersection(r1).value()) == coordinates);
+    CHECK(plane.getNormal(plane.getIntersection(r2).value()) == coordinates);
 }

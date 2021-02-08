@@ -79,6 +79,11 @@ private:
      * The vector to the third point C
      */
     Vector3 m_originC;
+
+    /**
+     * The normal vector to the triangle
+     */
+    Vector3 m_normal;
 };
 
 #endif //H_RAYTRACING_TRIANGLE_H
