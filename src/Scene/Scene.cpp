@@ -221,8 +221,10 @@ bool Scene::isIlluminated(const Ray& secondaryRay, const Vector3& lightOrigin) c
     double lightDistance = lightOrigin.distance(intersectionPoint);
 
     // Get closer object
-    for (auto& [object, intersection] : intersections) // NOLINT
+    for (auto& element : intersections) // NOLINT
     {
+        auto& intersection = element.second;
+
         // Distance to the light (from the newly found intersection point)
         double distance = lightOrigin.distance(intersection);
 
