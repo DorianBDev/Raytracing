@@ -12,14 +12,9 @@ Spot::Spot(double intensity, Color color, Vector3 origin, Vector3 direction, dou
 {
 }
 
-bool Spot::isEnLight(Ray intersection)
+bool Spot::isEnLight(Vector3 origin)
 {
-    if (intersection.getType() != SECONDARY)
-        return false;
     // See with all the objects if there is an interception with the ray
-
-    const Vector3& origin = intersection.getOrigin();
-
     double num = origin.x() * m_direction.x() + origin.y() * m_direction.y() + origin.z() * m_direction.z();
 
     double den1 = pow2(origin.x()) + pow2(origin.y()) + pow2(origin.z());
@@ -34,15 +29,12 @@ bool Spot::isEnLight(Ray intersection)
     return angle <= m_angle + padding;
 }
 
-std::optional<Vector3> Spot::getOrigin(Ray intersection)
+std::optional<Vector3> Spot::getOrigin([[maybe_unused]] Vector3 origin)
 {
-    if (intersection.getType() != SECONDARY)
-        return std::nullopt;
-
     return m_origin;
 }
 
-std::optional<Vector3> Spot::getDirection(Ray intersection)
+std::optional<Vector3> Spot::getDirection(Vector3 origin)
 {
-    return m_origin - intersection.getOrigin();
+    return m_origin - origin;
 }

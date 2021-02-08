@@ -43,29 +43,29 @@ public:
     /*
      * @brief Method that return if the secondary ray is enlightened.
      *
-     * @param intersection The secondary ray
+     * @param origin The origin of the ray
      *
      * @return Returns true if the ray is enlightened.
      */
-    virtual bool isEnLight(Ray intersection) = 0;
+    virtual bool isEnLight(Vector3 origin) = 0;
 
     /**
      * @brief Method to get the origin of the light.
      *
-     * @param intersection The secondary ray
+     * @param origin The origin of the ray
      *
      * @return Returns the origin point of the light.
      */
-    virtual std::optional<Vector3> getOrigin(Ray intersection) = 0;
+    virtual std::optional<Vector3> getOrigin(Vector3 origin) = 0;
 
     /**
      * @brief Method to get the direction of the light.
      *
-     * @param intersection The secondary ray
+     * @param origin The origin of the ray
      *
      * @return Returns the direction of the light.
      */
-    virtual std::optional<Vector3> getDirection(Ray intersection) = 0;
+    virtual std::optional<Vector3> getDirection(Vector3 origin) = 0;
 
 private:
     /**

@@ -6,20 +6,17 @@ Punctual::Punctual(double intensity, Color color, Vector3 origin) : Light(intens
 {
 }
 
-bool Punctual::isEnLight(Ray intersection)
+bool Punctual::isEnLight([[maybe_unused]] Vector3 origin)
 {
-    return intersection.getType() == SECONDARY;
+    return true;
 }
 
-std::optional<Vector3> Punctual::getOrigin(Ray intersection)
+std::optional<Vector3> Punctual::getOrigin([[maybe_unused]] Vector3 origin)
 {
-    if (intersection.getType() != SECONDARY)
-        return std::nullopt;
-
     return m_origin;
 }
 
-std::optional<Vector3> Punctual::getDirection(Ray intersection)
+std::optional<Vector3> Punctual::getDirection(Vector3 origin)
 {
-    return m_origin - intersection.getOrigin();
+    return m_origin - origin;
 }

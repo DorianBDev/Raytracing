@@ -24,31 +24,31 @@ public:
     Punctual(double intensity, Color color, Vector3 origin);
 
     /*
-     * @brief Method that return if intersection is enlightened.
+     * @brief Method that return if the intersection is enlightened.
      *
-     * @param intersection The secondary ray
+     * @param origin The origin of the ray
      *
      * @return Returns true if the intersection is enlightened.
      */
-    bool isEnLight(Ray intersection) override;
+    bool isEnLight([[maybe_unused]] Vector3 origin) override;
 
     /**
      * @brief Method to get the origin of the light.
      *
-     * @param intersection The secondary ray
+     * @param origin The origin of the ray
      *
      * @return Returns the origin point of the light.
      */
-    std::optional<Vector3> getOrigin(Ray intersection) override;
+    std::optional<Vector3> getOrigin([[maybe_unused]] Vector3 origin) override;
 
     /**
      * @brief Method to get the direction of the light.
      *
-     * @param intersection The secondary ray
+     * @param origin The origin of the ray
      *
      * @return Returns the direction of the light.
      */
-    std::optional<Vector3> getDirection(Ray intersection) override;
+    std::optional<Vector3> getDirection(Vector3 origin) override;
 
 private:
     /**

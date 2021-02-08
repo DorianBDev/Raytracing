@@ -10,15 +10,11 @@ Directional::Directional(double intensity, Color color, Vector3 originA, Vector3
 {
 }
 
-bool Directional::isEnLight(Ray intersection)
+bool Directional::isEnLight(Vector3 origin)
 {
-    if (intersection.getType() != SECONDARY)
-        return false;
-
     Vector3 ab = m_originB - m_originA;
 
-    const Vector3& origin = intersection.getOrigin();
-    const Vector3& direction = intersection.getDirection() * -1;
+    const Vector3& direction = m_direction * -1;
 
     double den = ab.x() * direction.y() - ab.y() * direction.x();
 
@@ -46,15 +42,11 @@ bool Directional::isEnLight(Ray intersection)
              (m_direction.z() != 0 && vector.z() / m_direction.z() < 0));
 }
 
-std::optional<Vector3> Directional::getOrigin(Ray intersection)
+std::optional<Vector3> Directional::getOrigin(Vector3 origin)
 {
-    if (intersection.getType() != SECONDARY)
-        return std::nullopt;
-
     Vector3 ab = m_originB - m_originA;
 
-    const Vector3& origin = intersection.getOrigin();
-    const Vector3& direction = intersection.getDirection() * -1;
+    const Vector3& direction = m_direction * -1;
 
     double den = ab.x() * direction.y() - ab.y() * direction.x();
 
@@ -85,7 +77,7 @@ std::optional<Vector3> Directional::getOrigin(Ray intersection)
     return direction * m + origin;
 }
 
-std::optional<Vector3> Directional::getDirection(Ray intersection)
+std::optional<Vector3> Directional::getDirection(Vector3 origin)
 {
-    return m_direction - intersection.getOrigin();
+    return m_direction - origin;
 }

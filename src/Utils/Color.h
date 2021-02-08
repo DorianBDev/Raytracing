@@ -92,12 +92,12 @@ struct Color
     /**
      * @brief Scalar multiplication on each channel of the color.
      */
-    Color& operator*(double value)
+    Color& operator*(/*double value*/)
     {
-        m_red *= value;
+        /*m_red *= value;
         m_green *= value;
         m_blue *= value;
-        m_alpha *= value;
+        m_alpha *= value;*/
 
         return *this;
     }
