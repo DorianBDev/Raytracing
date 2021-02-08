@@ -1,8 +1,8 @@
 #ifndef H_RAYTRACING_COLOR_H
 #define H_RAYTRACING_COLOR_H
 
-#include <cstdint>
 #include <SFML/Graphics/Color.hpp>
+#include <cstdint>
 
 /**
  * @struct Color
@@ -92,12 +92,12 @@ struct Color
     /**
      * @brief Scalar multiplication on each channel of the color.
      */
-    Color& operator*(/*double value*/)
+    Color& operator*(double value)
     {
-        /*m_red *= value;
-        m_green *= value;
-        m_blue *= value;
-        m_alpha *= value;*/
+        m_red = multiplyChannel(m_red, value);
+        m_green = multiplyChannel(m_green, value);
+        m_blue = multiplyChannel(m_blue, value);
+        m_alpha = multiplyChannel(m_alpha, value);
 
         return *this;
     }
@@ -105,9 +105,23 @@ struct Color
     /**
      * @brief Convert the color to sf::Color.
      */
-    sf::Color toSFMLColor()
+    sf::Color toSFMLColor() const
     {
         return sf::Color(m_red, m_green, m_blue, m_alpha);
+    }
+
+protected:
+    static uint8_t multiplyChannel(uint8_t channel, double factor)
+    {
+        double temp = static_cast<double>(channel) * factor;
+
+        if (temp > 255)
+            temp = 255;
+
+        if (temp < 0)
+            temp = 0;
+
+        return static_cast<uint8_t>(temp);
     }
 
 private:
