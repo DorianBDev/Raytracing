@@ -144,7 +144,7 @@ IntersectionResult Scene::getIntersectedObject(const Ray& ray) const
     {
         double distance = intersection.distance(ray.getOrigin());
 
-        if (Matrix::areApproximatelyEqual(intersection, ray.getOrigin()))
+        if (Matrix::areApproximatelyEqual(intersection, ray.getOrigin(), 0.0000001))
             continue;
 
         if (distance < minDistance || minDistance == -1)
