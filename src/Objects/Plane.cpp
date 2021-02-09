@@ -39,6 +39,11 @@ std::optional<Ray> Plane::getSecondaryRay(Vector3 intersectionPoint, Vector3 ori
     return Ray(intersectionPoint, originLight - intersectionPoint, SECONDARY);
 }
 
+std::optional<Vector3> Plane::getRefractedIntersection(Ray ray)
+{
+    return getIntersection(ray);
+}
+
 Vector3 Plane::getNormal([[maybe_unused]] const Vector3& intersectionPoint)
 {
     return m_coordinates;

@@ -59,6 +59,11 @@ double Triangle::getArea(const Vector3& a, const Vector3& b, const Vector3& c)
     return std::sqrt(p * (p - ab) * (p - bc) * (p - ac));
 }
 
+std::optional<Vector3> Triangle::getRefractedIntersection(Ray ray)
+{
+    return getIntersection(ray);
+}
+
 Vector3 Triangle::getNormal([[maybe_unused]] const Vector3& intersectionPoint)
 {
     return m_normal;
