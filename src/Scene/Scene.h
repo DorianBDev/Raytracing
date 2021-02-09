@@ -123,6 +123,19 @@ protected:
      */
     bool isIlluminated(const Ray& secondaryRay, const Vector3& lightOrigin) const;
 
+    /**
+     * @brief Compute the reflection impact on the object color.
+     *
+     * @param intersectionObject The intersected object.
+     * @param intersectionPoint  The intersection point.
+     * @param primaryRay         The primary ray.
+     *
+     * @return Returns the color (to add with the object color).
+     */
+    std::optional<Color> computeReflection(const std::shared_ptr<Object>& intersectionObject,
+                                           const Vector3& intersectionPoint,
+                                           const Ray& primaryRay) const;
+
 private:
     std::shared_ptr<Camera> m_camera;
     std::vector<std::shared_ptr<Light>> m_lights;

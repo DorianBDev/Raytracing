@@ -91,10 +91,18 @@ std::shared_ptr<sf::Image> Scene::compute() const
             {
                 auto& [object, point] = intersection.value();
 
-                // Set the color
-                color = object->getColor() + computeLight(object, point, ray);
+                double r = object->getMaterial().reflectivity();
 
-                //std::cout << computeLight(object, point, ray) << std::endl;
+                auto light = computeLight(object, point, ray);
+                auto reflection = computeReflection(object, point, ray);
+
+                // Set the color
+                if (reflection.has_value())
+                    color = object->getColor() * (1 - r) + reflection.value() * r;
+                else
+                    color = object->getColor();
+
+                color += light;
             }
 
             // Compute the pixel color
@@ -126,25 +134,33 @@ IntersectionResult Scene::getIntersectedObject(const Ray& ray) const
 
     // Check if no intersection
     if (intersections.empty())
-        return {};
+        return std::nullopt;
 
     // Get closer object
-    std::shared_ptr<Object> closerObject = intersections.begin()->first;
-    Vector3& closerNorm = intersections.begin()->second;
+    std::shared_ptr<Object> closerObject = nullptr;
+    Vector3& closerIntersectionPoint = intersections.begin()->second;
     double minDistance = -1;
     for (auto& [object, intersection] : intersections)
     {
-        double distance = intersection.distance(m_camera->getCoordinates());
+        double distance = intersection.distance(ray.getOrigin());
+
+        if (areDoubleApproximatelyEqual(distance, 0))
+            continue;
 
         if (distance < minDistance || minDistance == -1)
         {
             closerObject = object;
-            closerNorm = intersection;
+            closerIntersectionPoint = intersection;
             minDistance = distance;
         }
     }
 
-    return {{closerObject, closerNorm}};
+    if (closerObject == nullptr)
+        return std::nullopt;
+
+    std::cout << intersections.size() << std::endl;
+
+    return {{closerObject, closerIntersectionPoint}};
 }
 
 Color Scene::computeLight(const std::shared_ptr<Object>& intersectionObject,
@@ -236,4 +252,31 @@ bool Scene::isIlluminated(const Ray& secondaryRay, const Vector3& lightOrigin) c
     }
 
     return true;
+}
+
+std::optional<Color> Scene::computeReflection(const std::shared_ptr<Object>& intersectionObject,
+                                              const Vector3& intersectionPoint,
+                                              const Ray& primaryRay) const
+{
+    if (intersectionObject->getMaterial().isOpaque())
+        return std::nullopt;
+
+    // Get reflected direction
+    auto reflectedDirection = Matrix::reflection(primaryRay.getDirection(),                         // Primary direction
+                                                 intersectionObject->getNormal(intersectionPoint)); // Normal
+
+    // Create the reflected ray
+    Ray reflectedRay(intersectionPoint, reflectedDirection, PRIMARY);
+
+    // Result of the reflection
+    auto reflectionResult = getIntersectedObject(reflectedRay);
+    if (!reflectionResult.has_value())
+        return std::nullopt;
+
+    auto reflectedObject = reflectionResult.value().first;
+
+    if (intersectionObject == reflectedObject)
+        throw std::runtime_error("Error.");
+
+    return reflectedObject->getColor();
 }
