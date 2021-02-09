@@ -14,10 +14,10 @@ int main()
         scene.addLight<Punctual>(2.5, Color(150, 150, 150), Vector3(10, 0, 10));
 
         // Add objects
-        scene.addObject<Sphere>(Materials::metal(), Colors::blue(), Vector3(-7, 0, 10), 2);
-        scene.addObject<Sphere>(Materials::metal(), Color(50, 50, 50), Vector3(-4, 0, 10), 1);
-        scene.addObject<Sphere>(Materials::metal(), Colors::red(), Vector3(0, -4, 20), 2);
-        scene.addObject<Sphere>(Materials::metal(), Colors::green(), Vector3(5, -2, 30), 2);
+        scene.addObject<Sphere>(Materials::metal(0.4), Colors::blue(), Vector3(-7, 0, 10), 2);
+        scene.addObject<Sphere>(Materials::metal(0.4), Color(50, 50, 50), Vector3(-4, 0, 10), 1);
+        scene.addObject<Sphere>(Materials::metal(0.4), Colors::red(), Vector3(0, -4, 20), 2);
+        scene.addObject<Sphere>(Materials::metal(0.4), Colors::green(), Vector3(5, -2, 30), 2);
 
         // Generate image
         scene.generate("out.png");

@@ -144,7 +144,7 @@ IntersectionResult Scene::getIntersectedObject(const Ray& ray) const
     {
         double distance = intersection.distance(ray.getOrigin());
 
-        if (areDoubleApproximatelyEqual(distance, 0))
+        if (Matrix::areApproximatelyEqual(intersection, ray.getOrigin()))
             continue;
 
         if (distance < minDistance || minDistance == -1)
@@ -158,7 +158,7 @@ IntersectionResult Scene::getIntersectedObject(const Ray& ray) const
     if (closerObject == nullptr)
         return std::nullopt;
 
-    std::cout << intersections.size() << std::endl;
+    //std::cout << intersections.size() << std::endl;
 
     return {{closerObject, closerIntersectionPoint}};
 }
@@ -276,7 +276,11 @@ std::optional<Color> Scene::computeReflection(const std::shared_ptr<Object>& int
     auto reflectedObject = reflectionResult.value().first;
 
     if (intersectionObject == reflectedObject)
-        throw std::runtime_error("Error.");
+    {
+        std::cout << "Error" << std::endl;
+        reflectionResult.value().second.print("reflection result");
+        intersectionPoint.print("intersection point");
+    }
 
     return reflectedObject->getColor();
 }
