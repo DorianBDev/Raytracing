@@ -17,13 +17,14 @@ public:
     /**
      * @brief Constructor that initialize the triangle object.
      *
+     * @param material    The object's material.
      * @param coordinates The coordinates of the triangle
      * @param color       The triangle's color
      * @param originA     The vector to the first point A
      * @param originB     The vector to the second point B
      * @param originC     The vector to the third point C
      */
-    Triangle(const Color& color, Vector3 originA, Vector3 originB, Vector3 originC);
+    Triangle(Material material, const Color& color, Vector3 originA, Vector3 originB, Vector3 originC);
 
     /**
      * @brief Method to get the intersection point with a ray and the triangle.

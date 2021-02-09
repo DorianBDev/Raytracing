@@ -5,7 +5,7 @@ TEST_CASE("Testing plane object")
 {
     Vector3 coordinates({{1, 1, 0}});
     Color color{};
-    Plane plane(color, coordinates, 3);
+    Plane plane(Materials::metal(), color, coordinates, 3);
 
     Vector3 a1({{1.5, 1.5, 3}});
     Ray r1({{0, 0, 0}}, a1, PRIMARY);

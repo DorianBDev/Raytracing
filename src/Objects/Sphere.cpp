@@ -4,8 +4,8 @@
 
 #include <utility>
 
-Sphere::Sphere(const Color& color, Vector3 coordinates, double radius)
-    : Object(color),
+Sphere::Sphere(Material material, const Color& color, Vector3 coordinates, double radius)
+    : Object(material, color),
       m_coordinates(std::move(coordinates)),
       m_radius(radius)
 {

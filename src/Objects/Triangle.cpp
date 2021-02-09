@@ -4,8 +4,8 @@
 
 #include <utility>
 
-Triangle::Triangle(const Color& color, Vector3 originA, Vector3 originB, Vector3 originC)
-    : Object(color),
+Triangle::Triangle(Material material, const Color& color, Vector3 originA, Vector3 originB, Vector3 originC)
+    : Object(material, color),
       m_originA(std::move(originA)),
       m_originB(std::move(originB)),
       m_originC(std::move(originC))
@@ -21,8 +21,7 @@ std::optional<Vector3> Triangle::getIntersection(Ray ray)
     m_normal = Matrix::vectProduct(u, v);
     double d = m_normal.x() * m_originA.x() + m_normal.y() * m_originA.y() + m_normal.z() * m_originA.z();
 
-    Color color{};
-    Plane plane(color, {m_normal.x(), m_normal.y(), m_normal.z()}, d);
+    Plane plane(getMaterial(), getColor(), {m_normal.x(), m_normal.y(), m_normal.z()}, d);
 
     std::optional<Vector3> intersection = plane.getIntersection(ray);
 

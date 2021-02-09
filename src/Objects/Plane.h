@@ -17,11 +17,12 @@ public:
     /**
      * @brief Constructor to initialize a plane object.
      *
+     * @param material    The object's material.
      * @param color       The color of the plane
      * @param coordinates The equation of the plane
      * @param d           The const of the plane
      */
-    Plane(const Color& color, Vector3 coordinates, double d);
+    Plane(Material material, const Color& color, Vector3 coordinates, double d);
 
     /**
      * @brief Method to get the intersection point with a ray and the plane.

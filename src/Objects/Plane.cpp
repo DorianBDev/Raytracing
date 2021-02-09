@@ -2,8 +2,8 @@
 
 #include <utility>
 
-Plane::Plane(const Color& color, Vector3 coordinates, double d)
-    : Object(color),
+Plane::Plane(Material material, const Color& color, Vector3 coordinates, double d)
+    : Object(material, color),
       m_coordinates(std::move(coordinates)),
       m_d(d)
 {

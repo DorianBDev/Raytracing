@@ -10,7 +10,7 @@ TEST_CASE("Testing triangle object")
     Vector3 originC({1, -1, 0});
 
     Color color{};
-    Triangle triangle(color, originA + coordinates, originB + coordinates, originC + coordinates);
+    Triangle triangle(Materials::metal(), color, originA + coordinates, originB + coordinates, originC + coordinates);
 
     Vector3 a1({{1, 1, 0}});
     Ray r1({{0, 0, 0}}, a1, PRIMARY);

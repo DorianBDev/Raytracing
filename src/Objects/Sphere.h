@@ -17,11 +17,12 @@ public:
     /**
      * @brief Constructor that initialize the sphere object.
      *
+     * @param material    The object's material.
      * @param color       The color of the sphere
      * @param coordinates Coordinates of the sphere's center
      * @param radius      The radius of the sphere
      */
-    Sphere(const Color& color, Vector3 coordinates, double radius);
+    Sphere(Material material, const Color& color, Vector3 coordinates, double radius);
 
     /**
      * @brief Method to get the intersection point with a ray and the sphere.

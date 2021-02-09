@@ -1,6 +1,7 @@
 #ifndef H_RAYTRACING_OBJECT_H
 #define H_RAYTRACING_OBJECT_H
 
+#include "Materials/Material.h"
 #include "Utils/Color.h"
 #include "Utils/Ray.h"
 #include "Utils/Vector3.h"
@@ -24,9 +25,10 @@ public:
      *
      * This constructor initialize the object.
      *
-     * @param color       Object's color.
+     * @param material The object's material.
+     * @param color    Object's color.
      */
-    explicit Object(const Color& color);
+    explicit Object(Material material, const Color& color);
     virtual ~Object() = default;
 
     /**
@@ -84,13 +86,22 @@ public:
      *
      * @return Returns the object's color.
      */
-    Color getColor();
+    Color getColor() const;
+
+    /**
+     * @brief Get the material of the object.
+     *
+     * @return Returns the object's material.
+     */
+    Material getMaterial() const;
 
 private:
     /**
      * The object's color.
      */
     Color m_color;
+
+    Material m_material;
 };
 
 #endif //RAYTRACING_OBJECT_H
