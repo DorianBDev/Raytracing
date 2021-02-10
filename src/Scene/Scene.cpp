@@ -83,7 +83,7 @@ std::shared_ptr<sf::Image> Scene::compute() const
                     Matrix::normalize(m_camera->getDirection() + direction).toVector3(),
                     PRIMARY);
 
-            Color color(0, 0, 0, 255);
+            Color color = m_backgroundColor;
 
             // Get the intersection object and point
             auto intersection = getIntersectedObject(ray);
@@ -115,6 +115,7 @@ IntersectionResult Scene::getIntersectedObject(const Ray& ray) const
     for (const auto& object : m_objects)
     {
         auto intersection = object->getIntersection(ray);
+
         if (intersection.has_value())
         {
             intersections[object] = intersection.value();
@@ -146,8 +147,6 @@ IntersectionResult Scene::getIntersectedObject(const Ray& ray) const
 
     if (closerObject == nullptr)
         return std::nullopt;
-
-    //std::cout << intersections.size() << std::endl;
 
     return {{closerObject, closerIntersectionPoint}};
 }
@@ -266,15 +265,58 @@ std::optional<Color> Scene::computeReflection(const std::shared_ptr<Object>& int
     auto reflectedObject = reflectionResult.value().first;
     auto reflectedIntersection = reflectionResult.value().second;
 
-    if (intersectionObject == reflectedObject)
+    if (recursivity != 0)
+        return getColor(reflectedObject, reflectedIntersection, reflectedRay, recursivity - 1);
+
+    return reflectedObject->getColor();
+}
+
+std::optional<Color> Scene::computeRefraction(const std::shared_ptr<Object>& intersectionObject,
+                                              const Vector3& intersectionPoint,
+                                              const Ray& primaryRay,
+                                              unsigned int recursivity) const
+{
+    if (!intersectionObject->getMaterial().isTransparent())
+        return std::nullopt;
+
+    // Get refracted direction
+    auto refractedDirection = Matrix::refraction(primaryRay.getDirection(),                        // Primary direction
+                                                 intersectionObject->getNormal(intersectionPoint), // Normal
+                                                 1.0,
+                                                 intersectionObject->getMaterial().refractivity()); // Refractivity
+
+    // Create the reflected ray
+    Ray reflectedRay(intersectionPoint, refractedDirection, PRIMARY);
+
+    // Result of the reflection
+    auto reflectionResult = getIntersectedObject(reflectedRay);
+    if (!reflectionResult.has_value())
+        return std::nullopt;
+
+    auto reflectedObject = reflectionResult.value().first;
+    auto reflectedIntersection = reflectionResult.value().second;
+
+    if (reflectedObject == intersectionObject)
     {
-        std::cout << "Error" << std::endl;
-        reflectionResult.value().second.print("reflection result");
-        intersectionPoint.print("intersection point");
+        refractedDirection = Matrix::refraction(reflectedRay.getDirection(),
+                                                reflectedObject->getNormal(reflectedIntersection) * -1,
+                                                reflectedObject->getMaterial().refractivity(),
+                                                1.0);
+
+        // Create the reflected ray
+        reflectedRay = Ray(reflectedIntersection, refractedDirection, PRIMARY);
+
+        // Result of the reflection
+        reflectionResult = getIntersectedObject(reflectedRay);
+        if (!reflectionResult.has_value())
+            return std::nullopt;
+
+        reflectedObject = reflectionResult.value().first;
+        reflectedIntersection = reflectionResult.value().second;
     }
 
     if (recursivity != 0)
-        return getColor(reflectedObject, reflectedIntersection, reflectedRay, recursivity--);
+        return getColor(reflectedObject, reflectedIntersection, reflectedRay, recursivity - 1);
 
     return reflectedObject->getColor();
 }
@@ -287,15 +329,23 @@ Color Scene::getColor(const std::shared_ptr<Object>& intersectionObject,
     Color color;
 
     double r = intersectionObject->getMaterial().reflectivity();
+    double t = intersectionObject->getMaterial().transparency();
 
     auto light = computeLight(intersectionObject, intersectionPoint, primaryRay);
     auto reflection = computeReflection(intersectionObject, intersectionPoint, primaryRay, recursivity);
+    auto refraction = computeRefraction(intersectionObject, intersectionPoint, primaryRay, recursivity);
 
     // Set the color
     if (reflection.has_value())
         color = intersectionObject->getColor() * (1 - r) + reflection.value() * r;
     else
         color = intersectionObject->getColor();
+
+    // Refraction
+    if (refraction.has_value())
+        color = color * (1 - t) + refraction.value() * t;
+    else
+        color = color * (1 - t) + m_backgroundColor * t;
 
     color += light;
 

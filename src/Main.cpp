@@ -21,6 +21,8 @@ int main()
         scene.addObject<Sphere>(Materials::metal(0.05), Colors::green(), Vector3(5, -2, 30), 2);
         scene.addObject<Plane>(Materials::metal(0.01), Color(10, 10, 10), Vector3(0, 5, 10), Vector3(0, -1, 0));
 
+        scene.addObject<Sphere>(Materials::transparent(0, 1.33, 1), Colors::white(), Vector3(0, -2, 10), 2);
+
         // Generate image
         scene.generate("out.png");
     }

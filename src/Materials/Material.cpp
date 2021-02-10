@@ -2,9 +2,10 @@
 
 #include "Utils/Math.h"
 
-Material::Material(double reflectivity, double refractivity)
+Material::Material(double reflectivity, double refractivity, double transparency)
     : m_reflectivity(reflectivity),
-      m_refractivity(refractivity)
+      m_refractivity(refractivity),
+      m_transparency(transparency)
 {
     if (m_reflectivity > 1.0)
         m_reflectivity = 1.0;
@@ -12,11 +13,11 @@ Material::Material(double reflectivity, double refractivity)
     if (m_reflectivity < 0.0)
         m_reflectivity = 0.0;
 
-    if (m_refractivity > 1.0)
-        m_refractivity = 1.0;
+    if (m_transparency > 1.0)
+        m_transparency = 1.0;
 
-    if (m_refractivity < 0.0)
-        m_refractivity = 0.0;
+    if (m_transparency < 0.0)
+        m_transparency = 0.0;
 }
 
 double Material::reflectivity() const
@@ -29,6 +30,11 @@ double Material::refractivity() const
     return m_refractivity;
 }
 
+double Material::transparency() const
+{
+    return m_transparency;
+}
+
 bool Material::isOpaque() const
 {
     return areDoubleApproximatelyEqual(m_reflectivity, 0);
@@ -36,5 +42,5 @@ bool Material::isOpaque() const
 
 bool Material::isTransparent() const
 {
-    return !areDoubleApproximatelyEqual(m_refractivity, 0);
+    return !areDoubleApproximatelyEqual(m_transparency, 0);
 }

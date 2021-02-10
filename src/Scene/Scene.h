@@ -138,6 +138,20 @@ protected:
                                            unsigned int recursivity = 0) const;
 
     /**
+     * @brief Compute the refraction impact on the object color.
+     *
+     * @param intersectionObject The intersected object.
+     * @param intersectionPoint  The intersection point.
+     * @param primaryRay         The primary ray.
+     *
+     * @return Returns the color (to add with the object color).
+     */
+    std::optional<Color> computeRefraction(const std::shared_ptr<Object>& intersectionObject,
+                                           const Vector3& intersectionPoint,
+                                           const Ray& primaryRay,
+                                           unsigned int recursivity = 0) const;
+
+    /**
      * @brief Function (with recursivity) to get the color of an intersected object.
      *
      * @param intersectionObject The intersection object.
@@ -156,6 +170,7 @@ private:
     std::shared_ptr<Camera> m_camera;
     std::vector<std::shared_ptr<Light>> m_lights;
     std::vector<std::shared_ptr<Object>> m_objects;
+    Color m_backgroundColor = Colors::black();
 };
 
 #endif //H_RAYTRACING_SCENE_H

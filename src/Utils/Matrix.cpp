@@ -761,6 +761,31 @@ Matrix Matrix::reflection(const Matrix& directionPrimary, const Matrix& intersec
     return reflectedDir;
 }
 
+Matrix Matrix::refraction(const Matrix& directionPrimary, const Matrix& intersectionNormal, double n1, double n2)
+{
+    if ((directionPrimary.m_rowCount != 3 && directionPrimary.m_rowCount != 1) ||
+        (intersectionNormal.m_rowCount != 3 && intersectionNormal.m_rowCount != 1))
+    {
+        throw Exception::Matrix::WrongSize("Must be (1,3) to calculate the reflection.");
+    }
+
+    if (n2 == 0)
+        throw std::runtime_error("Division by 0.");
+
+    Matrix incident = Matrix::normalize(directionPrimary);
+    Matrix normal = Matrix::normalize(intersectionNormal);
+
+    double n = n1 / n2;
+
+    double teta1 = std::acos(Matrix::scalarProduct(normal, incident)) / (normal.getNorm() * incident.getNorm());
+    double teta2 = std::asin((n1 * std::sin(teta1)) / n2);
+
+    double cos1 = std::cos(teta1);
+    double cos2 = std::cos(teta2);
+
+    return incident * n + normal * (n * cos1 - cos2);
+}
+
 Matrix Matrix::round(const Matrix& matrix)
 {
     Matrix res = matrix;

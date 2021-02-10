@@ -502,6 +502,19 @@ public:
     static Matrix reflection(const Matrix& directionPrimary, const Matrix& intersectionNormal);
 
     /**
+     * @brief Refraction implementation.
+     *
+     * @param directionPrimary   The direction of the primary ray.
+     * @param intersectionNormal The intersection normal.
+     * @param refraction         The refraction coefficient.
+     * @param n1                 The refraction value of the first material/environment.
+     * @param n2                 The refraction value of the second material/environment.
+     *
+     * @return Returns the refracted ray (Vector3).
+     */
+    static Matrix refraction(const Matrix& directionPrimary, const Matrix& intersectionNormal, double n1, double n2);
+
+    /**
      * @brief Round a matrix.
      *
      * @param matrix The matrix to round.
