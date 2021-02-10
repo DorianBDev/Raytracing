@@ -81,6 +81,13 @@ public:
      */
     Scene& generate(const std::string& imagePath);
 
+    /**
+     * @brief Show last generated image (if empty, will generate one).
+     *
+     * @return Returns *this.
+     */
+    Scene& show();
+
 protected:
     /**
      * @brief Make the computation and get the corresponding image.
@@ -171,6 +178,7 @@ private:
     std::vector<std::shared_ptr<Light>> m_lights;
     std::vector<std::shared_ptr<Object>> m_objects;
     Color m_backgroundColor = Colors::black();
+    std::string m_lastSavedImage;
 };
 
 #endif //H_RAYTRACING_SCENE_H

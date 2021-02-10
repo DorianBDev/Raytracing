@@ -4,6 +4,8 @@
 #include "Utils/Math.h"
 #include "Utils/Utils.h"
 
+#include <SFML/Graphics.hpp>
+
 #ifdef PARALLELIZATION
 #include <algorithm>
 #include <execution>
@@ -21,6 +23,47 @@ Scene::Scene(std::shared_ptr<Camera> camera) : m_camera(std::move(camera))
 Scene& Scene::generate(const std::string& imagePath)
 {
     compute()->saveToFile(imagePath);
+    m_lastSavedImage = imagePath;
+
+    return *this;
+}
+
+Scene& Scene::show()
+{
+    auto width = static_cast<unsigned int>(m_camera->getResolution().width());
+    auto height = static_cast<unsigned int>(m_camera->getResolution().height());
+
+    sf::RenderWindow window(sf::VideoMode(width, height), "Raytracing");
+
+    sf::Image image;
+    if (!m_lastSavedImage.empty())
+    {
+        image.loadFromFile(m_lastSavedImage);
+    }
+    else
+    {
+        image = *compute();
+    }
+
+    sf::Texture texture;
+    texture.loadFromImage(image);
+
+    sf::Sprite sprite;
+    sprite.setTexture(texture);
+
+    while (window.isOpen())
+    {
+        sf::Event event{};
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        window.clear();
+        window.draw(sprite);
+        window.display();
+    }
 
     return *this;
 }
@@ -341,13 +384,13 @@ Color Scene::getColor(const std::shared_ptr<Object>& intersectionObject,
     else
         color = intersectionObject->getColor();
 
+    color += light;
+
     // Refraction
     if (refraction.has_value())
         color = color * (1 - t) + refraction.value() * t;
     else
         color = color * (1 - t) + m_backgroundColor * t;
-
-    color += light;
 
     return color;
 }
