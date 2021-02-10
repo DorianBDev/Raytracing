@@ -25,6 +25,16 @@ public:
     Plane(Material material, const Color& color, Vector3 coordinates, double d);
 
     /**
+     * @brief Constructor to initialize a plane object.
+     *
+     * @param material The object's material.
+     * @param color    The color of the plane
+     * @param origin   The origin point
+     * @param normal   The normal of the plane
+     */
+    Plane(Material material, const Color& color, const Vector3& origin, Vector3 normal);
+
+    /**
      * @brief Method to get the intersection point with a ray and the plane.
      *
      * @param ray The ray
@@ -70,7 +80,7 @@ private:
     /**
      * The const of the plane.
      */
-    double m_d;
+    double m_d{};
 };
 
 #endif //H_RAYTRACING_PLANE_H

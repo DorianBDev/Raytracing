@@ -9,6 +9,13 @@ Plane::Plane(Material material, const Color& color, Vector3 coordinates, double 
 {
 }
 
+Plane::Plane(Material material, const Color& color, const Vector3& origin, Vector3 normal)
+    : Object(material, color),
+      m_coordinates(std::move(normal)),
+      m_d(m_coordinates.x() * origin.x() + m_coordinates.y() * origin.y() + m_coordinates.z() * origin.z())
+{
+}
+
 std::optional<Vector3> Plane::getIntersection(Ray ray)
 {
     const Vector3& origin = ray.getOrigin();
