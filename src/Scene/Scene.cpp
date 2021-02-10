@@ -210,9 +210,6 @@ Color Scene::computeLight(const std::shared_ptr<Object>& intersectionObject,
         if (!origin.has_value())
             continue;
 
-        if (intersectionObject == nullptr)
-            std::cout << "Pas ouf" << std::endl;
-
         auto ray = intersectionObject->getSecondaryRay(intersectionPoint, origin.value());
 
         if (!ray.has_value())

@@ -783,7 +783,7 @@ Matrix Matrix::refraction(const Matrix& directionPrimary, const Matrix& intersec
     double cos1 = std::cos(teta1);
     double cos2 = std::cos(teta2);
 
-    return incident * n + normal * (n * cos1 - cos2);
+    return Matrix::normalize(incident * n + normal * (n * cos1 - cos2));
 }
 
 Matrix Matrix::round(const Matrix& matrix)
@@ -809,8 +809,16 @@ bool Matrix::areApproximatelyEqual(const Matrix& a, const Matrix& b, double prec
     {
         for (std::size_t column = 0; column < a.getColumnCount(); column++)
         {
-            if (!areDoubleApproximatelyEqual(a.value(row, column), b.value(row, column), precision))
-                return false;
+            if (precision != 0)
+            {
+                if (!areDoubleApproximatelyEqual(a.value(row, column), b.value(row, column), precision))
+                    return false;
+            }
+            else
+            {
+                if (a.value(row, column) != b.value(row, column))
+                    return false;
+            }
         }
     }
 
