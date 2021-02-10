@@ -19,6 +19,7 @@ Checks: >
   -cppcoreguidelines-special-member-functions,
   -hicpp-special-member-functions,
   -modernize-use-nodiscard,
+  -misc-no-recursion,
 WarningsAsErrors:  '*'
 CheckOptions:
   - key:    readability-identifier-naming.ClassCase

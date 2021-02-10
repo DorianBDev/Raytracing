@@ -91,18 +91,7 @@ std::shared_ptr<sf::Image> Scene::compute() const
             {
                 auto& [object, point] = intersection.value();
 
-                double r = object->getMaterial().reflectivity();
-
-                auto light = computeLight(object, point, ray);
-                auto reflection = computeReflection(object, point, ray);
-
-                // Set the color
-                if (reflection.has_value())
-                    color = object->getColor() * (1 - r) + reflection.value() * r;
-                else
-                    color = object->getColor();
-
-                color += light;
+                color = getColor(object, point, ray, 1);
             }
 
             // Compute the pixel color
@@ -256,7 +245,8 @@ bool Scene::isIlluminated(const Ray& secondaryRay, const Vector3& lightOrigin) c
 
 std::optional<Color> Scene::computeReflection(const std::shared_ptr<Object>& intersectionObject,
                                               const Vector3& intersectionPoint,
-                                              const Ray& primaryRay) const
+                                              const Ray& primaryRay,
+                                              unsigned int recursivity) const
 {
     if (intersectionObject->getMaterial().isOpaque())
         return std::nullopt;
@@ -274,6 +264,7 @@ std::optional<Color> Scene::computeReflection(const std::shared_ptr<Object>& int
         return std::nullopt;
 
     auto reflectedObject = reflectionResult.value().first;
+    auto reflectedIntersection = reflectionResult.value().second;
 
     if (intersectionObject == reflectedObject)
     {
@@ -282,5 +273,31 @@ std::optional<Color> Scene::computeReflection(const std::shared_ptr<Object>& int
         intersectionPoint.print("intersection point");
     }
 
+    if (recursivity != 0)
+        return getColor(reflectedObject, reflectedIntersection, reflectedRay, recursivity--);
+
     return reflectedObject->getColor();
+}
+
+Color Scene::getColor(const std::shared_ptr<Object>& intersectionObject,
+                      const Vector3& intersectionPoint,
+                      const Ray& primaryRay,
+                      unsigned int recursivity) const
+{
+    Color color;
+
+    double r = intersectionObject->getMaterial().reflectivity();
+
+    auto light = computeLight(intersectionObject, intersectionPoint, primaryRay);
+    auto reflection = computeReflection(intersectionObject, intersectionPoint, primaryRay, recursivity);
+
+    // Set the color
+    if (reflection.has_value())
+        color = intersectionObject->getColor() * (1 - r) + reflection.value() * r;
+    else
+        color = intersectionObject->getColor();
+
+    color += light;
+
+    return color;
 }

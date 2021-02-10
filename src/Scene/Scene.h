@@ -134,7 +134,23 @@ protected:
      */
     std::optional<Color> computeReflection(const std::shared_ptr<Object>& intersectionObject,
                                            const Vector3& intersectionPoint,
-                                           const Ray& primaryRay) const;
+                                           const Ray& primaryRay,
+                                           unsigned int recursivity = 0) const;
+
+    /**
+     * @brief Function (with recursivity) to get the color of an intersected object.
+     *
+     * @param intersectionObject The intersection object.
+     * @param intersectionPoint  The intersection point.
+     * @param primaryRay         The primary ray.
+     * @param recursivity        The level of recursivity (default 0 = no recursivity).
+     *
+     * @return Returns the color of the intersected object.
+     */
+    Color getColor(const std::shared_ptr<Object>& intersectionObject,
+                   const Vector3& intersectionPoint,
+                   const Ray& primaryRay,
+                   unsigned int recursivity = 0) const;
 
 private:
     std::shared_ptr<Camera> m_camera;
