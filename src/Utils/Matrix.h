@@ -246,7 +246,7 @@ public:
      *
      * @see transpose
      * @see determinant
-     * @see scalarProduct
+     * @see dot
      */
     Matrix& invert();
 
@@ -468,7 +468,7 @@ public:
      *
      * @see transpose
      * @see determinant
-     * @see scalarProduct
+     * @see dot
      */
     static Matrix invert(const Matrix& a);
 
@@ -489,7 +489,7 @@ public:
     *
     * @return Returns the scalar production of the 2 Vec3.
     */
-    static double scalarProduct(const Matrix& a, const Matrix& b);
+    static double dot(const Matrix& a, const Matrix& b);
 
     /**
      * @brief Reflection implementation.

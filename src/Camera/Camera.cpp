@@ -4,7 +4,7 @@
 
 Camera::Camera(Vector3 coordinates, Vector3 direction, const Size& resolution, double focal)
     : m_coordinates(std::move(coordinates)),
-      m_direction(std::move(direction)),
+      m_direction(std::move(direction.normalize())),
       m_resolution(resolution),
       m_focal(focal)
 {

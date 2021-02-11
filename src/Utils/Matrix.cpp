@@ -166,7 +166,7 @@ double Matrix::determinant() const
 
 double Matrix::scalarProduct(const Matrix& b) const
 {
-    return Matrix::scalarProduct(*this, b);
+    return Matrix::dot(*this, b);
 }
 
 Matrix& Matrix::round()
@@ -706,7 +706,7 @@ double Matrix::determinant(const Matrix& a)
     throw Exception::Matrix::WrongSize("Need to be a (3,3) matrix to get the determinant.");
 }
 
-double Matrix::scalarProduct(const Matrix& a, const Matrix& b)
+double Matrix::dot(const Matrix& a, const Matrix& b)
 {
     if (a.m_columnCount != b.getColumnCount() && a.m_rowCount != b.m_rowCount)
     {
@@ -777,13 +777,20 @@ Matrix Matrix::refraction(const Matrix& directionPrimary, const Matrix& intersec
 
     double n = n1 / n2;
 
-    double teta1 = std::acos(Matrix::scalarProduct(normal, incident)) / (normal.getNorm() * incident.getNorm());
+    double temp = Matrix::dot(normal, incident);
+    if (temp < -1)
+        temp = -1;
+
+    if (temp > 1)
+        temp = 1;
+
+    double teta1 = std::acos(temp);
     double teta2 = std::asin((n1 * std::sin(teta1)) / n2);
 
     double cos1 = std::cos(teta1);
     double cos2 = std::cos(teta2);
 
-    return Matrix::normalize(incident * n + normal * (n * cos1 - cos2));
+    return Matrix::normalize(incident * n + normal * (n * cos1 + cos2));
 }
 
 Matrix Matrix::round(const Matrix& matrix)

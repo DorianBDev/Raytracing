@@ -134,7 +134,7 @@ std::shared_ptr<sf::Image> Scene::compute() const
             {
                 auto& [object, point] = intersection.value();
 
-                color = getColor(object, point, ray, 1);
+                color = getColor(object, point, ray, 0);
             }
 
             // Compute the pixel color
@@ -227,7 +227,7 @@ Color Scene::computeLight(const std::shared_ptr<Object>& intersectionObject,
 
         const double shininess = 2.0;
 
-        double intensity = attenuation * light->getIntensity() * std::pow(Matrix::scalarProduct(n, h), shininess);
+        double intensity = attenuation * light->getIntensity() * std::pow(Matrix::dot(n, h), shininess);
         res += light->getColor() * intensity;
     }
 
@@ -326,10 +326,10 @@ std::optional<Color> Scene::computeRefraction(const std::shared_ptr<Object>& int
                                                  intersectionObject->getMaterial().refractivity()); // Refractivity
 
     // Create the reflected ray
-    Ray reflectedRay(intersectionPoint, refractedDirection, PRIMARY);
+    Ray refractedRay(intersectionPoint, refractedDirection, PRIMARY);
 
     // Result of the reflection
-    auto reflectionResult = getIntersectedObject(reflectedRay);
+    auto reflectionResult = getIntersectedObject(refractedRay);
     if (!reflectionResult.has_value())
         return std::nullopt;
 
@@ -338,16 +338,18 @@ std::optional<Color> Scene::computeRefraction(const std::shared_ptr<Object>& int
 
     if (reflectedObject == intersectionObject)
     {
-        refractedDirection = Matrix::refraction(reflectedRay.getDirection(),
+        std::cout << "lol" << std::endl;
+
+        refractedDirection = Matrix::refraction(refractedRay.getDirection(),
                                                 reflectedObject->getNormal(reflectedIntersection) * -1,
                                                 reflectedObject->getMaterial().refractivity(),
                                                 1.0);
 
         // Create the reflected ray
-        reflectedRay = Ray(reflectedIntersection, refractedDirection, PRIMARY);
+        refractedRay = Ray(reflectedIntersection, refractedDirection, PRIMARY);
 
         // Result of the reflection
-        reflectionResult = getIntersectedObject(reflectedRay);
+        reflectionResult = getIntersectedObject(refractedRay);
         if (!reflectionResult.has_value())
             return std::nullopt;
 
@@ -356,7 +358,7 @@ std::optional<Color> Scene::computeRefraction(const std::shared_ptr<Object>& int
     }
 
     if (recursivity != 0)
-        return getColor(reflectedObject, reflectedIntersection, reflectedRay, recursivity - 1);
+        return getColor(reflectedObject, reflectedIntersection, refractedRay, recursivity - 1);
 
     return reflectedObject->getColor();
 }

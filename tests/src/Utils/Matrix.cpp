@@ -176,16 +176,16 @@ TEST_CASE("testing matrix 1")
     CHECK(toTest.value(2, 2) == -0.125);
 
     Matrix vec32(3, 1, {{1}, {0}, {0}});
-    double scalProd = Matrix::scalarProduct(vec32, vec32);
+    double scalProd = Matrix::dot(vec32, vec32);
     CHECK(scalProd == 1);
 
     Matrix vec321(3, 1, {{2}, {4}, {6}});
     Matrix vec322(3, 1, {{0.2}, {1}, {3.5}});
-    double scalProd2 = Matrix::scalarProduct(vec321, vec322);
+    double scalProd2 = Matrix::dot(vec321, vec322);
     CHECK(scalProd2 == 25.4);
 
     Matrix vec33(1, 3, {{1, 0, 0}});
-    double scalProd3 = Matrix::scalarProduct(vec33, vec33);
+    double scalProd3 = Matrix::dot(vec33, vec33);
     CHECK(scalProd3 == 1);
 }
 
