@@ -338,8 +338,6 @@ std::optional<Color> Scene::computeRefraction(const std::shared_ptr<Object>& int
 
     if (reflectedObject == intersectionObject)
     {
-        std::cout << "lol" << std::endl;
-
         refractedDirection = Matrix::refraction(refractedRay.getDirection(),
                                                 reflectedObject->getNormal(reflectedIntersection) * -1,
                                                 reflectedObject->getMaterial().refractivity(),
