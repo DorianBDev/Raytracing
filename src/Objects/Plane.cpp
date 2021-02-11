@@ -16,7 +16,7 @@ Plane::Plane(Material material, const Color& color, const Vector3& origin, Vecto
 {
 }
 
-std::optional<Vector3> Plane::getIntersection(Ray ray)
+std::optional<Vector3> Plane::getIntersection(const Ray& ray) const
 {
     const Vector3& origin = ray.getOrigin();
     const Vector3& direction = ray.getDirection();
@@ -41,17 +41,17 @@ std::optional<Vector3> Plane::getIntersection(Ray ray)
     return intersection;
 }
 
-std::optional<Ray> Plane::getSecondaryRay(Vector3 intersectionPoint, Vector3 originLight)
+std::optional<Ray> Plane::getSecondaryRay(const Vector3& intersectionPoint, const Vector3& originLight) const
 {
     return Ray(intersectionPoint, originLight - intersectionPoint, SECONDARY);
 }
 
-std::optional<Vector3> Plane::getRefractedIntersection(Ray ray)
+std::optional<Vector3> Plane::getRefractedIntersection(const Ray& ray) const
 {
     return getIntersection(ray);
 }
 
-Vector3 Plane::getNormal([[maybe_unused]] const Vector3& intersectionPoint)
+Vector3 Plane::getNormal([[maybe_unused]] const Vector3& intersectionPoint) const
 {
     return m_coordinates;
 }

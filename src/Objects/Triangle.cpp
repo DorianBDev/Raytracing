@@ -10,15 +10,15 @@ Triangle::Triangle(Material material, const Color& color, Vector3 originA, Vecto
       m_originB(std::move(originB)),
       m_originC(std::move(originC))
 {
-}
-
-std::optional<Vector3> Triangle::getIntersection(Ray ray)
-{
-    // We find the plane equation
     Vector3 u = m_originC - m_originA;
     Vector3 v = m_originB - m_originA;
 
     m_normal = Matrix::vectProduct(u, v);
+}
+
+std::optional<Vector3> Triangle::getIntersection(const Ray& ray) const
+{
+    // We find the plane equation
     double d = m_normal.x() * m_originA.x() + m_normal.y() * m_originA.y() + m_normal.z() * m_originA.z();
 
     Plane plane(getMaterial(), getColor(), {m_normal.x(), m_normal.y(), m_normal.z()}, d);
@@ -43,7 +43,7 @@ std::optional<Vector3> Triangle::getIntersection(Ray ray)
     return std::nullopt;
 }
 
-std::optional<Ray> Triangle::getSecondaryRay(Vector3 intersectionPoint, Vector3 originLight)
+std::optional<Ray> Triangle::getSecondaryRay(const Vector3& intersectionPoint, const Vector3& originLight) const
 {
     return Ray(intersectionPoint, originLight - intersectionPoint, SECONDARY);
 }
@@ -58,12 +58,12 @@ double Triangle::getArea(const Vector3& a, const Vector3& b, const Vector3& c)
     return std::sqrt(p * (p - ab) * (p - bc) * (p - ac));
 }
 
-std::optional<Vector3> Triangle::getRefractedIntersection(Ray ray)
+std::optional<Vector3> Triangle::getRefractedIntersection(const Ray& ray) const
 {
     return getIntersection(ray);
 }
 
-Vector3 Triangle::getNormal([[maybe_unused]] const Vector3& intersectionPoint)
+Vector3 Triangle::getNormal([[maybe_unused]] const Vector3& intersectionPoint) const
 {
     return m_normal;
 }

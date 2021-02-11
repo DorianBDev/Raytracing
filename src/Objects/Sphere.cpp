@@ -11,7 +11,7 @@ Sphere::Sphere(Material material, const Color& color, Vector3 coordinates, doubl
 {
 }
 
-std::optional<Vector3> Sphere::getIntersection(Ray ray)
+std::optional<Vector3> Sphere::getIntersection(const Ray& ray) const
 {
     const Vector3& origin = ray.getOrigin();
     const Vector3& direction = ray.getDirection();
@@ -50,12 +50,12 @@ std::optional<Vector3> Sphere::getIntersection(Ray ray)
     return std::nullopt;
 }
 
-std::optional<Ray> Sphere::getSecondaryRay(Vector3 intersectionPoint, Vector3 originLight)
+std::optional<Ray> Sphere::getSecondaryRay(const Vector3& intersectionPoint, const Vector3& originLight) const
 {
     return Ray(intersectionPoint, originLight - intersectionPoint, SECONDARY);
 }
 
-std::optional<Vector3> Sphere::getRefractedIntersection(Ray ray)
+std::optional<Vector3> Sphere::getRefractedIntersection(const Ray& ray) const
 {
     const Vector3& origin = ray.getOrigin();
     const Vector3& direction = ray.getDirection();
@@ -94,7 +94,7 @@ std::optional<Vector3> Sphere::getRefractedIntersection(Ray ray)
     return std::nullopt;
 }
 
-Vector3 Sphere::getNormal(const Vector3& intersectionPoint)
+Vector3 Sphere::getNormal(const Vector3& intersectionPoint) const
 {
     return intersectionPoint - m_coordinates;
 }

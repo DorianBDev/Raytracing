@@ -38,7 +38,7 @@ public:
      *
      * @return Returns the intersection point if there is an intersection, nothing otherwise.
      */
-    virtual std::optional<Vector3> getIntersection(Ray ray) = 0;
+    virtual std::optional<Vector3> getIntersection(const Ray& ray) const = 0;
 
     /**
      * @brief Get the secondary ray from an intersection and origin point if there is an intersection.
@@ -48,7 +48,7 @@ public:
      *
      * @return Returns the secondary ray if there is an intersection, nothing otherwise.
      */
-    virtual std::optional<Ray> getSecondaryRay(Vector3 intersectionPoint, Vector3 originLight) = 0;
+    virtual std::optional<Ray> getSecondaryRay(const Vector3& intersectionPoint, const Vector3& originLight) const = 0;
 
     /**
      * @brief Check if the ray intersect with the object, if this is the case it will return the intersection point.
@@ -57,7 +57,7 @@ public:
      *
      * @return Returns the second intersection point.
      */
-    virtual std::optional<Vector3> getRefractedIntersection(Ray ray) = 0;
+    virtual std::optional<Vector3> getRefractedIntersection(const Ray& ray) const = 0;
 
     /**
      * @brief Method to calculate the normal vector.
@@ -66,7 +66,7 @@ public:
      *
      * @return Returns the normal vector.
      */
-    virtual Vector3 getNormal(const Vector3& intersectionPoint) = 0;
+    virtual Vector3 getNormal(const Vector3& intersectionPoint) const = 0;
 
     /**
      * @brief Method.

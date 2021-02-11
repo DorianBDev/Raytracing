@@ -33,7 +33,7 @@ public:
      *
      * @return The intersection point if there is an intersection, nothing otherwise.
      */
-    std::optional<Vector3> getIntersection(Ray ray) override;
+    std::optional<Vector3> getIntersection(const Ray& ray) const override;
 
     /**
      * @brief Get the secondary ray from an intersection and origin point if there is an intersection.
@@ -43,7 +43,7 @@ public:
      *
      * @return Returns the secondary ray if there is an intersection, nothing otherwise.
      */
-    std::optional<Ray> getSecondaryRay(Vector3 intersectionPoint, Vector3 originLight) override;
+    std::optional<Ray> getSecondaryRay(const Vector3& intersectionPoint, const Vector3& originLight) const override;
 
     /**
      * @brief Check if the ray intersect with the object, if this is the case it will return the intersection point.
@@ -52,7 +52,7 @@ public:
      *
      * @return Returns the second intersection point.
      */
-    std::optional<Vector3> getRefractedIntersection(Ray ray) override;
+    std::optional<Vector3> getRefractedIntersection(const Ray& ray) const override;
 
     /**
      * @brief Method to calculate the normal vector.
@@ -61,7 +61,7 @@ public:
      *
      * @return Returns the normal vector.
      */
-    Vector3 getNormal([[maybe_unused]] const Vector3& intersectionPoint) override;
+    Vector3 getNormal([[maybe_unused]] const Vector3& intersectionPoint) const override;
 
     /**
      * @brief Method using Heron's formula to calculate an area.
