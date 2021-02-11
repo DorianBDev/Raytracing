@@ -112,11 +112,11 @@ protected:
      * @param intersectionPoint  The intersection point.
      * @param primaryRay         The primary ray.
      *
-     * @return Returns the color (to add with the object color).
+     * @return Returns the combined intensity and colors of all lights.
      */
-    Color computeLight(const std::shared_ptr<Object>& intersectionObject,
-                       const Vector3& intersectionPoint,
-                       const Ray& primaryRay) const;
+    std::pair<double, Color> computeLight(const std::shared_ptr<Object>& intersectionObject,
+                                          const Vector3& intersectionPoint,
+                                          const Ray& primaryRay) const;
 
     /**
      * @brief Check if the intersection point is illuminated.

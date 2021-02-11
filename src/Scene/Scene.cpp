@@ -194,11 +194,15 @@ IntersectionResult Scene::getIntersectedObject(const Ray& ray) const
     return {{closerObject, closerIntersectionPoint}};
 }
 
-Color Scene::computeLight(const std::shared_ptr<Object>& intersectionObject,
-                          const Vector3& intersectionPoint,
-                          const Ray& primaryRay) const
+std::pair<double, Color> Scene::computeLight(const std::shared_ptr<Object>& intersectionObject,
+                                             const Vector3& intersectionPoint,
+                                             const Ray& primaryRay) const
 {
-    Color res(0, 0, 0, 0);
+    /* Light global illumination */
+    double i = 0;
+
+    /* Light colors */
+    Color color;
 
     for (const auto& light : m_lights)
     {
@@ -218,22 +222,33 @@ Color Scene::computeLight(const std::shared_ptr<Object>& intersectionObject,
         if (!isIlluminated(ray.value(), origin.value()))
             continue;
 
-        double attenuation = 1 / origin->distance(ray->getOrigin());
+        // fatt
+        double attenuation = 1 / origin->distance(ray->getOrigin()); // TODO: Better attenuation ?
 
+        // N
         Vector3 n = intersectionObject->getNormal(intersectionPoint);
 
+        // H
         Vector3 h = ray->getDirection() + primaryRay.getDirection();
         h.normalize();
 
-        const double shininess = 2.0;
+        // L
+        Vector3 l = ray->getDirection();
 
-        double intensity = attenuation * light->getIntensity() * std::pow(Matrix::dot(n, h), shininess);
-        res += light->getColor() * intensity;
+        // Alpha/n
+        const double shininess = 7.0; // TODO: In material
+
+        /* Specular */
+        double is = std::max<double>(std::pow(Matrix::dot(n, h), shininess), 0.) * attenuation;
+
+        /* Diffuse */
+        double id = Matrix::dot(n, l) * attenuation;
+
+        i += is + id;
+        color += light->getColor() * light->getIntensity() * attenuation;
     }
 
-    //res.print();
-
-    return res;
+    return {i, color};
 }
 
 bool Scene::isIlluminated(const Ray& secondaryRay, const Vector3& lightOrigin) const
@@ -366,8 +381,6 @@ Color Scene::getColor(const std::shared_ptr<Object>& intersectionObject,
                       const Ray& primaryRay,
                       unsigned int recursivity) const
 {
-    Color color;
-
     double r = intersectionObject->getMaterial().reflectivity();
     double t = intersectionObject->getMaterial().transparency();
 
@@ -375,13 +388,15 @@ Color Scene::getColor(const std::shared_ptr<Object>& intersectionObject,
     auto reflection = computeReflection(intersectionObject, intersectionPoint, primaryRay, recursivity);
     auto refraction = computeRefraction(intersectionObject, intersectionPoint, primaryRay, recursivity);
 
+    /* Ambient */
+    double ambient = 0.1; // TODO: To scene member (in constructor)
+
+    Color color = intersectionObject->getColor() * ambient +
+                  intersectionObject->getColor() * (1 - ambient) * light.first + light.second * light.first;
+
     // Set the color
     if (reflection.has_value())
-        color = intersectionObject->getColor() * (1 - r) + reflection.value() * r;
-    else
-        color = intersectionObject->getColor();
-
-    color += light;
+        color = color * (1 - r) + reflection.value() * r;
 
     // Refraction
     if (refraction.has_value())
