@@ -75,11 +75,12 @@ public:
     /**
      * @brief Generate an image from the scene.
      *
-     * @param light The light to add.
+     * @param light       The light to add.
+     * @param recursivity Recursivity used for reflection and refraction computation (default 1).
      *
      * @return Returns *this.
      */
-    Scene& generate(const std::string& imagePath);
+    Scene& generate(const std::string& imagePath, unsigned int recursivity = 1);
 
     /**
      * @brief Show last generated image (if empty, will generate one).
@@ -88,13 +89,27 @@ public:
      */
     Scene& show();
 
+    /**
+     * @brief Enable anti-aliasing.
+     *
+     * @param antialiasingSampling Anti-aliasing sampling value (4, 8 or 16).
+     */
+    void enableAntialiasing(std::size_t antialiasingSampling = 4);
+
+    /**
+     * @brief Disable anti-aliasing.
+     */
+    void disableAntialiasing();
+
 protected:
     /**
      * @brief Make the computation and get the corresponding image.
      *
+     * @param recursivity Recursivity used for reflection and refraction computation.
+     *
      * @return Returns the generated image.
      */
-    std::shared_ptr<sf::Image> compute() const;
+    std::shared_ptr<sf::Image> compute(unsigned int recursivity = 1) const;
 
     /**
      * @brief Get the intersected object and intersection point by a primary ray.
@@ -179,6 +194,7 @@ private:
     std::vector<std::shared_ptr<Object>> m_objects;
     Color m_backgroundColor = Colors::black();
     std::string m_lastSavedImage;
+    std::size_t m_antialiasingSampling = 0;
 };
 
 #endif //H_RAYTRACING_SCENE_H

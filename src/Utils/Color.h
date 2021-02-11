@@ -1,6 +1,8 @@
 #ifndef H_RAYTRACING_COLOR_H
 #define H_RAYTRACING_COLOR_H
 
+#include "Vector3.h"
+
 #include <SFML/Graphics/Color.hpp>
 #include <cstdint>
 #include <iostream>
@@ -106,23 +108,7 @@ struct Color
         int green = static_cast<int>(m_green) + static_cast<int>(color.green());
         int blue = static_cast<int>(m_blue) + static_cast<int>(color.blue());
 
-        if (red > 255)
-            red = 255;
-
-        if (green > 255)
-            green = 255;
-
-        if (blue > 255)
-            blue = 255;
-
-        if (red < 0)
-            red = 0;
-
-        if (green < 0)
-            green = 0;
-
-        if (blue < 0)
-            blue = 0;
+        clamp(red, green, blue);
 
         res.setColor(static_cast<uint8_t>(red), static_cast<uint8_t>(green), static_cast<uint8_t>(blue));
 
@@ -180,6 +166,60 @@ struct Color
         int g = static_cast<int>(m_green) * static_cast<int>(color.m_green);
         int b = static_cast<int>(m_blue) * static_cast<int>(color.m_blue);
 
+        clamp(r, g, b);
+
+        return Color(static_cast<uint8_t>(r), static_cast<uint8_t>(g), static_cast<uint8_t>(b));
+    }
+
+    /**
+     * @brief Division operation.
+     */
+    Color operator/(double value) const
+    {
+        double r = static_cast<double>(m_red) / value;
+        double g = static_cast<double>(m_green) / value;
+        double b = static_cast<double>(m_blue) / value;
+
+        clamp(r, g, b);
+
+        return Color(static_cast<uint8_t>(r), static_cast<uint8_t>(g), static_cast<uint8_t>(b));
+    }
+
+    /**
+     * @brief Operator equal.
+     */
+    inline Color& operator=(const Vector3& vector)
+    {
+        double r = vector.x();
+        double g = vector.y();
+        double b = vector.z();
+
+        clamp(r, g, b);
+
+        m_red = static_cast<uint8_t>(r);
+        m_green = static_cast<uint8_t>(g);
+        m_blue = static_cast<uint8_t>(b);
+
+        return *this;
+    }
+
+protected:
+    inline static uint8_t multiplyChannel(uint8_t channel, double factor)
+    {
+        double temp = static_cast<double>(channel) * factor;
+
+        if (temp > 255)
+            temp = 255;
+
+        if (temp < 0)
+            temp = 0;
+
+        return static_cast<uint8_t>(temp);
+    }
+
+    template<typename T>
+    inline static void clamp(T& r, T& g, T& b)
+    {
         if (r > 255)
             r = 255;
 
@@ -197,22 +237,6 @@ struct Color
 
         if (b < 0)
             b = 0;
-
-        return Color(static_cast<uint8_t>(r), static_cast<uint8_t>(g), static_cast<uint8_t>(b));
-    }
-
-protected:
-    static uint8_t multiplyChannel(uint8_t channel, double factor)
-    {
-        double temp = static_cast<double>(channel) * factor;
-
-        if (temp > 255)
-            temp = 255;
-
-        if (temp < 0)
-            temp = 0;
-
-        return static_cast<uint8_t>(temp);
     }
 
 private:
@@ -220,6 +244,11 @@ private:
     uint8_t m_green = 0;
     uint8_t m_blue = 0;
 };
+
+inline Vector3 operator+(const Vector3& vector, const Color& color)
+{
+    return Vector3(vector.x() + color.red(), vector.y() + color.green(), vector.z() + color.blue());
+}
 
 /**
  * @brief Define usual colors.

@@ -12,7 +12,9 @@ This project contains:
 - SFML Window,
 - Continuous integration (see Github Actions),
 - Transparency,
-- Recursivity.
+- Recursivity,
+- Movable camera,
+- SSAA anti-aliasing.
 
 # Build
 

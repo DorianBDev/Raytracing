@@ -20,9 +20,9 @@ Scene::Scene(std::shared_ptr<Camera> camera) : m_camera(std::move(camera))
 {
 }
 
-Scene& Scene::generate(const std::string& imagePath)
+Scene& Scene::generate(const std::string& imagePath, unsigned int recursivity)
 {
-    compute()->saveToFile(imagePath);
+    compute(recursivity)->saveToFile(imagePath);
     m_lastSavedImage = imagePath;
 
     return *this;
@@ -68,7 +68,17 @@ Scene& Scene::show()
     return *this;
 }
 
-std::shared_ptr<sf::Image> Scene::compute() const
+void Scene::enableAntialiasing(std::size_t antialiasingSampling)
+{
+    m_antialiasingSampling = antialiasingSampling;
+}
+
+void Scene::disableAntialiasing()
+{
+    m_antialiasingSampling = 0;
+}
+
+std::shared_ptr<sf::Image> Scene::compute(unsigned int recursivity) const
 {
     auto resolution = m_camera->getResolution();
 
@@ -114,27 +124,77 @@ std::shared_ptr<sf::Image> Scene::compute() const
 #endif
         for (std::size_t y = 0; y < resolution.height(); y++)
         {
-            // Coordinates
-            double projectionPlanPointX = x * stepX + imagePlanMin.x();
-            double projectionPlanPointY = y * stepY + imagePlanMin.y();
-
-            // Direction
-            Vector3 direction = Vector3(projectionPlanPointX, projectionPlanPointY, projectionPlanCenter.y());
-
-            // Create the ray
-            Ray ray(m_camera->getCoordinates(),
-                    Matrix::normalize(m_camera->getDirection() + direction).toVector3(),
-                    PRIMARY);
-
             Color color = m_backgroundColor;
 
-            // Get the intersection object and point
-            auto intersection = getIntersectedObject(ray);
-            if (intersection.has_value())
+            if (m_antialiasingSampling != 0)
             {
-                auto& [object, point] = intersection.value();
+                int padding = static_cast<int>(std::sqrt(m_antialiasingSampling));
 
-                color = getColor(object, point, ray, 1);
+                double samplingStepX = stepX / padding;
+                double samplingStepY = stepY / padding;
+
+                int centeredPadding = padding / 2;
+
+                Vector3 colors;
+
+                double baseX = x * stepX + imagePlanMin.x() - stepX / (padding * 2);
+                double baseY = y * stepY + imagePlanMin.y() - stepY / (padding * 2);
+
+                // Sampling
+                for (int i = 0; i <= centeredPadding; i++)
+                {
+                    for (int j = 0; j <= centeredPadding; j++)
+                    {
+                        // Coordinates
+                        double projectionPlanPointX = baseX + i * samplingStepX;
+                        double projectionPlanPointY = baseY + j * samplingStepY;
+
+                        // Direction
+                        Vector3 direction =
+                                Vector3(projectionPlanPointX, projectionPlanPointY, projectionPlanCenter.z());
+
+                        // Create the ray
+                        Ray ray(m_camera->getCoordinates(),
+                                Matrix::normalize(m_camera->getDirection() + direction).toVector3(),
+                                PRIMARY);
+
+                        // Get the intersection object and point
+                        auto intersection = getIntersectedObject(ray);
+                        if (intersection.has_value())
+                        {
+                            auto& [object, point] = intersection.value();
+
+                            colors = colors + getColor(object, point, ray, recursivity);
+                        }
+                        else
+                            colors = colors + m_backgroundColor;
+                    }
+                }
+
+                color = colors * (1.0 / static_cast<double>(m_antialiasingSampling));
+            }
+            else
+            {
+                // Coordinates
+                double projectionPlanPointX = x * stepX + imagePlanMin.x();
+                double projectionPlanPointY = y * stepY + imagePlanMin.y();
+
+                // Direction
+                Vector3 direction = Vector3(projectionPlanPointX, projectionPlanPointY, projectionPlanCenter.z());
+
+                // Create the ray
+                Ray ray(m_camera->getCoordinates(),
+                        Matrix::normalize(m_camera->getDirection() + direction).toVector3(),
+                        PRIMARY);
+
+                // Get the intersection object and point
+                auto intersection = getIntersectedObject(ray);
+                if (intersection.has_value())
+                {
+                    auto& [object, point] = intersection.value();
+
+                    color = getColor(object, point, ray, recursivity);
+                }
             }
 
             // Compute the pixel color
@@ -389,7 +449,7 @@ Color Scene::getColor(const std::shared_ptr<Object>& intersectionObject,
     auto refraction = computeRefraction(intersectionObject, intersectionPoint, primaryRay, recursivity);
 
     /* Ambient */
-    double ambient = 0.1; // TODO: To scene member (in constructor)
+    double ambient = 0.01; // TODO: To scene member (in constructor)
 
     Color color = intersectionObject->getColor() * ambient +
                   intersectionObject->getColor() * (1 - ambient) * light.first + light.second * light.first;
