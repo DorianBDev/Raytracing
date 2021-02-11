@@ -86,7 +86,7 @@ TEST_CASE("Testing triangle object")
     Vector3 u = originC - originA;
     Vector3 v = originB - originA;
 
-    Vector3 normal = Matrix::vectProduct(u, v);
+    Vector3 normal = Matrix::vectProduct(u, v) * -1;
 
     CHECK(triangle.getNormal(triangle.getIntersection(r1).value()) == normal);
     CHECK(triangle.getNormal(triangle.getIntersection(r2).value()) == normal);
