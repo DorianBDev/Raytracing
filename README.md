@@ -1,16 +1,18 @@
-# Template
+# Raytracing
 
-To adapt this template, you just need to edit the 'CMakeLists.txt' file with project information.
+This project contains:
 
-Also you can edit files in the root folder to adapt for your needs.
-
-## Presentation
-
-This template use CMake and conan. Conan is a package manager for C/C++ written in python. All is automated thanks to these tools.
-
-## Add dependencies
-
-Just edit the 'DEPENDENCIES' file and add dependencies names. To search a package, please visit: https://conan.io/center/.
+- Basic raytracing,
+- Multithreading
+- Unit testing,
+- Lights,
+- Objects (sphere, plane, triangle),
+- Reflection,
+- Refraction,
+- SFML Window,
+- Continuous integration (see Github Actions),
+- Transparency,
+- Recursivity.
 
 # Build
 
@@ -70,12 +72,6 @@ Build (in the 'build' folder, for example):
 ```
 Binaries are in the 'build/bin' folder in the bundle ".app" format.
 
-# Contributing
-
-Read the "CONTRIBUTING.md" file.
-
 # License
 
 MIT license. See LICENSE.TXT for details.
-
-The current main maintainer of Degate is **Dorian Bachelot** <dev@dorianb.net>.
