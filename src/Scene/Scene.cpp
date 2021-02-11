@@ -134,7 +134,7 @@ std::shared_ptr<sf::Image> Scene::compute() const
             {
                 auto& [object, point] = intersection.value();
 
-                color = getColor(object, point, ray, 0);
+                color = getColor(object, point, ray, 1);
             }
 
             // Compute the pixel color

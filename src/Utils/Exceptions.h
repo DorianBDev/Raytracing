@@ -160,6 +160,23 @@ namespace Exception
                 : RaytracingException("VECTOR3", "Wrong Vector3 initializer list.", std::move(secondaryMessage)){};
         };
     } // namespace Vector3
+
+    /////////////////////////////////////////////////////////////////////
+    /// Math
+    /////////////////////////////////////////////////////////////////////
+
+    namespace Math
+    {
+        /**
+         * @brief Used when initializer list is wrong.
+         */
+        class DivisionByZero : public RaytracingException
+        {
+        public:
+            explicit DivisionByZero(std::string secondaryMessage = "")
+                : RaytracingException("MATH", "Division by 0.", std::move(secondaryMessage)){};
+        };
+    } // namespace Math
 } // namespace Exception
 
 #endif //H_RAYTRACING_EXCEPTIONS_H

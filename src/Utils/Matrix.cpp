@@ -769,8 +769,8 @@ Matrix Matrix::refraction(const Matrix& directionPrimary, const Matrix& intersec
         throw Exception::Matrix::WrongSize("Must be (1,3) to calculate the reflection.");
     }
 
-    if (n2 == 0)
-        throw std::runtime_error("Division by 0.");
+    if (n1 == 0 || n2 == 0)
+        throw Exception::Math::DivisionByZero("Can't do the refraction.");
 
     Matrix incident = Matrix::normalize(directionPrimary);
     Matrix normal = Matrix::normalize(intersectionNormal);
@@ -778,6 +778,7 @@ Matrix Matrix::refraction(const Matrix& directionPrimary, const Matrix& intersec
     double n = n1 / n2;
 
     double temp = Matrix::dot(normal, incident);
+
     if (temp < -1)
         temp = -1;
 
