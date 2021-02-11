@@ -13,7 +13,7 @@ Triangle::Triangle(Material material, const Color& color, Vector3 originA, Vecto
     Vector3 u = m_originC - m_originA;
     Vector3 v = m_originB - m_originA;
 
-    m_normal = Matrix::vectProduct(u, v);
+    m_normal = Matrix::vectProduct(u, v) * -1;
 }
 
 std::optional<Vector3> Triangle::getIntersection(const Ray& ray) const
