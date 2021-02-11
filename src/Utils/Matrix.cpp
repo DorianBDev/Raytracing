@@ -790,6 +790,9 @@ Matrix Matrix::refraction(const Matrix& directionPrimary, const Matrix& intersec
     double cos1 = std::cos(teta1);
     double cos2 = std::cos(teta2);
 
+    if (teta1 > std::asin(n2 / n1) && n2 < n1)
+        return directionPrimary;
+
     return Matrix::normalize(incident * n + normal * (n * cos1 + cos2));
 }
 
