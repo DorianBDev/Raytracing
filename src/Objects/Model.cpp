@@ -152,27 +152,13 @@ std::optional<Ray> Model::getSecondaryRay(const Vector3& intersectionPoint, cons
 
 Vector3 Model::getNormal(const Vector3& intersectionPoint) const
 {
-    std::vector<Vector3> normalList;
-
     for (const auto& triangle : m_triangle)
     {
         if (triangle.isInTriangle(intersectionPoint))
         {
-            normalList.emplace_back(triangle.getNormal(intersectionPoint));
+            return triangle.getNormal(intersectionPoint);
         }
     }
 
-    Vector3 bestNormal(0, 0, 0);
-
-    if (normalList.size() == 1)
-        return normalList.at(0);
-
-    std::cout << normalList.size() << std::endl;
-
-    for (const auto& normal : normalList)
-    {
-        bestNormal += normal;
-    }
-
-    return bestNormal * -1;
+    throw Exception::Object::NoIntersectionFound("Can't return a normal for model.");
 }

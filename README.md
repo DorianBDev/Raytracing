@@ -1,3 +1,5 @@
+[![Raytracing image](etc/banner.png)]()
+
 # Raytracing
 
 This project contains:
@@ -5,7 +7,8 @@ This project contains:
 - Basic raytracing,
 - Multithreading
 - Unit testing,
-- Lights,
+- Lights (directional, punctual, spot),
+- Colorized lights,
 - Objects (sphere, plane, triangle),
 - Reflection,
 - Refraction,
@@ -14,7 +17,13 @@ This project contains:
 - Transparency,
 - Recursivity,
 - Movable camera,
-- SSAA anti-aliasing.
+- SSAA anti-aliasing,
+- OBJ loading,
+- Modern c++ (c++17).
+
+## Multithreading
+
+To enable multithreading, please go to the "Config.h" file.
 
 # Build
 

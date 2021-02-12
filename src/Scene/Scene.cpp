@@ -256,6 +256,14 @@ IntersectionResult Scene::getIntersectedObject(const Ray& ray) const
     return {{closerObject, closerIntersectionPoint}};
 }
 
+double lightAttenuation(double distance)
+{
+    static const double b = 3.0;
+    static const double c = 3.0;
+
+    return 1.0 / (b * distance + c * pow2(distance));
+}
+
 std::pair<double, Color> Scene::computeLight(const std::shared_ptr<Object>& intersectionObject,
                                              const Vector3& intersectionPoint,
                                              const Ray& primaryRay) const
@@ -284,8 +292,8 @@ std::pair<double, Color> Scene::computeLight(const std::shared_ptr<Object>& inte
         if (!isIlluminated(ray.value(), origin.value()))
             continue;
 
-        // fatt
-        double attenuation = 1 / origin->distance(ray->getOrigin());
+        // fatt origin->distance(ray->getOrigin())
+        double attenuation = lightAttenuation(origin->distance(ray->getOrigin()) * (1.0 / light->getIntensity()));
 
         // N
         Vector3 n = intersectionObject->getNormal(intersectionPoint);

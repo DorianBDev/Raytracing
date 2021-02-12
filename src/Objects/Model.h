@@ -29,7 +29,12 @@ public:
      * @param path        The path of the object's file.
      * @param coordinates The coordinates of the object.
      */
-    Model(Material material, const Color& color, const std::string& path, const Vector3& coordinates, const Vector3& angle, double scale);
+    Model(Material material,
+          const Color& color,
+          const std::string& path,
+          const Vector3& coordinates,
+          const Vector3& angle,
+          double scale);
 
     /**
      * @brief Method to get the intersection point with a ray and the plane.

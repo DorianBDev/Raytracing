@@ -79,7 +79,7 @@ namespace Materials
      */
     inline Material metal(double reflectivity = 0.1)
     {
-        return Material(reflectivity, 0.0, 0.0, 7.0);
+        return Material(reflectivity, 0.0, 0.0, 6.0);
     }
 
     /**
@@ -91,7 +91,7 @@ namespace Materials
      */
     inline Material transparent(double reflectivity = 0.2, double refractivity = 1.20, double transparency = 0.8)
     {
-        return Material(reflectivity, refractivity, transparency, 6.0);
+        return Material(reflectivity, refractivity, transparency, 5.0);
     }
 } // namespace Materials
 

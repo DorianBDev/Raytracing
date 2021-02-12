@@ -177,6 +177,23 @@ namespace Exception
                 : RaytracingException("MATH", "Division by 0.", std::move(secondaryMessage)){};
         };
     } // namespace Math
+
+    /////////////////////////////////////////////////////////////////////
+    /// Object
+    /////////////////////////////////////////////////////////////////////
+
+    namespace Object
+    {
+        /**
+         * @brief Used when no intersection found (when getting a normal for example).
+         */
+        class NoIntersectionFound : public RaytracingException
+        {
+        public:
+            explicit NoIntersectionFound(std::string secondaryMessage = "")
+                : RaytracingException("OBJECT", "No intersection found.", std::move(secondaryMessage)){};
+        };
+    } // namespace Object
 } // namespace Exception
 
 #endif //H_RAYTRACING_EXCEPTIONS_H
