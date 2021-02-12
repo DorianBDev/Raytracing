@@ -16,7 +16,9 @@
 #include <numeric>
 #include <utility>
 
-Scene::Scene(std::shared_ptr<Camera> camera) : m_camera(std::move(camera))
+Scene::Scene(std::shared_ptr<Camera> camera, double ambientLight)
+    : m_camera(std::move(camera)),
+      m_ambientLight(ambientLight)
 {
 }
 
@@ -283,7 +285,7 @@ std::pair<double, Color> Scene::computeLight(const std::shared_ptr<Object>& inte
             continue;
 
         // fatt
-        double attenuation = 1 / origin->distance(ray->getOrigin()); // TODO: Better attenuation ?
+        double attenuation = 1 / origin->distance(ray->getOrigin());
 
         // N
         Vector3 n = intersectionObject->getNormal(intersectionPoint);
@@ -296,7 +298,7 @@ std::pair<double, Color> Scene::computeLight(const std::shared_ptr<Object>& inte
         Vector3 l = ray->getDirection();
 
         // Alpha/n
-        const double shininess = 7.0; // TODO: In material
+        const double shininess = intersectionObject->getMaterial().shininess();
 
         /* Specular */
         double is = std::max<double>(std::pow(Matrix::dot(n, h), shininess), 0.) * attenuation;
@@ -448,11 +450,8 @@ Color Scene::getColor(const std::shared_ptr<Object>& intersectionObject,
     auto reflection = computeReflection(intersectionObject, intersectionPoint, primaryRay, recursivity);
     auto refraction = computeRefraction(intersectionObject, intersectionPoint, primaryRay, recursivity);
 
-    /* Ambient */
-    double ambient = 0.01; // TODO: To scene member (in constructor)
-
-    Color color = intersectionObject->getColor() * ambient +
-                  intersectionObject->getColor() * (1 - ambient) * light.first + light.second * light.first;
+    Color color = intersectionObject->getColor() * m_ambientLight +
+                  intersectionObject->getColor() * (1 - m_ambientLight) * light.first + light.second * light.first;
 
     // Set the color
     if (reflection.has_value())

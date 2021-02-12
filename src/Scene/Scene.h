@@ -20,9 +20,10 @@ public:
     /**
      * @brief Create a scene with a camera.
      *
-     * @param camera The camera used.
+     * @param camera       The camera used.
+     * @param ambientLight The ambient light of the scene (coefficient in [0,1]).
      */
-    explicit Scene(std::shared_ptr<Camera> camera);
+    explicit Scene(std::shared_ptr<Camera> camera, double ambientLight = 0.2);
     ~Scene() = default;
 
     /**
@@ -195,6 +196,7 @@ private:
     Color m_backgroundColor = Colors::black();
     std::string m_lastSavedImage;
     std::size_t m_antialiasingSampling = 0;
+    double m_ambientLight;
 };
 
 #endif //H_RAYTRACING_SCENE_H

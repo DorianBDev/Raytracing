@@ -14,8 +14,9 @@ public:
      * @param reflectivity Reflectivity of the material.
      * @param refractivity Refractivity of the material.
      * @param transparency Transparency of the material.
+     * @param shininess    Shininess of the material.
      */
-    Material(double reflectivity, double refractivity, double transparency);
+    Material(double reflectivity, double refractivity, double transparency, double shininess);
     ~Material() = default;
 
     /**
@@ -40,6 +41,13 @@ public:
     double transparency() const;
 
     /**
+     * @brief Get the shininess of the material.
+     *
+     * @return Returns the shininess of the material.
+     */
+    double shininess() const;
+
+    /**
      * @brief Know if the material is opaque.
      *
      * @return Returns true if the material is opaque, false otherwise.
@@ -57,6 +65,7 @@ private:
     double m_reflectivity;
     double m_refractivity;
     double m_transparency;
+    double m_shininess;
 };
 
 namespace Materials
@@ -70,7 +79,7 @@ namespace Materials
      */
     inline Material metal(double reflectivity = 0.1)
     {
-        return Material(reflectivity, 0.0, 0.0);
+        return Material(reflectivity, 0.0, 0.0, 7.0);
     }
 
     /**
@@ -82,7 +91,7 @@ namespace Materials
      */
     inline Material transparent(double reflectivity = 0.2, double refractivity = 1.20, double transparency = 0.8)
     {
-        return Material(reflectivity, refractivity, transparency);
+        return Material(reflectivity, refractivity, transparency, 6.0);
     }
 } // namespace Materials
 
