@@ -25,6 +25,10 @@ This project contains:
 
 To enable multithreading, please go to the "Config.h" file.
 
+## Template
+
+This project uses the [cpp-template](https://github.com/DorianBDev/cpp-template) of [Dorian Bachelot](https://github.com/DorianBDev).
+
 # Build
 
 ## Dependencies
