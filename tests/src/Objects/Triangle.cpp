@@ -93,16 +93,4 @@ TEST_CASE("Testing triangle object")
     CHECK(triangle.getNormal(triangle.getIntersection(r3).value()) == normal);
     CHECK(triangle.getNormal(triangle.getIntersection(r4).value()) == normal);
     CHECK(triangle.getNormal(triangle.getIntersection(r5).value()) == normal);
-
-    CHECK(triangle.getRefractedIntersection(r1).value() == a1);
-    CHECK(triangle.getRefractedIntersection(r2).value() == a2);
-    CHECK(triangle.getRefractedIntersection(r3).value() == a3);
-    CHECK(triangle.getRefractedIntersection(r4).value() == a4);
-    CHECK(triangle.getRefractedIntersection(r5).value() == a5);
-    CHECK(triangle.getRefractedIntersection(r6) == std::nullopt);
-    CHECK(triangle.getRefractedIntersection(r7) == std::nullopt);
-    CHECK(triangle.getRefractedIntersection(r8) == std::nullopt);
-    CHECK(triangle.getRefractedIntersection(r9) == std::nullopt);
-    CHECK(triangle.getRefractedIntersection(r10) == std::nullopt);
-    CHECK(triangle.getRefractedIntersection(r11) == std::nullopt);
 }

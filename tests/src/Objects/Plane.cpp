@@ -48,9 +48,4 @@ TEST_CASE("Testing plane object")
 
     CHECK(plane.getNormal(plane.getIntersection(r1).value()) == coordinates);
     CHECK(plane.getNormal(plane.getIntersection(r2).value()) == coordinates);
-
-    CHECK(Matrix::areApproximatelyEqual(plane.getRefractedIntersection(r1).value(), res1));
-    CHECK(Matrix::areApproximatelyEqual(plane.getRefractedIntersection(r2).value(), res2));
-    CHECK(plane.getRefractedIntersection(r3) == std::nullopt);
-    CHECK(plane.getRefractedIntersection(r5) == std::nullopt);
 }

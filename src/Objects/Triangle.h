@@ -20,11 +20,24 @@ public:
      * @param material    The object's material.
      * @param coordinates The coordinates of the triangle
      * @param color       The triangle's color
-     * @param originA     The vector to the first point A
-     * @param originB     The vector to the second point B
-     * @param originC     The vector to the third point C
+     * @param originA     The first point A
+     * @param originB     The second point B
+     * @param originC     The third point C
      */
     Triangle(Material material, const Color& color, Vector3 originA, Vector3 originB, Vector3 originC);
+
+    /**
+     * @brief Constructor that initialize the triangle object.
+     *
+     * @param material    The object's material.
+     * @param coordinates The coordinates of the triangle
+     * @param color       The triangle's color
+     * @param originA     The first point A
+     * @param originB     The second point B
+     * @param originC     The third point C
+     * @param normal      The normal of the triangle
+     */
+    Triangle(Material material, const Color& color, Vector3 originA, Vector3 originB, Vector3 originC, Vector3 normal);
 
     /**
      * @brief Method to get the intersection point with a ray and the triangle.
@@ -46,15 +59,6 @@ public:
     std::optional<Ray> getSecondaryRay(const Vector3& intersectionPoint, const Vector3& originLight) const override;
 
     /**
-     * @brief Check if the ray intersect with the object, if this is the case it will return the intersection point.
-     *
-     * @param ray The ray to check the collision with.
-     *
-     * @return Returns the second intersection point.
-     */
-    std::optional<Vector3> getRefractedIntersection(const Ray& ray) const override;
-
-    /**
      * @brief Method to calculate the normal vector.
      *
      * @param intersectionPoint The intersection between the primary ray and the object.
@@ -62,6 +66,8 @@ public:
      * @return Returns the normal vector.
      */
     Vector3 getNormal([[maybe_unused]] const Vector3& intersectionPoint) const override;
+
+    bool isInTriangle(const Vector3& intersectionPoint) const;
 
     /**
      * @brief Method using Heron's formula to calculate an area.

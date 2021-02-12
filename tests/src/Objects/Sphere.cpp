@@ -63,15 +63,4 @@ TEST_CASE("testing sphere")
     CHECK(Matrix::areApproximatelyEqual(sphere.getNormal(sphere.getIntersection(r1).value()), (res1 - coordinates)));
     CHECK(Matrix::areApproximatelyEqual(sphere.getNormal(sphere.getIntersection(r2).value()), (res2 - coordinates)));
     CHECK(Matrix::areApproximatelyEqual(sphere.getNormal(sphere.getIntersection(r5).value()), (res5 - coordinates)));
-
-    Vector3 sec1({{1.58, 1.58, 1.58}});
-    Vector3 sec2({{1.51, 1.51, 0.3}});
-    Vector3 sec5({{1.6, 1.6, 0.48}});
-
-    // Check the refracted point
-    CHECK(Matrix::areApproximatelyEqual(sphere.getRefractedIntersection(r1).value(), sec1));
-    CHECK(Matrix::areApproximatelyEqual(sphere.getRefractedIntersection(r2).value(), sec2));
-    CHECK(sphere.getRefractedIntersection(r3) == std::nullopt);
-    CHECK(sphere.getRefractedIntersection(r4) == std::nullopt);
-    CHECK(Matrix::areApproximatelyEqual(sphere.getRefractedIntersection(r5).value(), sec5));
 }

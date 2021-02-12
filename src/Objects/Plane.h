@@ -54,15 +54,6 @@ public:
     std::optional<Ray> getSecondaryRay(const Vector3& intersectionPoint, const Vector3& originLight) const override;
 
     /**
-     * @brief Check if the ray intersect with the object, if this is the case it will return the intersection point.
-     *
-     * @param ray The ray to check the collision with.
-     *
-     * @return Returns the second intersection point.
-     */
-    std::optional<Vector3> getRefractedIntersection(const Ray& ray) const override;
-
-    /**
      * @brief Method to calculate the normal vector.
      *
      * @param intersectionPoint The intersection between the primary ray and the object.
