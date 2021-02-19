@@ -1,10 +1,15 @@
 #include "Scene.h"
 
 #include "Config.h"
+#include "Light/Punctual.h"
+#include "Objects/Model.h"
+#include "Objects/Plane.h"
+#include "Objects/Sphere.h"
 #include "Utils/Math.h"
 #include "Utils/Utils.h"
 
 #include <SFML/Graphics.hpp>
+#include <cmath>
 
 #ifdef PARALLELIZATION
 #include <algorithm>
@@ -20,6 +25,195 @@ Scene::Scene(std::shared_ptr<Camera> camera, double ambientLight)
     : m_camera(std::move(camera)),
       m_ambientLight(ambientLight)
 {
+}
+
+void Scene::loadScene(const std::string& path)
+{
+    std::ifstream file(path);
+
+    std::stringstream stream;
+    std::string line;
+    std::string word;
+
+    std::string pathModel;
+    double intensity = 0.0;
+    double radius = 0.0;
+    double scale = 0.0;
+
+    Material material(0, 0, 0, 0);
+    Color color(0, 0, 0);
+    Vector3 coordinates;
+    Vector3 normal;
+    Vector3 angle;
+
+    if (!file.is_open())
+        throw std::runtime_error("Error when opening the config file.");
+
+    while (getline(file, line))
+    {
+        stream = std::stringstream(line);
+        getline(stream, word, ' ');
+
+        if (word == "Punctual")
+        {
+            std::cout << line << std::endl;
+
+            getline(stream, word, ' ');
+            intensity = std::stod(word);
+            color = splitColor(stream);
+            coordinates = splitVector3(stream);
+
+            addLight<Punctual>(intensity, color, coordinates);
+        }
+        /*else if (word == "Directional")
+        {
+            std::cout << line << std::endl;
+        }
+        else if (word == "Spot")
+        {
+            std::cout << line << std::endl;
+        }*/
+        else if (word == "Sphere")
+        {
+            std::cout << line << std::endl;
+
+            material = splitMaterial(stream);
+            color = splitColor(stream);
+            coordinates = splitVector3(stream);
+
+            getline(stream, word, ' ');
+            radius = std::stod(word);
+
+            addObject<Sphere>(material, color, coordinates, radius);
+        }
+        /*else if (word == "Triangle")
+        {
+            std::cout << line << std::endl;
+        }*/
+        else if (word == "Plane")
+        {
+            std::cout << line << std::endl;
+
+            material = splitMaterial(stream);
+            color = splitColor(stream);
+            coordinates = splitVector3(stream);
+            normal = splitVector3(stream);
+
+            addObject<Plane>(material, color, coordinates, normal);
+        }
+        else if (word == "Model")
+        {
+            std::cout << line << std::endl;
+
+            material = splitMaterial(stream);
+            color = splitColor(stream);
+            getline(stream, pathModel, ' ');
+            coordinates = splitVector3(stream);
+            angle = splitVector3(stream);
+            getline(stream, word, ' ');
+            scale = std::stod(word);
+
+            addObject<Model>(material, color, pathModel, coordinates, angle, scale);
+        }
+    }
+}
+
+Material Scene::splitMaterial(std::stringstream& stream)
+{
+    std::string word;
+    getline(stream, word, ' ');
+
+    double reflectivity = 0.0;
+    double refractivity = 0.0;
+    double transparency = 0.0;
+
+    if (word == "metal")
+    {
+        getline(stream, word, ' ');
+        reflectivity = std::stod(word);
+
+        return Materials::metal(reflectivity);
+    }
+
+    if (word == "transparent")
+    {
+        getline(stream, word, ' ');
+        reflectivity = std::stod(word);
+
+        getline(stream, word, ' ');
+        refractivity = std::stod(word);
+
+        getline(stream, word, ' ');
+        transparency = std::stod(word);
+
+        return Materials::transparent(reflectivity, refractivity, transparency);
+    }
+
+    throw std::runtime_error("Error when opening the config file. (splitMaterial");
+}
+
+Vector3 Scene::splitVector3(std::stringstream& stream)
+{
+    std::string word;
+
+    double x = 0.0;
+    double y = 0.0;
+    double z = 0.0;
+
+    getline(stream, word, ' ');
+    x = std::stod(word);
+
+    getline(stream, word, ' ');
+    y = std::stod(word);
+
+    getline(stream, word, ' ');
+    z = std::stod(word);
+
+    return Vector3(x, y, z);
+}
+
+Color Scene::splitColor(std::stringstream& stream)
+{
+    std::string word;
+
+    uint8_t x = 0;
+    uint8_t y = 0;
+    uint8_t z = 0;
+
+    getline(stream, word, ' ');
+
+    if (word == "defined")
+    {
+        getline(stream, word, ' ');
+        return getColor(word);
+    }
+
+    getline(stream, word, ' ');
+    x = static_cast<uint8_t>(std::stoi(word));
+
+    getline(stream, word, ' ');
+    y = static_cast<uint8_t>(std::stoi(word));
+
+    getline(stream, word, ' ');
+    z = static_cast<uint8_t>(std::stoi(word));
+
+    return Color(x, y, z);
+}
+
+Color Scene::getColor(const std::string& name)
+{
+    if (name == "red")
+        return Colors::red();
+    if (name == "blue")
+        return Colors::blue();
+    if (name == "green")
+        return Colors::green();
+    if (name == "black")
+        return Colors::black();
+    if (name == "white")
+        return Colors::white();
+
+    return Colors::white();
 }
 
 Scene& Scene::generate(const std::string& imagePath, unsigned int recursivity)

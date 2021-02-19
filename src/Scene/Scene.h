@@ -6,7 +6,11 @@
 #include "Objects/Object.h"
 
 #include <SFML/Graphics/Image.hpp>
+#include <fstream>
 #include <memory>
+#include <regex>
+#include <sstream>
+#include <string>
 #include <vector>
 
 using IntersectionResult = std::optional<std::pair<std::shared_ptr<Object>, Vector3>>;
@@ -72,6 +76,49 @@ public:
     {
         return std::make_shared<Camera>(args...);
     }
+
+    /**
+     * @brief Load the lights and objects from a config file.
+     *
+     * @param path The path of the config file.
+     */
+    void loadScene(const std::string& path);
+
+    /**
+     * @brief Split a material element of the config file.
+     *
+     * @param stream The stream of the material.
+     *
+     * @return Returns the material associated in the file.
+     */
+    static Material splitMaterial(std::stringstream& stream);
+
+    /**
+     * @brief Split a vector3 element of the config file.
+     *
+     * @param stream The stream of the vector3.
+     *
+     * @return Returns the vector3 associated in the file.
+     */
+    static Vector3 splitVector3(std::stringstream& stream);
+
+    /**
+     * @brief Split the color element of the config file.
+     *
+     * @param stream The stream of the color.
+     *
+     * @return Returns the color associated in the file.
+     */
+    static Color splitColor(std::stringstream& stream);
+
+    /**
+     * @brief Get the defined color associated.
+     *
+     * @param name The name of the color.
+     *
+     * @return Returns the color defined.
+     */
+    static Color getColor(const std::string& name);
 
     /**
      * @brief Generate an image from the scene.
