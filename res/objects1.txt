@@ -1,0 +1,11 @@
+Punctual 8 undefined 150 150 150 10 -5 10
+Punctual 4 undefined 255 0 0 0 0 4
+Sphere metal 0.1 defined red 0 -4 20 2
+Sphere metal 0.1 defined green 5 -2 30 2
+Sphere metal 0.1 defined blue -7 0 10 2
+Sphere metal 0.1 undefined 50 50 50 -4 0 10 1
+Sphere transparent 0.5 1.1 1 defined white 0 -2 6 1
+Plane metal 0.03 undefined 10 10 10 0 5 10 0 -0.5 0
+Model metal 0.4 undefined 5 5 5 res/Object/cube.obj -1 3 8 10 10 10 0.3
+Directional 20 undefined 255 0 0 0 -4 -15 5 -2 -15 -5 -3 35
+Spot 12 undefined 0 255 0 0 0 -15 0 0 1 20

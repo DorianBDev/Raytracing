@@ -19,6 +19,7 @@ This project contains:
 - Movable camera,
 - SSAA anti-aliasing,
 - OBJ loading,
+- Config file for objects in parameters,
 - Modern c++ (c++17).
 
 ## Multithreading
@@ -86,6 +87,25 @@ Build (in the 'build' folder, for example):
 > cmake --build .
 ```
 Binaries are in the 'build/bin' folder in the bundle ".app" format.
+
+### File format
+
+To initialize the objects and lights, you need to specify the config file path. The '|' are replaced by blank space in the file.
+
+The file can contains these objects and lights :
+- Color definition    : defined name | undefined r g b
+- Vector definition   : x y z
+- Structure definition : metal reflectivity | transparent reflectivity refractivity transparency
+
+
+- Punctual format    : Name | Intensity | Color | Vector Coordinates
+- Spot Format        : Name | Intensity | Color | Vector Coordinates | Vector direction | Angle
+- Directional Format : Name | Structure type | Color | Vector Coordinates A | Vector Coordinates B | Vector Direction
+
+
+- Shere Format : Name | Structure type | Color | Vector Coordinates | Radius
+- Plane Format : Name | Structure type | Color | Vector Coordinates | Vector Normal
+- Model Format : Name | Structure type | Color | File model path | Vector Coordinates | Vector Angle | Scale
 
 # License
 

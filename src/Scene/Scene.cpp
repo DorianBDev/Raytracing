@@ -1,7 +1,9 @@
 #include "Scene.h"
 
 #include "Config.h"
+#include "Light/Directional.h"
 #include "Light/Punctual.h"
+#include "Light/Spot.h"
 #include "Objects/Model.h"
 #include "Objects/Plane.h"
 #include "Objects/Sphere.h"
@@ -43,6 +45,8 @@ void Scene::loadScene(const std::string& path)
     Material material(0, 0, 0, 0);
     Color color(0, 0, 0);
     Vector3 coordinates;
+    Vector3 secondCoordinates;
+    Vector3 direction;
     Vector3 normal;
     Vector3 angle;
 
@@ -56,8 +60,6 @@ void Scene::loadScene(const std::string& path)
 
         if (word == "Punctual")
         {
-            std::cout << line << std::endl;
-
             getline(stream, word, ' ');
             intensity = std::stod(word);
             color = splitColor(stream);
@@ -65,18 +67,30 @@ void Scene::loadScene(const std::string& path)
 
             addLight<Punctual>(intensity, color, coordinates);
         }
-        /*else if (word == "Directional")
+        else if (word == "Directional")
         {
-            std::cout << line << std::endl;
+            getline(stream, word, ' ');
+            intensity = std::stod(word);
+            color = splitColor(stream);
+            coordinates = splitVector3(stream);
+            secondCoordinates = splitVector3(stream);
+            direction = splitVector3(stream);
+
+            addLight<Directional>(intensity, color, coordinates, secondCoordinates, direction);
         }
         else if (word == "Spot")
         {
-            std::cout << line << std::endl;
-        }*/
+            getline(stream, word, ' ');
+            intensity = std::stod(word);
+            color = splitColor(stream);
+            coordinates = splitVector3(stream);
+            direction = splitVector3(stream);
+            getline(stream, word, ' ');
+
+            addLight<Spot>(intensity, color, coordinates, direction, std::stod(word));
+        }
         else if (word == "Sphere")
         {
-            std::cout << line << std::endl;
-
             material = splitMaterial(stream);
             color = splitColor(stream);
             coordinates = splitVector3(stream);
@@ -86,14 +100,8 @@ void Scene::loadScene(const std::string& path)
 
             addObject<Sphere>(material, color, coordinates, radius);
         }
-        /*else if (word == "Triangle")
-        {
-            std::cout << line << std::endl;
-        }*/
         else if (word == "Plane")
         {
-            std::cout << line << std::endl;
-
             material = splitMaterial(stream);
             color = splitColor(stream);
             coordinates = splitVector3(stream);

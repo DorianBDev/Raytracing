@@ -14,7 +14,6 @@ TEST_CASE("Testing directional light")
     Vector3 a3({{1.5, 0.5, 1}});
     Vector3 a4({{1.25, 0.75, 1}});
     Vector3 a5({{0.75, 1.25, 1}});
-    Vector3 a7({{-0.25, -0.75, -1}});
 
     // Check if the device if in the light
     CHECK(directional.isEnLight(a1) == true);
@@ -22,7 +21,6 @@ TEST_CASE("Testing directional light")
     CHECK(directional.isEnLight(a3) == false);
     CHECK(directional.isEnLight(a4) == true);
     CHECK(directional.isEnLight(a5) == true);
-    CHECK(directional.isEnLight(a7) == false);
 
     Vector3 o1({{0.25, 0.25, 0}});
     Vector3 o4({{0.5, 0, 0}});
@@ -34,7 +32,6 @@ TEST_CASE("Testing directional light")
     CHECK(directional.getOrigin(a3) == std::nullopt);
     CHECK(directional.getOrigin(a4) == o4);
     CHECK(directional.getOrigin(a5) == o5);
-    CHECK(directional.getOrigin(a7) == std::nullopt);
 
     // Check if the direction is correct
     CHECK(directional.getDirection(a1) == (direction - a1));

@@ -1,5 +1,7 @@
 #include "Directional.h"
 
+#include "Utils/Math.h"
+
 #include <utility>
 
 Directional::Directional(double intensity, const Color& color, Vector3 originA, Vector3 originB, Vector3 direction)
@@ -14,13 +16,16 @@ bool Directional::isEnLight(const Vector3& origin) const
 {
     Vector3 ab = m_originB - m_originA;
 
-    const Vector3& direction = m_direction * -1;
+    const Vector3& direction = m_direction;
 
     double den = ab.x() * direction.y() - ab.y() * direction.x();
 
     // Verify if the vector aren't parallel
     if (den == 0)
+    {
+        std::cout << den << std::endl;
         return false;
+    }
 
     double x = -((m_originA.x() - origin.x()) * direction.y() - (m_originA.y() - origin.y()) * direction.x()) / den;
 
@@ -31,22 +36,18 @@ bool Directional::isEnLight(const Vector3& origin) const
         return false;
 
     // 3D validation
-    if (ab.z() * x + m_originA.z() != origin.z() + direction.z() * m)
+    if ((ab.z() * x + m_originA.z() != origin.z() + direction.z() * m) &&
+        !areDoubleApproximatelyEqual(ab.z() * x + m_originA.z(), origin.z() + direction.z() * m, 0.5))
         return false;
 
-    Vector3 vector = origin - m_direction;
-
-    // Verify if the direction have the same orientation
-    return !((m_direction.x() != 0 && vector.x() / m_direction.x() < 0) ||
-             (m_direction.y() != 0 && vector.y() / m_direction.y() < 0) ||
-             (m_direction.z() != 0 && vector.z() / m_direction.z() < 0));
+    return true;
 }
 
 std::optional<Vector3> Directional::getOrigin(const Vector3& origin) const
 {
     Vector3 ab = m_originB - m_originA;
 
-    const Vector3& direction = m_direction * -1;
+    const Vector3& direction = m_direction;
 
     double den = ab.x() * direction.y() - ab.y() * direction.x();
 
@@ -63,15 +64,8 @@ std::optional<Vector3> Directional::getOrigin(const Vector3& origin) const
         return std::nullopt;
 
     // 3D validation
-    if (ab.z() * x + m_originA.z() != origin.z() + direction.z() * m)
-        return std::nullopt;
-
-    Vector3 vector = origin - m_direction;
-
-    // Verify if the direction have the same orientation
-    if ((m_direction.x() != 0 && vector.x() / m_direction.x() < 0) ||
-        (m_direction.y() != 0 && vector.y() / m_direction.y() < 0) ||
-        (m_direction.z() != 0 && vector.z() / m_direction.z() < 0))
+    if ((ab.z() * x + m_originA.z() != origin.z() + direction.z() * m) &&
+        !areDoubleApproximatelyEqual(ab.z() * x + m_originA.z(), origin.z() + direction.z() * m, 0.5))
         return std::nullopt;
 
     return direction * m + origin;
